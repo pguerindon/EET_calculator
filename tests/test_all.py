@@ -14,6 +14,9 @@ from tests.test_calculator import (
     test_calculator,
 )
 
+from tests.test_validator import (
+    test_validator,
+)
 
 def run_all_tests():
     """
@@ -30,6 +33,8 @@ def run_all_tests():
     test_import_json()
 
     test_calculator()
+
+    test_validator()
 
     print("----------------------------------------")
     print("Tous les tests sont OK")

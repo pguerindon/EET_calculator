@@ -8,7 +8,10 @@ from services.document import (
     definir_et_us,
     definir_eet_index,
     definir_reference_indexes,
+    definir_missing_impulse,
 )
+
+from services import constants
 
 
 def creer_document_reference():
@@ -24,6 +27,11 @@ def creer_document_reference():
         5
     )
 
+    definir_missing_impulse(
+        document,
+        constants.IMPULSE_FINISH
+    )
+    
     mt = [
         1_000_000,
         2_000_000,

@@ -51,7 +51,9 @@ DISCIPLINE_AC = "AC"
 ERROR_INVALID_COMPETITOR_COUNT = "INVALID_COMPETITOR_COUNT"
 ERROR_DUPLICATE_BIB = "DUPLICATE_BIB"
 ERROR_INVALID_ET_COUNT = "INVALID_ET_COUNT"
+ERROR_INVALID_MISSING_IMPULSE = "INVALID_MISSING_IMPULSE"
 ERROR_INVALID_ET_PRECISION = "INVALID_ET_PRECISION"
+ERROR_INVALID_MT = "INVALID_MT"
 
 
 # ----------------------------------------------------------------------
@@ -67,3 +69,9 @@ ERROR_NOT_ENOUGH_REFERENCES = "NOT_ENOUGH_REFERENCES"
 MIN_ET_PRECISION = 3
 MAX_ET_PRECISION = 6
 DEFAULT_ET_PRECISION = 5
+
+# ----------------------------------------------------------------------
+# paramètres divers
+# ----------------------------------------------------------------------
+
+REFERENCE_COMPETITOR_COUNT = 10
