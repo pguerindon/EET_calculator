@@ -1,0 +1,52 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# =========================
+# Outils
+# =========================
+.vscode/
+.pytest_cache/
+
+# =========================
+# Journaux
+# =========================
+*.log
+
+# =========================
+# Archives générées
+# =========================
+*.zip
+versions_de_EET/
+
+# =========================
+# Windows
+# =========================
+Thumbs.db
+Desktop.ini
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Tests Python
+.coverage
+htmlcov/
+
+# Environnements Python
+.python-version
+
+# Outils personnels
+ssh_console_ovh.bat
+
+# Configurations locales éventuelles
+*.code-workspace

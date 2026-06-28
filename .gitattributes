@@ -1,0 +1,16 @@
+# Détection automatique des fichiers texte
+* text=auto
+
+# Scripts Linux
+*.sh text eol=lf
+
+# Sources Python
+*.py text eol=lf
+
+# Fichiers web
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# Batch Windows
+*.bat text eol=crlf

@@ -1,0 +1,20 @@
+[Unit]
+Description=EET Calculator Gunicorn
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/eet_calculator
+Environment="PATH=/opt/eet_calculator/venv/bin"
+
+ExecStart=/opt/eet_calculator/venv/bin/gunicorn 
+--workers 2 
+--bind 127.0.0.1:5000 
+app:app
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

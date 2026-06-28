@@ -1,0 +1,9 @@
+requirements.txt
+update.sh
+*.py
+*.md
+services\*.*
+templates\*.*
+static\*.*
+
+

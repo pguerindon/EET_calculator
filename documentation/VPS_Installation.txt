@@ -1,0 +1,246 @@
+# EET Calculator - Installation du VPS OVH
+
+## Date de mise en production
+
+Juin 2026
+
+## Infrastructure
+
+Hébergeur : OVH
+
+VPS :
+
+* Ubuntu 26.04 LTS
+* 2 vCPU
+* 4 Go RAM
+* 40 Go SSD
+
+## Nom de domaine
+
+* pg-chrono.fr
+* [www.pg-chrono.fr](http://www.pg-chrono.fr)
+
+## Application
+
+Nom :
+
+* EET Calculator
+
+Répertoire d'installation :
+
+* /opt/eet_calculator
+
+## Architecture
+
+Internet
+↓
+HTTPS (Let's Encrypt)
+↓
+Nginx
+↓
+Gunicorn
+↓
+Flask EET Calculator
+
+## Répertoires
+
+/opt/eet_calculator
+Application Flask
+
+/opt/archives
+Archives ZIP des versions
+
+/opt/documentation
+Documentation serveur
+
+/opt/data
+Données partagées
+
+/opt/tools
+Outils et scripts divers
+
+## Services
+
+Application :
+
+Fichier :
+/etc/systemd/system/eet.service
+
+Commandes :
+
+sudo systemctl start eet
+sudo systemctl stop eet
+sudo systemctl restart eet
+sudo systemctl status eet
+
+Nginx :
+
+sudo systemctl restart nginx
+sudo systemctl status nginx
+
+Fail2ban :
+
+sudo fail2ban-client status
+sudo fail2ban-client status sshd
+
+## Configuration Nginx
+
+Fichier :
+
+/etc/nginx/sites-available/eet
+
+Lien :
+
+/etc/nginx/sites-enabled/eet
+
+## Certificat HTTPS
+
+Let's Encrypt
+
+Obtention :
+
+sudo certbot --nginx -d pg-chrono.fr -d [www.pg-chrono.fr](http://www.pg-chrono.fr)
+
+Test renouvellement :
+
+sudo certbot renew --dry-run
+
+## Déploiement d'une nouvelle version
+
+1. Générer le ZIP de production.
+
+2. Déposer les fichiers ou le ZIP dans :
+
+   /opt/eet_calculator
+
+3. Mettre à jour les fichiers.
+
+4. Redémarrer l'application :
+
+   sudo systemctl restart eet
+
+5. Vérifier :
+
+   sudo systemctl status eet
+
+## Règles de mise à jour
+
+Modification d'un fichier Python :
+
+* app.py
+* config.py
+* translation.py
+* services/*.py
+
+Action :
+
+sudo systemctl restart eet
+
+Modification d'un template HTML :
+
+* templates/*.html
+
+Action :
+
+sudo systemctl restart eet
+
+Modification d'un fichier statique :
+
+* static/js/*.js
+* static/css/*.css
+* static/images/*
+* static/*.ico
+
+Action :
+
+Aucun redémarrage nécessaire.
+
+Mettre à jour la variable VERSION dans version.py afin de forcer le rechargement des ressources par les navigateurs.
+
+## Sécurité
+
+Fail2ban installé.
+
+Configuration :
+
+/etc/fail2ban/jail.local
+
+Contenu :
+
+[DEFAULT]
+bantime = 24h
+findtime = 10m
+maxretry = 5
+
+[sshd]
+enabled = true
+
+## Sauvegardes à conserver
+
+Application :
+
+* EET_vX.XX.zip
+
+Configuration :
+
+* /etc/systemd/system/eet.service
+* /etc/nginx/sites-available/eet
+* /etc/fail2ban/jail.local
+
+## Informations diverses
+
+Adresse du site :
+
+https://pg-chrono.fr
+
+Adresse d'administration SSH :
+
+ssh [ubuntu@pg-chrono.fr](mailto:ubuntu@pg-chrono.fr)
+
+Utilisateur système :
+
+Ubuntu
+
+Historique des mises en production
+
+1.03 : Première mise en production sur OVH
+
+1.04 : Validation complète du processus
+       de déploiement par ZIP sur le VPS
+
+
+13/06/2026
+
+Création du script :
+
+/opt/tools/deploy_eet.sh
+
+Déploiement standard :
+
+1. Copier EET_vX.XX.zip dans /opt/archives
+
+2. Exécuter :
+
+/opt/tools/deploy_eet.sh /opt/archives/eet/EET_vx.xx.zip
+
+3. Vérifier :
+
+   sudo systemctl status eet
+
+
+Services RustDesk :
+
+sudo systemctl status rustdesk-hbbs
+sudo systemctl status rustdesk-hbbr
+
+Redémarrage :
+sudo systemctl restart rustdesk-hbbs
+sudo systemctl restart rustdesk-hbbr
+
+Logs :
+sudo journalctl -u rustdesk-hbbs -f
+sudo journalctl -u rustdesk-hbbr -f
+
+Clé publique :
+Q7gXrkgGBN3abtgXfgLausAd1oRMrVzlGiJSmMo7Q9o=
+

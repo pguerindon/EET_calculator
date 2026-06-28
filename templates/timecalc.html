@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+    <h1>{{ txt.timecalc_titre }}</h1>
+
+    <table>
+
+        <tr>
+            <td>{{ txt.timecalc_precision_tod }}</td>
+            <td>
+
+                <select id="precision_tod">
+
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6" selected>6</option>
+
+                </select>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>{{ txt.timecalc_precision_temps }}</td>
+            <td>
+
+                <select id="precision_temps">
+
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+
+                </select>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>{{ txt.timecalc_depart }}</td>
+            <td>
+                <input
+                    type="text"
+                    id="heure_depart">
+            </td>
+        </tr>
+
+        <tr>
+            <td>{{ txt.timecalc_arrivee }}</td>
+            <td>
+                <input
+                    type="text"
+                    id="heure_arrivee">
+            </td>
+        </tr>
+
+        <tr>
+            <td>{{ txt.timecalc_temps }}</td>
+            <td>
+                <input
+                    type="text"
+                    id="temps_course">
+            </td>
+        </tr>
+
+    </table>
+
+    <p id="message_validation"></p>
+
+    <button
+        type="button"
+        id="calculer">
+
+        {{ txt.timecalc_calculer }}
+
+    </button>
+
+    <button
+        type="button"
+        id="effacer">
+
+        {{ txt.timecalc_effacer }}
+
+    </button>
+
+    <button
+        type="button"
+        onclick="window.location.href='/help_timecalc'">
+
+        {{ txt.aide }}
+
+    </button>
+
+    <button
+        type="button"
+        onclick="window.location.href='/'">
+
+        {{ txt.retour }}
+
+    </button>
+
+<script>
+
+const TXT = {
+    erreur_deux_valeurs:
+        "{{ txt.timecalc_erreur_deux_valeurs }}",
+
+    erreur_arrivee:
+        "{{ txt.timecalc_erreur_arrivee }}",
+
+    erreur_negative:
+        "{{ txt.timecalc_erreur_negative }}",
+
+    erreur_tod:
+        "{{ txt.timecalc_erreur_tod }}",
+
+    erreur_duree:
+        "{{ txt.timecalc_erreur_duree }}",
+
+
+    calcul_ok:
+        "{{ txt.timecalc_calcul_ok }}"
+};
+
+
+</script>
+
+<script src="{{ url_for('static',
+filename='js/timecalc.js') }}"></script>
+
+<script src="{{ url_for(
+    'static',
+    filename='js/timecalc.js'
+) }}?v={{ version }}">
+</script>
+
+{% endblock %}

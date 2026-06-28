@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+    <h1>{{ txt.a_propos }}</h1>
+
+    <p>
+        Version {{ version }}
+    </p>
+
+    <p>
+        <strong>{{ txt.a_propos_developpement }}</strong><br>
+        Philippe Guérindon
+    </p>
+
+    <p>
+        {{ txt.a_propos_fonction_l1 }}
+    </p>
+    <p>
+        {{ txt.a_propos_fonction_l2 }}
+    </p>
+    <p>
+        {{ txt.a_propos_fonction_l3 }}
+    </p>
+    <p>
+        <strong>{{ txt.a_propos_contact }}</strong><br>
+        pg-chrono [at] orange.fr
+    </p>
+    <button
+        type="button"
+        onclick="window.location.href='/'">
+
+        {{ txt.retour }}
+
+    </button>
+
+{% endblock %}

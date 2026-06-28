@@ -1,0 +1,7 @@
+# config.py
+
+VERSION = "1.09a"
+SECRET_KEY = "PG_CHRONO_EET_2026_SECRET_KEY"
+DEBUG = False
+SUPPORTED_LANGUAGES = ("fr", "en", "de")
+DEFAULT_LANGUAGE = "en"

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+    <h1>{{ txt.timecalc_aide_titre }}</h1>
+
+    <div style="text-align: right; margin-bottom: 1em;">
+
+        <button
+            type="button"
+            onclick="window.location.href='/timecalc'">
+
+            {{ txt.retour }}
+
+        </button>
+
+    </div>
+    <h2>{{ txt.timecalc_aide_principe }}</h2>
+
+    <p>
+        {{ txt.timecalc_aide_principe_l1 }}
+    </p>
+
+    <h2>{{ txt.timecalc_aide_precision }}</h2>
+
+    <ul>
+        <li>{{ txt.timecalc_aide_precision_l1 }}</li>
+        <li>{{ txt.timecalc_aide_precision_l2 }}</li>
+        <li>{{ txt.timecalc_aide_precision_l3 }}</li>
+    </ul>
+
+    <h2>{{ txt.timecalc_aide_exemples }}</h2>
+
+    <h3>{{ txt.timecalc_aide_ex1 }}</h3>
+
+    <ul>
+        <li>{{ txt.timecalc_aide_ex1_l1 }}</li>
+        <li>{{ txt.timecalc_aide_ex1_l2 }}</li>
+        <li>
+            <strong>
+                {{ txt.timecalc_aide_ex1_l3 }}
+            </strong>
+        </li>
+    </ul>
+
+    <h3>{{ txt.timecalc_aide_ex2 }}</h3>
+
+    <ul>
+        <li>{{ txt.timecalc_aide_ex2_l1 }}</li>
+        <li>{{ txt.timecalc_aide_ex2_l2 }}</li>
+        <li>
+            <strong>
+                {{ txt.timecalc_aide_ex2_l3 }}
+            </strong>
+        </li>
+    </ul>
+
+    <h3>{{ txt.timecalc_aide_ex3 }}</h3>
+
+    <ul>
+        <li>{{ txt.timecalc_aide_ex3_l1 }}</li>
+        <li>{{ txt.timecalc_aide_ex3_l2 }}</li>
+        <li>
+            <strong>
+                {{ txt.timecalc_aide_ex3_l3 }}
+            </strong>
+        </li>
+    </ul>
+
+    <h2>{{ txt.timecalc_aide_remarques }}</h2>
+
+    <ul>
+        <li>{{ txt.timecalc_aide_remarque_l1 }}</li>
+        <li>{{ txt.timecalc_aide_remarque_l2 }}</li>
+        <li>{{ txt.timecalc_aide_remarque_l3 }}</li>
+    </ul>
+
+    <button
+        type="button"
+        onclick="window.location.href='/timecalc'">
+
+        {{ txt.retour }}
+
+    </button>
+
+{% endblock %}

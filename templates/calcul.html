@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+
+    <div class="entete">
+
+        <img
+            src="{{ url_for('static',
+                            filename='images/logo_fis.jpg') }}"
+            class="logo_fis"
+            width="850"
+            height="926"
+            alt="FIS">
+
+        <h1>
+            {{ txt.titre }}
+            <span class="version">
+                v{{ version }}
+            </span>
+        </h1>
+
+        <img
+            src="{{ url_for('static',
+                            filename='images/logo_ffs.jpg') }}"
+            class="logo_ffs"
+            width="480"
+            height="480"
+            alt="FFS">
+
+    </div>
+<form
+    method="POST"
+    action="/"
+    autocomplete="off">
+
+    <div class="parametres">
+
+        <label>{{txt.precision_te}} :</label>
+
+        <select
+            id="precision_te"
+            name="precision_te">
+
+            <option value="3"
+                {% if precision_te == 3 %}selected{% endif %}>
+                3
+            </option>
+
+            <option value="4"
+                {% if precision_te == 4 %}selected{% endif %}>
+                4
+            </option>
+
+            <option value="5"
+                {% if precision_te == 5 %}selected{% endif %}>
+                5
+            </option>
+
+            <option value="6"
+                {% if precision_te == 6 %}selected{% endif %}>
+                6
+            </option>
+
+        </select>
+
+        &nbsp;&nbsp;&nbsp;
+
+        <label>{{txt.precision_tm}} :</label>
+
+        <select
+            id="precision_tm"
+            name="precision_tm">
+
+            <option value="2"
+                {% if precision_tm == 2 %}selected{% endif %}>
+                2
+            </option>
+
+            <option value="3"
+                {% if precision_tm == 3 %}selected{% endif %}>
+                3
+            </option>
+
+            <option value="4"
+                {% if precision_tm == 4 %}selected{% endif %}>
+                4
+            </option>
+
+            <option value="5"
+                {% if precision_tm == 5 %}selected{% endif %}>
+                5
+            </option>
+
+            <option value="6"
+                {% if precision_tm == 6 %}selected{% endif %}>
+                6
+            </option>
+
+        </select>
+
+        <select
+            name="langue"
+            onchange="
+                document.getElementById(
+                    'action_langue'
+                ).value='langue';
+                this.form.submit();
+            ">
+            <option value="fr"
+                {% if langue == "fr" %}selected{% endif %}>
+                Français
+            </option>
+
+            <option value="en"
+                {% if langue == "en" %}selected{% endif %}>
+                English
+            </option>
+
+            <option value="de"
+                {% if langue == "de" %}selected{% endif %}>
+                Deutsch
+            </option>
+        </select>
+        
+</div>
+    <input
+        type="hidden"
+        id="action_langue"
+        name="action_langue"
+        value="">
+
+    <input
+        type="hidden"
+        name="dossard_eet"
+        value="{{ dossard_eet }}">
+
+    <div class="conteneur">
+
+        <div class="zone-grille">
+
+            <table>
+
+                <tr>
+                    <th style="width:80px">
+                        {{txt.dossard}}
+                    </th>
+
+                    <th>
+                        {{txt.temps_manuel}}
+                    </th>
+
+                    <th>
+                        {{txt.temps_electronique}}
+                    </th>
+
+                    <th style="width:120px">
+                        {{txt.delta}}
+                    </th>
+                </tr>
+
+                {% for ligne in lignes %}
+
+                <tr class="ligne {% if ligne.eet %}ligne-eet-calculee{% endif %}">
+
+                    <td>
+                        <input
+                            type="text"
+                            class="dossard"
+                            name="dossard_{{ loop.index0 }}"
+                            value="{{ ligne.dossard }}">
+                    </td>
+
+                    <td>
+                        <input
+                            type="text"
+                            class="tm"
+                            name="tm_{{ loop.index0 }}"
+                            value="{{ ligne.tm }}">
+                    </td>
+
+                    <td>
+                        <input
+                            type="text"
+                            class="te {% if ligne.eet %}te-eet{% endif %}"
+                            name="te_{{ loop.index0 }}"
+                            value="{{ ligne.te }}">
+                    </td>
+
+                    <td class="delta-cell delta">
+
+                        {% if ligne.eet %}
+                            EET
+                        {% else %}
+                            {{ ligne.delta }}
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                <tr class="ligne-total">
+
+                    <td class="total-label" colspan="3">
+                        {{ txt.somme_delta }}
+                    </td>
+
+                    <td class="delta-total">
+                        {{ somme_delta }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br>
+
+            <button
+                id="btn_calculer"
+                type="submit"
+                disabled>
+
+                {{txt.calculer}}
+
+            </button>
+
+            <button
+                id="btn_effacer"
+                type="button">
+
+                {{txt.effacer}}
+
+            </button>
+
+            <button
+                id="btn_exemple_fis"
+                type="button">
+
+                {{txt.exemple_fis}}
+
+            </button>
+
+            <button
+                type="button"
+                onclick="window.location.href='/help'">
+
+                {{ txt.aide }}
+
+            </button>
+
+            <button
+                type="button"
+                onclick="window.location.href='/timecalc'">
+
+                {{ txt.calculatrice_horaire }}
+
+            </button>
+            
+            <button
+                type="button"
+                onclick="window.location.href='/about'">
+
+                {{ txt.a_propos }}
+
+            </button>
+
+            <p id="message_validation"></p>
+
+        </div>
+
+        {% if eet %}
+        <div 
+            id="resultat-panel"
+            class="zone-resultat">
+
+            <h2>{{txt.resultat}}</h2>
+
+            <table class="resultat">
+
+                <tr>
+                    <td>
+                        {{txt.dossard_eet}}
+                    </td>
+
+                    <td>
+                        {{ dossard_eet }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{txt.references}}
+                    </td>
+
+                    <td>
+                        {{ nb_references }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{txt.somme_delta}}
+                    </td>
+
+                    <td>
+                        {{ somme_delta }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{txt.correction}}
+                    </td>
+
+                    <td>
+                        {{ correction }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{txt.eet_calculee}}
+                    </td>
+
+                    <td id="eet_calculee">
+                        {{ eet }}
+                    </td>
+                </tr>
+
+            </table>
+
+            <div class="zone-options-resultat">
+
+                <button
+                    id="btn_pdf"
+                    type="submit"
+                    name="action"
+                    value="pdf">
+
+                    PDF
+
+                </button>
+
+                <label class="option-affichage">
+
+                    <input
+                        type="checkbox"
+                        id="resultat_sous_grille">
+
+                    {{ txt.resultat_sous_grille }}
+
+                </label>
+
+            </div>
+
+            {% if calcul_precedent %}
+
+            <hr>
+
+            <div class="calcul-precedent">
+
+                <h3>{{txt.calcul_precedent}}</h3>
+
+                <p>
+                    {{txt.dossard}} :
+                    {{ calcul_precedent.dossard_eet }}
+                </p>
+
+                <p>
+                    EET :
+                    {{ calcul_precedent.eet }}
+                </p>
+
+                <button
+                    type="button"
+                    onclick="window.location.href='/reload_previous'">
+
+                    {{ txt.recharger }}
+
+                </button>
+
+            </div>
+
+            {% endif %}
+
+
+ 
+ 
+        </div>
+        {% endif %}
+
+    </div>
+
+</form>
+
+<script>
+
+    const TXT = {
+
+        erreur_plusieurs_te:
+            "{{ txt.erreur_plusieurs_te }}",
+
+        erreur_aucun_te:
+            "{{ txt.erreur_aucun_te }}",
+
+        erreur_tm:
+            "{{ txt.erreur_tm }}",
+
+        erreur_references:
+             "{{ txt.erreur_references }}",
+
+        grille_valide:
+            "{{ txt.grille_valide }}"
+    };
+
+</script>
+
+<script src="{{ url_for(
+                    'static',
+                    filename='js/eet.js'
+                ) }}?v={{ version }}">
+</script>
+
+{% endblock %}

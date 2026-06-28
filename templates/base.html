@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="{{ langue }}">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="{{ txt.meta_description }}">
+
+    <link
+        rel="canonical"
+        href="{{ request.base_url }}">
+
+    <meta property="og:title" content="{{ page_title or txt.home_title }}">
+    <meta property="og:description" content="{{ txt.meta_description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.base_url }}">
+
+    <meta name="google-site-verification" content="psfB7Z3KKl8Cq-sVIE4V-bk-wHkKV8_uABy0fogEhF0" />
+
+    <title>
+        {{ page_title or txt.home_title }}
+    </title>
+    
+    <link
+        rel="icon"
+        href="{{ url_for(
+            'static',
+            filename='favicon.ico'
+        ) }}?v={{ version }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/style.css'
+        ) }}?v={{ version }}">
+        
+</head>
+
+<body>
+
+    {% block contenu %}
+    {% endblock %}
+
+    <footer class="footer">
+        © 2026 Philippe Guérindon
+        <br>
+        Version {{ version }}
+    </footer>
+
+</body>
+
+</html>

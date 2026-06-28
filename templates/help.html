@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+    <div class="entete-aide">
+
+        <h1>{{ txt.aide }}</h1>
+
+        <button
+            type="button"
+            onclick="window.location.href='/'">
+            {{ txt.retour }}
+        </button>
+    </div>
+
+    <h2>{{txt.aide_principe}}</h2>
+
+    <p>
+    {{txt.aide_principe_l1}}
+    </p>
+
+    <p>
+    {{txt.aide_principe_l2}}
+    </p>
+
+    <ul>
+        <li>{{txt.aide_principe_l3}}</li>
+        <li>{{txt.aide_principe_l4}}</li>
+        <li>{{txt.aide_principe_l5}}</li>
+    </ul>
+
+    <h2>{{ txt["lexique_titre"] }}</h2>
+
+    <p>
+        <strong>{{ txt["lexique_precision"] }}</strong> :
+        {{ txt["lexique_precision_txt"] }}
+    </p>
+
+    <p>
+        <strong>TM</strong> :
+        {{ txt["lexique_tm"] }}
+    </p>
+
+    <p>
+        <strong>TE</strong> :
+        {{ txt["lexique_te"] }}
+    </p>
+
+    <p>
+        <strong>EET</strong> :
+        {{ txt["lexique_eet"] }}
+    </p>
+
+    <p>
+        <strong>{{ txt["lexique_precision_tm"] }}</strong> :
+        {{ txt["lexique_precision_tm_txt"] }}
+    </p>
+
+    <p>
+        <strong>{{ txt["lexique_precision_te"] }}</strong> :
+        {{ txt["lexique_precision_te_txt"] }}
+    </p>
+
+    <p>
+        <strong>TOD</strong> :
+        {{ txt["lexique_tod"] }}
+    </p>
+
+    <h2>{{txt.aide_selection_des_references}}</h2>
+
+    <p>
+    {{txt.aide_selection_des_references_l1}}
+    </p>
+
+    <p>
+    {{txt.aide_selection_des_references_l3}}
+    </p>
+
+    <p>
+    {{txt.aide_selection_des_references_l4}}
+    </p>
+
+    <h2>{{txt.aide_saisie_des_donnees}}</h2>
+
+    <ol>
+        <li>{{txt.aide_saisie_des_donnees_l1}}</li>
+        <li>{{txt.aide_saisie_des_donnees_l2}}</li>
+        <li>{{txt.aide_saisie_des_donnees_l3}}</li>
+        <li>{{txt.aide_saisie_des_donnees_l4}}</li>
+        <li>{{txt.aide_saisie_des_donnees_l5a}} <strong>{{txt.grille_valide}}</strong> {{txt.aide_saisie_des_donnees_l5b}}</li>
+    </ol>
+
+    <h2>{{txt.aide_calcul}}</h2>
+
+    <p>
+    {{txt.aide_calcul_l1a}}<strong>{{txt.aide_calcul_l1b}}</strong>
+    </p>
+
+    <p>
+    {{txt.aide_calcul_l2}}
+    </p>
+
+    <ul>
+        <li>{{txt.aide_calcul_l3}}</li>
+        <li>{{txt.aide_calcul_l4}}</li>
+        <li>{{txt.aide_calcul_l5}}</li>
+        <li>{{txt.aide_calcul_l6}}</li>
+    </ul>
+
+    <p>
+    {{txt.aide_calcul_explication_l1}}
+    </p>
+
+    <p>
+    {{txt.aide_calcul_explication_l2}}
+    </p>
+
+    <h2>{{txt.aide_rapport_pdf}}</h2>
+
+    <p>
+    {{txt.aide_rapport_pdf_l1a}}<strong>PDF </strong>{{txt.aide_rapport_pdf_l1b}}
+    </p>
+
+    <ul>
+        <li>{{txt.aide_rapport_pdf_l2}}</li>
+        <li>{{txt.aide_rapport_pdf_l3}}</li>
+        <li>{{txt.aide_rapport_pdf_l4}}</li>
+        <li>{{txt.aide_rapport_pdf_l5}}</li>
+        <li>{{txt.aide_rapport_pdf_l6}}</li>
+    </ul>
+
+    <h2>{{txt.aide_exemple_fis}}</h2>
+
+    <p>
+    {{txt.aide_exemple_fis_l1a}}<strong>{{txt.aide_exemple_fis}}</strong>{{txt.aide_exemple_fis_l1b}}
+    </p>
+
+    <h2>{{txt.aide_precision_des_temps}}</h2>
+
+    <p>
+    {{txt.aide_precision_des_temps_l1}}
+    </p>
+
+    <p>
+    {{txt.aide_precision_des_temps_l2}}
+    </p>
+
+    <p>
+    {{txt.aide_precision_des_temps_l3a}}<strong>{{txt.precision_tm}}</strong>{{txt.aide_precision_des_temps_l3b}}
+    <strong>{{txt.precision_te}}</strong>{{txt.aide_precision_des_temps_l3c}}
+    </p>
+
+    <p>
+    {{txt.aide_precision_des_temps_l4}}
+    </p>
+
+    <h2>{{ txt["session_titre"] }}</h2>
+
+    <p>{{ txt["session_intro"] }}</p>
+
+    <ul>
+        <li>{{ txt["session_ligne_1"] }}</li>
+        <li>{{ txt["session_ligne_2"] }}</li>
+    </ul>
+
+    <p>{{ txt["session_duree"] }}</p>
+
+    <p>{{ txt["session_fin"] }}</p>
+
+    <p>{{ txt["session_confidentialite"] }}</p>
+
+    <h2>{{ txt["confidentialite_titre"] }}</h2>
+
+    <p>{{ txt["confidentialite_intro"] }}</p>
+
+    <p>{{ txt["confidentialite_compte"] }}</p>
+
+    <p>{{ txt["confidentialite_session"] }}</p>
+
+    <p>{{ txt["confidentialite_stockage"] }}</p>
+
+    <p>{{ txt["confidentialite_ip"] }}</p>
+
+    <button
+        type="button"
+        onclick="window.location.href='/'">
+
+        {{ txt.retour }}
+
+    </button>
+
+{% endblock %}

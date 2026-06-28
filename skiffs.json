@@ -1,0 +1,28 @@
+{
+	"race_info": [
+		{
+			"codex": "FRA1234",
+            "missing": "start",
+			"run": 1,
+            "bib_eet": 3
+		}
+	],
+
+	"eet_data": [
+		{
+			"bib": 1,
+            "posit": 1,
+			"te": "10:12:10.467"
+		},
+		{
+			"bib": 2,
+            "posit": 2,
+			"te": "10:13:05.789"
+		},
+		{
+			"bib": 3,
+            "posit": 3,
+			"te": null
+		}
+	]
+}
