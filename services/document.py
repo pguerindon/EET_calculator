@@ -35,6 +35,7 @@ def nouveau_document_info():
     return {
         "version": constants.DOCUMENT_VERSION,
         "status": constants.STATUS_NEW,
+        "origin": constants.ORIGIN_MANUAL,
         "language": "",
         "errors": []
     }
@@ -387,3 +388,24 @@ def definir_mt_us(
     """
 
     competitor["mt_us"] = mt_us
+
+
+def definir_origin(
+    document,
+    origin
+):
+    """
+    Définit l'origine du document.
+    """
+
+    document["info"]["origin"] = origin
+
+
+def obtenir_origin(
+    document
+):
+    """
+    Retourne l'origine du document.
+    """
+
+    return document["info"]["origin"]

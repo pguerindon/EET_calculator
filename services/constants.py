@@ -70,6 +70,13 @@ MIN_ET_PRECISION = 3
 MAX_ET_PRECISION = 6
 DEFAULT_ET_PRECISION = 5
 
+#
+# Origine du document
+#
+
+ORIGIN_MANUAL = "manual"
+ORIGIN_CHRONO = "chrono"
+
 # ----------------------------------------------------------------------
 # paramètres divers
 # ----------------------------------------------------------------------

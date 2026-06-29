@@ -4,7 +4,9 @@ Import d'un document JSON.
 
 import json
 
+from services import constants
 from services.document import (
+    definir_origin,
     nouveau_document,
     nouveau_competitor,
     ajouter_competitor,
@@ -55,6 +57,11 @@ def importer_json(
     importer_competitors(
         document,
         json_document
+    )
+
+    definir_origin(
+        document,
+        constants.ORIGIN_CHRONO
     )
 
     return document
@@ -185,3 +192,4 @@ def importer_competitors(
             document,
             et_precision
         )
+
