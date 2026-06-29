@@ -12,6 +12,10 @@ from flask import (
 
 from flask_session import Session
 
+from web.session import (
+    obtenir_document_courant,
+)
+
 from services.api import (
     charger_references,
 )

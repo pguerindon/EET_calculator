@@ -18,6 +18,10 @@ from tests.test_validator import (
     test_validator,
 )
 
+from tests.test_adapter import (
+    test_adapter,
+)
+
 def run_all_tests():
     """
     Exécute tous les tests.
@@ -35,6 +39,8 @@ def run_all_tests():
     test_calculator()
 
     test_validator()
+
+    test_adapter()
 
     print("----------------------------------------")
     print("Tous les tests sont OK")

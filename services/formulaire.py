@@ -26,19 +26,24 @@ def lire_lignes(request):
 
 def initialiser_grille():
     """
-    vide les 11 lignes du formulaire de calcul EET.
+    Retourne une grille vide de 11 lignes.
     """
-    lignes = []
 
-    for i in range(11):
+    return [
+        nouvelle_ligne()
+        for _ in range(11)
+    ]
 
-        lignes.append(
-            {
-                "dossard": "",
-                "tm": "",
-                "te": "",
-                "delta": "",
-                "eet": False
-            }
-        )
-    return lignes
+
+def nouvelle_ligne():
+    """
+    Retourne une ligne vide du formulaire.
+    """
+
+    return {
+        "dossard": "",
+        "tm": "",
+        "te": "",
+        "delta": "",
+        "eet": False,
+    }
