@@ -27,12 +27,6 @@ env/
 *.zip
 versions_de_EET/
 
-# =========================
-# Windows
-# =========================
-Thumbs.db
-Desktop.ini
-
 # Fichiers système
 .DS_Store
 Thumbs.db
@@ -50,3 +44,6 @@ ssh_console_ovh.bat
 
 # Configurations locales éventuelles
 *.code-workspace
+
+# Flask session
+flask_session/

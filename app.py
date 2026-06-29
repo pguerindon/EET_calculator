@@ -10,6 +10,8 @@ from flask import (
     session,
 )
 
+from flask_session import Session
+
 from services.api import (
     charger_references,
 )
@@ -47,9 +49,17 @@ app = Flask(__name__)
 
 app.secret_key = SECRET_KEY
 
-app.permanent_session_lifetime = timedelta(
+app.config["SESSION_TYPE"] = "filesystem"
+
+app.config["SESSION_PERMANENT"] = True
+
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(
     hours=8
 )
+
+Session(app)
+
+app.secret_key = SECRET_KEY
 
 @app.route("/sitemap.xml")
 def sitemap():
