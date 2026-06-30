@@ -141,11 +141,48 @@ def _ligne_vers_competitor(
 def lignes_vers_document(
     document,
     lignes,
+    et_precision,
+    mt_precision,
+    eet_bib,
 ):
     """
     Met à jour un document
-    à partir des lignes du formulaire.
+    à partir du formulaire.
     """
+
+    #
+    # Mise à jour de la course
+    #
+
+    document["race"]["et_precision"] = (
+        et_precision
+    )
+
+    document["race"]["mt_precision"] = (
+        mt_precision
+    )
+
+    #
+    # Mise à jour des paramètres du calcul
+    #
+
+    document["calculation"]["eet_bib"] = (
+        eet_bib
+    )
+
+    #
+    # Les résultats seront recalculés
+    #
+
+    document["calculation"]["reference_indexes"] = []
+
+    document["calculation"]["sum_delta_us"] = 0
+
+    document["calculation"]["correction_us"] = 0
+
+    #
+    # Reconstruction complète des concurrents
+    #
 
     document["competitors"].clear()
 
@@ -161,4 +198,3 @@ def lignes_vers_document(
         document["competitors"].append(
             competitor
         )
-

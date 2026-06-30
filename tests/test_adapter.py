@@ -60,10 +60,13 @@ def test_lignes_vers_document():
             nouveau_competitor()
         )
 
-    lignes_vers_document(
-        document2,
-        lignes,
-    )
+        lignes_vers_document(
+            document2,
+            lignes,
+            4,      # et_precision
+            4,      # mt_precision
+            "8",    # eet_bib (ou le dossard EET utilisé dans ton jeu de référence)
+        )
 
     for index in range(11):
 
