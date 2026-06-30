@@ -37,7 +37,7 @@ def calculer_document(
     document
 ):
     """
-    Effectue le calcul EET.
+    Effectue le calcul EET complet.
     """
 
     if contient_erreurs(
@@ -45,7 +45,11 @@ def calculer_document(
     ):
         return
 
-def rechercher_references(
+    _rechercher_references(
+        document
+    )
+
+def _rechercher_references(
     document
 ):
     """
@@ -102,24 +106,24 @@ def rechercher_references(
         reference_indexes
     )
 
-    calculer_deltas(
+    _calculer_deltas(
         document
     )
 
-    calculer_correction(
+    _calculer_correction(
         document
     )
 
-    calculer_eet(
+    _calculer_eet(
         document
     )
 
-    finaliser_calcul(
+    _finaliser_calcul(
         document
     )
 
 
-def calculer_deltas(
+def _calculer_deltas(
     document
 ):
     """
@@ -147,7 +151,7 @@ def calculer_deltas(
         )
 
 
-def calculer_correction(
+def _calculer_correction(
     document
 ):
     """
@@ -192,7 +196,7 @@ def calculer_correction(
     )
 
 
-def calculer_eet(
+def _calculer_eet(
     document
 ):
     """
@@ -221,5 +225,8 @@ def calculer_eet(
     competitor["et_us"] = eet_us
 
 
-def finaliser_calcul(document):
-    pass
+def _finaliser_calcul(document):
+
+    document["calculation"]["nb_references"] = len(
+        document["calculation"]["reference_indexes"]
+    )

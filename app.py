@@ -12,6 +12,8 @@ from flask import (
 
 from flask_session import Session
 
+from web.actions import changer_langue, ouvrir_application
+from web.adapter import lignes_vers_document
 from web.session import (
     obtenir_document_courant,
 )
@@ -254,35 +256,15 @@ def calcul():
     #
 
     if request.method == "GET":
-        dernier_calcul = session.get(
-            "dernier_calcul"
+
+        return ouvrir_application(
+            txt,
+            langue,
+            calcul_precedent,
+            precision_te_session,
+            precision_tm_session,
         )
 
-        if dernier_calcul:
-            return afficher_calcul(
-                txt=txt,
-                langue=langue,
-                lignes=dernier_calcul["lignes"],
-                correction=dernier_calcul["correction"],
-                eet=dernier_calcul["eet"],
-                somme_delta=dernier_calcul["somme_delta"],
-                precision_te=dernier_calcul["precision_te"],
-                precision_tm=dernier_calcul["precision_tm"],
-                dossard_eet=dernier_calcul["dossard_eet"],
-                nb_references=dernier_calcul["nb_references"],
-                calcul_precedent=calcul_precedent,
-            )
-
-        lignes = initialiser_grille() 
-        return afficher_calcul(
-            txt=txt,
-            langue=langue,
-            lignes=lignes,
-            precision_te=precision_te_session,
-            precision_tm=precision_tm_session,
-            calcul_precedent=calcul_precedent,
-        )        
-    
     #
     # Récupération de l'action demandée
     #
@@ -296,12 +278,12 @@ def calcul():
 
     if action == "langue":
 
-        session["langue"] = request.form.get(
-            "langue",
-            DEFAULT_LANGUAGE
+        return changer_langue(
+            request.form.get(
+                "langue",
+                DEFAULT_LANGUAGE
+            )
         )
-
-        return redirect("/")
     
     #
     # Calcul du temps électronique équivalent
@@ -335,6 +317,13 @@ def calcul():
 
 
     lignes = lire_lignes(request)
+
+    document = obtenir_document_courant()
+
+    lignes_vers_document(
+        document,
+        lignes,
+    )
 
     dossard_eet_form = request.form.get(
         "dossard_eet",

@@ -7,22 +7,24 @@ from tests.jeu_reference import (
 )
 
 from services.calculator import (
-    calculer_deltas,
-    calculer_correction,
-    calculer_eet,
+    calculer_document,
 )
 
 
-def test_calculer_deltas():
+def test_calculer_document():
     """
-    Vérifie le calcul des deltas.
+    Vérifie le calcul complet.
     """
 
     document = creer_document_reference()
 
-    calculer_deltas(
+    calculer_document(
         document
     )
+
+    #
+    # Vérification des deltas
+    #
 
     deltas = [
         100,
@@ -54,21 +56,9 @@ def test_calculer_deltas():
             == deltas[i]
         )
 
-
-def test_calculer_correction():
-    """
-    Vérifie le calcul de la correction.
-    """
-
-    document = creer_document_reference()
-
-    calculer_deltas(
-        document
-    )
-
-    calculer_correction(
-        document
-    )
+    #
+    # Vérification de la correction
+    #
 
     assert (
         document["calculation"]["sum_delta_us"]
@@ -80,25 +70,9 @@ def test_calculer_correction():
         == 580
     )
 
-
-def test_calculer_eet():
-    """
-    Vérifie le calcul de l'EET.
-    """
-
-    document = creer_document_reference()
-
-    calculer_deltas(
-        document
-    )
-
-    calculer_correction(
-        document
-    )
-
-    calculer_eet(
-        document
-    )
+    #
+    # Vérification de l'EET
+    #
 
     competitor = (
         document["competitors"][7]
@@ -111,15 +85,8 @@ def test_calculer_eet():
 
 
 def test_calculator():
-    """
-    Exécute tous les tests du module calculator.
-    """
 
-    test_calculer_deltas()
-
-    test_calculer_correction()
-
-    test_calculer_eet()
+    test_calculer_document()
 
     print(
         "Tous les tests de calculator sont OK"

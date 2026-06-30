@@ -3,6 +3,7 @@ Adaptateur entre le document métier
 et l'interface Web.
 """
 
+from services.document import nouveau_competitor
 from services.formulaire import (
     nouvelle_ligne,
 )
@@ -113,26 +114,29 @@ def _ligne_vers_competitor(
 
     competitor["bib"] = ligne["dossard"]
 
-    if ligne["tm"]:
+    tm = ligne["tm"]
+
+    if tm:
 
         competitor["mt_us"] = duration_to_us(
-            ligne["tm"]
+            tm
         )
 
     else:
 
         competitor["mt_us"] = None
 
-    if ligne["te"]:
+    te = ligne["te"]
+
+    if te:
 
         competitor["et_us"] = tod_to_us(
-            ligne["te"]
+            te
         )
 
     else:
 
         competitor["et_us"] = None
-
 
 def lignes_vers_document(
     document,
@@ -143,12 +147,18 @@ def lignes_vers_document(
     à partir des lignes du formulaire.
     """
 
-    precision = document["race"]["et_precision"]
+    document["competitors"].clear()
 
-    for index, ligne in enumerate(lignes):
+    for ligne in lignes:
+
+        competitor = nouveau_competitor()
 
         _ligne_vers_competitor(
             ligne,
-            document["competitors"][index],
+            competitor,
+        )
+
+        document["competitors"].append(
+            competitor
         )
 
