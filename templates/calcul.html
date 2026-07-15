@@ -29,18 +29,24 @@
             alt="FFS">
 
     </div>
+
+
 <form
     method="POST"
     action="/"
     autocomplete="off">
 
+
     <div class="parametres">
 
-        <label>{{txt.precision_te}} :</label>
+        <label>
+            {{ txt.precision_te }} :
+        </label>
 
         <select
             id="precision_te"
-            name="precision_te">
+            name="precision_te"
+            {% if lecture_seule %}disabled{% endif %}>
 
             <option value="3"
                 {% if precision_te == 3 %}selected{% endif %}>
@@ -64,13 +70,18 @@
 
         </select>
 
+
         &nbsp;&nbsp;&nbsp;
 
-        <label>{{txt.precision_tm}} :</label>
+
+        <label>
+            {{ txt.precision_tm }} :
+        </label>
 
         <select
             id="precision_tm"
-            name="precision_tm">
+            name="precision_tm"
+            {% if lecture_seule %}disabled{% endif %}>
 
             <option value="2"
                 {% if precision_tm == 2 %}selected{% endif %}>
@@ -99,14 +110,40 @@
 
         </select>
 
+
+        &nbsp;&nbsp;&nbsp;
+
+
+        <label>
+            {{ txt.id_calcul }} :
+        </label>
+
+        <input
+            type="text"
+            id="calculation_id"
+            class="calculation-id"
+            name="calculation_id"
+            value="{{ calculation_id }}"
+            maxlength="6">
+
+        <button
+            type="submit"
+            name="action"
+            value="rappeler">
+
+            OK
+
+        </button>
+
+
+        &nbsp;&nbsp;&nbsp;
+
+
         <select
+            id="langue"
             name="langue"
-            onchange="
-                document.getElementById(
-                    'action_langue'
-                ).value='langue';
-                this.form.submit();
-            ">
+            onchange="changerLangue()">
+
             <option value="fr"
                 {% if langue == "fr" %}selected{% endif %}>
                 Français
@@ -121,126 +158,420 @@
                 {% if langue == "de" %}selected{% endif %}>
                 Deutsch
             </option>
+
         </select>
-        
-</div>
-    <input
-        type="hidden"
-        id="action_langue"
-        name="action_langue"
-        value="">
+
+        <button
+            id="btn_langue"
+            type="submit"
+            name="action"
+            value="langue"
+            style="display:none">
+        </button>
+
+    </div>
+
+
+    <div class="zone-bascule-recherche">
+
+        <button
+            type="button"
+            id="btn_afficher_recherche">
+
+            {{ txt.rechercher_calcul }}
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="zone_recherche"
+        class="zone-recherche"
+        {% if not recherche_effectuee %}
+        style="display:none"
+        {% endif %}>
+
+
+        <div class="recherche-calcul">
+
+            <label>
+                {{ txt.saison }} :
+            </label>
+
+            <input
+                type="text"
+                id="search_season"
+                class="recherche-season"
+                name="search_season"
+                value="{{ recherche.season }}"
+                maxlength="4">
+
+
+            <label>
+                {{ txt.codex }} :
+            </label>
+
+            <input
+                type="text"
+                id="search_codex"
+                class="recherche-codex"
+                name="search_codex"
+                value="{{ recherche.codex }}"
+                maxlength="4">
+
+
+            <label>
+                {{ txt.dossard }} :
+            </label>
+
+            <input
+                type="text"
+                id="search_bib"
+                class="recherche-bib"
+                name="search_bib"
+                value="{{ recherche.bib }}">
+
+
+            <button
+                type="submit"
+                name="action"
+                value="rechercher">
+
+                {{ txt.rechercher }}
+
+            </button>
+
+
+            <button
+                type="button"
+                id="btn_fermer_recherche">
+
+                {{ txt.fermer }}
+
+            </button>
+
+        </div>
+
+
+        {% if recherche_effectuee %}
+
+
+        <div class="resultats-recherche">
+
+
+            {% if resultats_recherche %}
+
+
+                <table>
+
+                    <tr>
+
+                        <th>
+                            {{ txt.saison }}
+                        </th>
+
+                        <th>
+                            {{ txt.codex }}
+                        </th>
+
+                        <th>
+                            {{ txt.discipline }}
+                        </th>
+
+                        <th>
+                            {{ txt.manche }}
+                        </th>
+
+                        <th>
+                            {{ txt.dossard }}
+                        </th>
+
+                        <th>
+                            {{ txt.date }}
+                        </th>
+
+                        <th>
+                            {{ txt.lieu }}
+                        </th>
+
+                        <th>
+                        </th>
+
+                    </tr>
+
+
+                    {% for document_recherche
+                        in resultats_recherche %}
+
+
+                        {% set eet_index =
+                            document_recherche.result.eet_index %}
+
+
+                        {% set competitor =
+                            document_recherche.competitors[
+                                eet_index
+                            ] %}
+
+
+                    <tr>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .season
+                            }}
+                        </td>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .codex
+                            }}
+                        </td>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .discipline
+                            }}
+                        </td>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .run
+                            }}
+                        </td>
+
+                        <td>
+                            {{ competitor.bib }}
+                        </td>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .date
+                            }}
+                        </td>
+
+                        <td>
+                            {{
+                                document_recherche
+                                .race
+                                .location
+                            }}
+                        </td>
+
+                        <td>
+
+                            <button
+                                type="submit"
+                                name="consulter_index"
+                                value="{{ loop.index0 }}">
+
+                                {{ txt.consulter }}
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </table>
+
+
+            {% else %}
+
+
+            <p>
+                 {{ txt.aucun_calcul_trouve }}
+            </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
 
     <input
         type="hidden"
         name="dossard_eet"
         value="{{ dossard_eet }}">
 
-    <div class="conteneur">
+
+    <div
+        id="zone_calcul"
+        class="conteneur"
+        {% if recherche_effectuee %}
+        style="display:none"
+        {% endif %}>
+
 
         <div class="zone-grille">
+
 
             <table>
 
                 <tr>
+
                     <th style="width:80px">
-                        {{txt.dossard}}
+                        {{ txt.dossard }}
                     </th>
 
                     <th>
-                        {{txt.temps_manuel}}
+                        {{ txt.temps_manuel }}
                     </th>
 
                     <th>
-                        {{txt.temps_electronique}}
+                        {{ txt.temps_electronique }}
                     </th>
 
                     <th style="width:120px">
-                        {{txt.delta}}
+                        {{ txt.delta }}
                     </th>
+
                 </tr>
 
+
                 {% for ligne in lignes %}
+
 
                 <tr class="ligne {% if ligne.eet %}ligne-eet-calculee{% endif %}">
 
                     <td>
+
                         <input
                             type="text"
                             class="dossard"
                             name="dossard_{{ loop.index0 }}"
-                            value="{{ ligne.dossard }}">
+                            value="{{ ligne.dossard }}"
+                            {% if lecture_seule %}readonly{% endif %}>
+
                     </td>
 
                     <td>
+
                         <input
                             type="text"
                             class="tm"
                             name="tm_{{ loop.index0 }}"
-                            value="{{ ligne.tm }}">
+                            value="{{ ligne.tm }}"
+                            {% if lecture_seule %}readonly{% endif %}>
+
                     </td>
 
                     <td>
+
                         <input
                             type="text"
                             class="te {% if ligne.eet %}te-eet{% endif %}"
                             name="te_{{ loop.index0 }}"
-                            value="{{ ligne.te }}">
+                            value="{{ ligne.te }}"
+                            {% if lecture_seule %}readonly{% endif %}>
+
                     </td>
 
                     <td class="delta-cell delta">
 
                         {% if ligne.eet %}
+
                             EET
+
                         {% else %}
+
                             {{ ligne.delta }}
+
                         {% endif %}
 
                     </td>
 
                 </tr>
 
+
                 {% endfor %}
+
 
                 <tr class="ligne-total">
 
-                    <td class="total-label" colspan="3">
+                    <td
+                        class="total-label"
+                        colspan="3">
+
                         {{ txt.somme_delta }}
+
                     </td>
 
                     <td class="delta-total">
+
                         {{ somme_delta }}
+
                     </td>
 
                 </tr>
 
             </table>
 
+
             <br>
+
+
+            {% if not lecture_seule %}
+
 
             <button
                 id="btn_calculer"
                 type="submit"
+                name="action"
+                value="calcul"
                 disabled>
 
-                {{txt.calculer}}
+                {{ txt.calculer }}
 
             </button>
+
 
             <button
                 id="btn_effacer"
-                type="button">
+                type="submit"
+                name="action"
+                value="effacer">
 
-                {{txt.effacer}}
+                {{ txt.effacer }}
 
             </button>
+
 
             <button
                 id="btn_exemple_fis"
-                type="button">
+                type="submit"
+                name="action"
+                value="exemple_fis">
 
-                {{txt.exemple_fis}}
+                {{ txt.exemple_fis }}
 
             </button>
+
+
+            {% endif %}
+
 
             <button
                 type="button"
@@ -250,6 +581,7 @@
 
             </button>
 
+
             <button
                 type="button"
                 onclick="window.location.href='/timecalc'">
@@ -257,7 +589,8 @@
                 {{ txt.calculatrice_horaire }}
 
             </button>
-            
+
+
             <button
                 type="button"
                 onclick="window.location.href='/about'">
@@ -266,70 +599,93 @@
 
             </button>
 
+
             <p id="message_validation"></p>
 
         </div>
 
+
         {% if eet %}
-        <div 
+
+
+        <div
             id="resultat-panel"
             class="zone-resultat">
 
-            <h2>{{txt.resultat}}</h2>
+
+            <h2>
+                {{ txt.resultat }}
+            </h2>
+
 
             <table class="resultat">
 
                 <tr>
+
                     <td>
-                        {{txt.dossard_eet}}
+                        {{ txt.dossard_eet }}
                     </td>
 
                     <td>
                         {{ dossard_eet }}
                     </td>
+
                 </tr>
 
+
                 <tr>
+
                     <td>
-                        {{txt.references}}
+                        {{ txt.references }}
                     </td>
 
                     <td>
                         {{ nb_references }}
                     </td>
+
                 </tr>
 
+
                 <tr>
+
                     <td>
-                        {{txt.somme_delta}}
+                        {{ txt.somme_delta }}
                     </td>
 
                     <td>
                         {{ somme_delta }}
                     </td>
+
                 </tr>
 
+
                 <tr>
+
                     <td>
-                        {{txt.correction}}
+                        {{ txt.correction }}
                     </td>
 
                     <td>
                         {{ correction }}
                     </td>
+
                 </tr>
 
+
                 <tr>
+
                     <td>
-                        {{txt.eet_calculee}}
+                        {{ txt.eet_calculee }}
                     </td>
 
                     <td id="eet_calculee">
                         {{ eet }}
                     </td>
+
                 </tr>
 
             </table>
+
 
             <div class="zone-options-resultat">
 
@@ -343,6 +699,7 @@
 
                 </button>
 
+
                 <label class="option-affichage">
 
                     <input
@@ -355,22 +712,31 @@
 
             </div>
 
+
             {% if calcul_precedent %}
+
 
             <hr>
 
+
             <div class="calcul-precedent">
 
-                <h3>{{txt.calcul_precedent}}</h3>
+                <h3>
+                    {{ txt.calcul_precedent }}
+                </h3>
 
                 <p>
-                    {{txt.dossard}} :
+
+                    {{ txt.dossard }} :
                     {{ calcul_precedent.dossard_eet }}
+
                 </p>
 
                 <p>
+
                     EET :
                     {{ calcul_precedent.eet }}
+
                 </p>
 
                 <button
@@ -383,17 +749,21 @@
 
             </div>
 
+
             {% endif %}
 
 
- 
- 
         </div>
+
+
         {% endif %}
+
 
     </div>
 
+
 </form>
+
 
 <script>
 
@@ -409,7 +779,7 @@
             "{{ txt.erreur_tm }}",
 
         erreur_references:
-             "{{ txt.erreur_references }}",
+            "{{ txt.erreur_references }}",
 
         grille_valide:
             "{{ txt.grille_valide }}"
@@ -417,10 +787,57 @@
 
 </script>
 
+
+<script>
+
+    const btnAfficherRecherche = document.getElementById(
+        "btn_afficher_recherche"
+    );
+
+    const btnFermerRecherche = document.getElementById(
+        "btn_fermer_recherche"
+    );
+
+    const zoneRecherche = document.getElementById(
+        "zone_recherche"
+    );
+
+    const zoneCalcul = document.getElementById(
+        "zone_calcul"
+    );
+
+
+    btnAfficherRecherche.addEventListener(
+        "click",
+        function () {
+
+            zoneRecherche.style.display = "block";
+
+            zoneCalcul.style.display = "none";
+
+        }
+    );
+
+
+    btnFermerRecherche.addEventListener(
+        "click",
+        function () {
+
+            zoneRecherche.style.display = "none";
+
+            zoneCalcul.style.display = "";
+
+        }
+    );
+
+</script>
+
+
 <script src="{{ url_for(
                     'static',
                     filename='js/eet.js'
                 ) }}?v={{ version }}">
 </script>
+
 
 {% endblock %}

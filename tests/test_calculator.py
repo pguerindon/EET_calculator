@@ -1,25 +1,78 @@
 """
 Tests du module calculator.
-"""
 
-from tests.jeu_reference import (
-    creer_document_reference,
-)
+Le moteur de calcul est vérifié à partir
+de l'exemple officiel FIS.
+"""
 
 from services.calculator import (
     calculer_document,
 )
 
+from services.exemples import (
+    charger_exemple_fis,
+)
+
+from services.document import (
+    nouveau_document,
+)
+
+from services.validator import (
+    valider_document,
+)
+
 
 def test_calculer_document():
     """
-    Vérifie le calcul complet.
+    Vérifie le calcul complet
+    sur l'exemple officiel FIS.
     """
 
-    document = creer_document_reference()
+    document = nouveau_document()
+
+    charger_exemple_fis(
+        document
+    )
+
+    valider_document(
+        document
+    )
+
+    assert not document["info"]["errors"]
 
     calculer_document(
         document
+    )
+
+    result = document["result"]
+
+    #
+    # Vérification du concurrent EET
+    #
+
+    assert (
+        result["eet_index"]
+        == 7
+    )
+
+    #
+    # Vérification des références
+    #
+
+    assert (
+        result["reference_indexes"]
+        == [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            9,
+            10,
+        ]
     )
 
     #
@@ -27,64 +80,94 @@ def test_calculer_document():
     #
 
     deltas = [
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        900,
-        1000,
-        1100,
+        225_600,
+        -173_200,
+        5_800,
+        -366_400,
+        -598_800,
+        -42_700,
+        51_000,
+        -125_100,
+        -181_900,
+        48_100,
     ]
 
-    references = (
-        document["calculation"]["reference_indexes"]
-    )
-
-    for i, index in enumerate(
-        references
+    for delta_us, index in zip(
+        deltas,
+        result["reference_indexes"],
     ):
 
-        competitor = (
-            document["competitors"][index]
-        )
+        competitor = document["competitors"][
+            index
+        ]
 
         assert (
             competitor["delta_us"]
-            == deltas[i]
+            == delta_us
         )
 
     #
-    # Vérification de la correction
+    # Vérification de la somme des deltas
     #
 
     assert (
-        document["calculation"]["sum_delta_us"]
-        == 5800
+        result["sum_delta_us"]
+        == -1_157_600
     )
 
+    #
+    # Vérification de la correction FIS
+    #
+
     assert (
-        document["calculation"]["correction_us"]
-        == 580
+        result["correction_us"]
+        == -115_800
     )
 
     #
     # Vérification de l'EET
     #
 
-    competitor = (
-        document["competitors"][7]
+    competitor = document["competitors"][7]
+
+    assert (
+        competitor["bib"]
+        == "8"
+    )
+
+    #
+    # L'ET original reste manquant
+    #
+
+    assert (
+        competitor["et_tod"]
+        is None
     )
 
     assert (
         competitor["et_us"]
-        == 8_000_580
+        is None
+    )
+
+    #
+    # L'EET calculé est stocké séparément
+    #
+
+    assert (
+        competitor["eet_tod"]
+        == "10:07:51.6972"
+    )
+
+    assert (
+        competitor["eet_us"]
+        == 36_471_697_200
     )
 
 
 def test_calculator():
+    """
+    Exécute les tests du calculator.
+    """
 
     test_calculer_document()
 

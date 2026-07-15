@@ -142,7 +142,7 @@ function mettreAJourDeltas()
         });
 }
 
-function validerGrille()
+function mettreAJourEtatCalcul()
 {
     let nbDossards = 0;
     let nbTMComplets = 0;
@@ -165,75 +165,70 @@ function validerGrille()
 
     document
         .querySelectorAll(".ligne")
-        .forEach(ligne =>
-        {
-            ligne.classList.remove(
-                "ligne-eet"
-            );
-
-            const dossard =
-                ligne.querySelector(".dossard")
-                     .value.trim();
-
-            const tm =
-                ligne.querySelector(".tm")
-                     .value.trim();
-
-            const te =
-                ligne.querySelector(".te")
-                     .value.trim();
-
-            if (dossard !== "")
+        .forEach(
+            ligne =>
             {
-                nbDossards++;
-            }
-
-            if (
-                tempsComplet(
-                    tm,
-                    precisionTM
-                )
-            )
-            {
-                nbTMComplets++;
-            }
-
-            if (
-                tempsComplet(
-                    te,
-                    precisionTE
-                )
-            )
-            {
-                nbTEComplets++;
-            }
-
-            if (te === "")
-            {
-                nbTEVides++;
-            }
-
-            /*
-             * Ligne EET :
-             * Dossard présent
-             * TM complet
-             * TE vide
-             */
-
-            if (
-                dossard !== "" &&
-                tempsComplet(
-                    tm,
-                    precisionTM
-                ) &&
-                te === ""
-            )
-            {
-                ligne.classList.add(
+                ligne.classList.remove(
                     "ligne-eet"
                 );
+
+                const dossard =
+                    ligne.querySelector(".dossard")
+                         .value.trim();
+
+                const tm =
+                    ligne.querySelector(".tm")
+                         .value.trim();
+
+                const te =
+                    ligne.querySelector(".te")
+                         .value.trim();
+
+                if (dossard !== "")
+                {
+                    nbDossards++;
+                }
+
+                if (
+                    tempsComplet(
+                        tm,
+                        precisionTM
+                    )
+                )
+                {
+                    nbTMComplets++;
+                }
+
+                if (
+                    tempsComplet(
+                        te,
+                        precisionTE
+                    )
+                )
+                {
+                    nbTEComplets++;
+                }
+
+                if (te === "")
+                {
+                    nbTEVides++;
+                }
+
+                if (
+                    dossard !== "" &&
+                    tempsComplet(
+                        tm,
+                        precisionTM
+                    ) &&
+                    te === ""
+                )
+                {
+                    ligne.classList.add(
+                        "ligne-eet"
+                    );
+                }
             }
-        });
+        );
 
     const grilleValide =
     (
@@ -243,75 +238,23 @@ function validerGrille()
         nbTEVides === 1
     );
 
-    console.log(
-        "nbDossards=",
-        nbDossards,
-        "nbTMComplets=",
-        nbTMComplets,
-        "nbTEComplets=",
-        nbTEComplets,
-        "nbTEVides=",
-        nbTEVides
-    );
-
-    console.log(
-        "grilleValide=",
-        grilleValide
-    );
-
     const message =
         document.getElementById(
             "message_validation"
         );
 
-    if (
-        document.getElementById(
-            "resultat-panel"
-        ) !== null
-    )
-    {
-        message.innerHTML = "";
-        return;
-    }
-    if (nbTEVides > 1)
-    {
-        message.innerHTML =
-            TXT.erreur_plusieurs_te;
-    }
-
-    else if (
-        nbTEVides === 0 &&
-        !resultatAffiche
-    )
-    {
-        message.innerHTML =
-            TXT.erreur_aucun_te;
-    }
-    else if (nbTMComplets < 11)
-    {
-        message.innerHTML =
-            TXT.erreur_tm;
-    }
-    else if (nbTEComplets < 10)
-    {
-         message.innerHTML =
-            TXT.erreur_references;
-    }
-    else if (grilleValide)
+    if (grilleValide)
     {
         message.innerHTML =
             "✓ " + TXT.grille_valide;
-    }
 
-    if (grilleValide)
-    {
-        message.style.color = "green";
+        message.style.color =
+            "green";
     }
     else
     {
-        message.style.color = "red";
+        message.innerHTML = "";
     }
-
 
     document
         .getElementById(
@@ -319,57 +262,13 @@ function validerGrille()
         )
         .disabled = !grilleValide;
 
-}
-
-function chargerExempleFIS()
-{
-    document.getElementById(
-        "precision_te"
-    ).value = "4";
-
-    document.getElementById(
-        "precision_tm"
-    ).value = "4";
-
-    const donnees =
-    [
-        ["1","10:00:50.3548","10:00:50.1292"],
-        ["2","10:01:52.0189","10:01:52.1921"],
-        ["3","10:02:49.4978","10:02:49.4920"],
-        ["4","10:03:50.6148","10:03:50.9812"],
-        ["5","10:04:49.2741","10:04:49.8729"],
-        ["6","10:05:50.4702","10:05:50.5129"],
-        ["7","10:06:48.9125","10:06:48.8615"],
-        ["8","10:07:51.5814",""],
-        ["9","10:08:49.8751","10:08:50.0002"],
-        ["10","10:09:49.2459","10:09:49.4278"],
-        ["11","10:10:50.3954","10:10:50.3473"]
-    ];
-
-    document
-        .querySelectorAll(".ligne")
-        .forEach(
-            (ligne, index) =>
-            {
-                ligne.querySelector(
-                    ".dossard"
-                ).value =
-                    donnees[index][0];
-
-                ligne.querySelector(
-                    ".tm"
-                ).value =
-                    donnees[index][1];
-
-                ligne.querySelector(
-                    ".te"
-                ).value =
-                    donnees[index][2];
-            }
-        );
-
-    mettreAJourDeltas();
-    validerGrille();
+    console.log(
+        "Dossards :", nbDossards,
+        "TM :", nbTMComplets,
+        "TE :", nbTEComplets,
+        "TE vides :", nbTEVides,
+        "Grille valide :", grilleValide
+    );
 }
 
 document.addEventListener(
@@ -452,125 +351,9 @@ document.addEventListener(
             }
         }
         mettreAJourDeltas();
-        validerGrille();
+        mettreAJourEtatCalcul();
     }
 );
-
-
-document
-    .getElementById("btn_effacer")
-    .addEventListener(
-        "click",
-        function()
-        {
-            //
-            // Champs
-            //
-            document
-                .querySelectorAll(".dossard, .tm, .te")
-                .forEach(champ =>
-                {
-                    champ.value = "";
-                });
-
-            //
-            // Deltas
-            //
-            document
-                .querySelectorAll(".delta-cell")
-                .forEach(cell =>
-                {
-                    cell.textContent = "";
-                    cell.className =
-                        "delta-cell delta";
-                });
-
-            //
-            // Somme des deltas
-            //
-            const total =
-                document.querySelector(
-                    ".delta-total"
-                );
-
-            if (total)
-            {
-                total.textContent = "";
-            }
-
-            //
-            // Ligne EET
-            //
-            document
-                .querySelectorAll(".ligne")
-                .forEach(ligne =>
-                {
-                    ligne.classList.remove(
-                        "ligne-eet-calculee"
-                    );
-                });
-
-            document
-                .querySelectorAll(".te")
-                .forEach(champ =>
-                {
-                    champ.classList.remove(
-                        "te-eet"
-                    );
-                });
-
-            //
-            // Panneau résultat
-            //
-            const panel =
-                document.getElementById(
-                    "resultat-panel"
-                );
-
-            if (panel)
-            {
-                panel.remove();
-            }
-
-            document
-                .querySelector(
-                    ".conteneur"
-                )
-                .classList
-                .remove(
-                    "resultat-dessous"
-                );
-
-
-            //
-            // Message
-            //
-            document.getElementById(
-                "message_validation"
-            ).textContent = "";
-
-            //
-            // Bouton calcul
-            //
-            document.getElementById(
-                "btn_calculer"
-            ).disabled = true;
-
-            
-        }
-    );
-
-document
-    .getElementById(
-        "btn_exemple_fis"
-    )
-    .addEventListener(
-        "click",
-        function()
-        {
-            chargerExempleFIS();
-        }
-    )
 
 const checkbox =
     document.getElementById(
@@ -624,3 +407,19 @@ if (checkbox)
         }
     );
 }
+
+function changerLangue()
+{
+    document.getElementById(
+        "btn_langue"
+    ).click();
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () =>
+    {
+        mettreAJourDeltas();
+        mettreAJourEtatCalcul();
+    }
+);

@@ -47,3 +47,17 @@ ssh_console_ovh.bat
 
 # Flask session
 flask_session/
+
+# Calculs EET persistés
+calculs/*.json
+calculs/*.tmp
+
+# Exports générés
+document.json
+
+# Fichiers de test HTTP
+tests/cookies.txt
+
+# Artefacts accidentels PowerShell
+-Method
+Invoke-RestMethod

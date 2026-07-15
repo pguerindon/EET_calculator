@@ -1,49 +1,58 @@
-from datetime import timedelta
-
 from flask import (
     Flask,
     jsonify,
-    redirect,
     request,
+    redirect,
     send_file,
     send_from_directory,
     session,
 )
 
-from flask_session import Session
-
-from web.actions import changer_langue, ouvrir_application
-from web.adapter import lignes_vers_document
-from web.session import (
-    obtenir_document_courant,
-)
-
-from services.api import (
-    charger_references,
-)
-
-from config import (
-    DEFAULT_LANGUAGE,
-    SECRET_KEY, 
-)
+from config import DEFAULT_LANGUAGE, SECRET_KEY
+from copy import deepcopy
 
 from pdf import creer_pdf
 
-from services.eet_calculator import (
-    calculer_deltas,
-    calculer_eet,
-    trouver_ligne_eet,
-    extraire_references,
+from export_json import (
+    exporter_document_json,
 )
 
-from services.formulaire import (
-    initialiser_grille,
-    lire_lignes,
+from services.views import(
+    afficher_about,
+    afficher_calcul, 
+    afficher_help, 
+    afficher_help_timecalc, 
+    afficher_timecalc,
 )
 
-from services.views import (
-    afficher_calcul,
-    afficher_page,
+from services.eep import (
+    recevoir_eep,
+    rappeler_calcul,
+    rechercher_calculs,
+    sauver_calcul,
+)
+
+from services.eep_validator import (
+    EEPValidationError,
+)
+
+from services.importer_form import (
+    importer_formulaire,
+)
+
+from services.workflow import traiter_document
+
+from services.exemples import charger_exemple_fis
+
+from web.session import (
+    definir_document_courant,
+    obtenir_document_courant,
+    enregistrer_nouveau_calcul,
+    echanger_documents,
+)
+
+from services.document import (
+    nouveau_document,
 )
 
 from translation import (
@@ -51,19 +60,8 @@ from translation import (
     TEXTES,
 )
 
+
 app = Flask(__name__)
-
-app.secret_key = SECRET_KEY
-
-app.config["SESSION_TYPE"] = "filesystem"
-
-app.config["SESSION_PERMANENT"] = True
-
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(
-    hours=8
-)
-
-Session(app)
 
 app.secret_key = SECRET_KEY
 
@@ -94,373 +92,397 @@ def google_verification():
 @app.route("/about")
 def about():
 
-    langue = get_langue()
+    return afficher_about()
 
-    txt = TEXTES[langue]
-
-    return afficher_page(
-        "about.html",
-        txt,
-        langue,
-        txt["a_propos_title"],
-    )
-
-@app.route(
-    "/api/load",
-    methods=["POST"]
-)
-def api_load():
-
-    data = request.get_json()
-
-    lignes = charger_references(
-        data
-    )
-
-    return jsonify(
-        {
-            "status": "ok",
-            "lignes": lignes
-        }
-    )
 
 @app.route("/help")
 def help():
 
-    langue = get_langue()
+    return afficher_help()
 
-    txt = TEXTES[langue]
 
-    return afficher_page(
-        "help.html",
-        txt,
-        langue,
-        txt["aide_title"],
+@app.route("/timecalc")
+def timecalc():
+
+    return afficher_timecalc()
+
+
+@app.route("/help_timecalc")
+def help_timecalc():
+
+    return afficher_help_timecalc()
+
+
+@app.route(
+    "/api/eep",
+    methods=["POST"],
+)
+def api_eep():
+    """
+    Reçoit un document EEP
+    d'un système de chronométrage.
+    """
+
+    eep_document = request.get_json(
+        silent=True
+    )
+
+    try:
+
+        calculation_id = recevoir_eep(
+            eep_document
+        )
+
+    except EEPValidationError as erreur:
+
+        return jsonify(
+            {
+                "status": "error",
+                "error": str(erreur),
+            }
+        ), 400
+
+    if calculation_id is None:
+
+        return jsonify(
+            {
+                "status": "error",
+            }
+        ), 400
+
+    return jsonify(
+        {
+            "status": "ok",
+            "calculation_id": calculation_id,
+        }
     )
 
 
 @app.route("/reload_previous")
 def reload_previous():
 
-    precedent = session.get(
-        "calcul_precedent"
-    )
-
-    courant = session.get(
-        "dernier_calcul"
-    )
-
-    if precedent:
-
-        session["dernier_calcul"] = precedent
-
-        if courant:
-            session["calcul_precedent"] = courant
+    echanger_documents()
 
     return redirect("/")
 
-@app.route("/timecalc")
-def timecalc():
 
-    langue = get_langue()
+@app.route("/export_json")
+def export_json():
 
-    txt = TEXTES[langue]
+    document = obtenir_document_courant()
 
-    return afficher_page(
-        "timecalc.html",
-        txt,
-        langue,
-        txt["timecalc_title"],
+    exporter_document_json(
+        document,
+        "document.json",
     )
 
-
-@app.route("/help_timecalc")
-def help_timecalc():
-
-    langue = get_langue()
-
-    txt = TEXTES[langue]
-
-    return afficher_page(
-        "help_timecalc.html",
-        txt,
-        langue,
-        txt["timecalc_aide_title"],
+    return (
+        "document.json créé",
+        200,
     )
+
 
 @app.route("/", methods=["GET", "POST"])
 def calcul():
 
-    session.permanent = True
+    #
+    # Lecture de la requête
+    #
 
-    if request.method == "POST":
+    action = request.form.get(
+        "action"
+    )
 
-        action_langue = request.form.get(
-            "action_langue"
-        )
+    consulter_index = request.form.get(
+        "consulter_index"
+    )
 
+    print("=" * 60)
+    print("ACTION =", action)
+    print(
+        "CONSULTER INDEX =",
+        consulter_index,
+    )
+    print("=" * 60)
 
-        langue_form = request.form.get(
-            "langue"
-        )
-
-        if langue_form:
-
-            session["langue"] = langue_form
-
-        if action_langue == "langue":
-            return redirect("/")
-
-        precision_te_form = request.form.get(
-            "precision_te"
-        )
-
-        if precision_te_form:
-
-            session["precision_te"] = int(
-                precision_te_form
-            )
-
-        precision_tm_form = request.form.get(
-            "precision_tm"
-        )
-
-        if precision_tm_form:
-
-            session["precision_tm"] = int(
-                precision_tm_form
-            )
-
+    #
+    # Contexte
+    #
 
     langue = get_langue()
-
-    precision_te_session = session.get(
-        "precision_te",
-        4
-    )
-
-    precision_tm_session = session.get(
-        "precision_tm",
-        4
-    )
-
-
     txt = TEXTES[langue]
 
-    calcul_precedent = session.get(
-        "calcul_precedent"
-    )
-
     #
-    # Premier affichage de la page
+    # Consultation d'un résultat
+    # de recherche publique
     #
 
-    if request.method == "GET":
+    if consulter_index is not None:
 
-        return ouvrir_application(
-            txt,
-            langue,
-            calcul_precedent,
-            precision_te_session,
-            precision_tm_session,
+        season = (
+            request.form.get(
+                "search_season",
+                "",
+            )
+            .strip()
         )
 
-    #
-    # Récupération de l'action demandée
-    #
+        codex = (
+            request.form.get(
+                "search_codex",
+                "",
+            )
+            .strip()
+        )
 
-    action = (
-        request.form.get("action_langue")
-        or request.form.get("action")
-        or "calcul"
-    )
+        bib = (
+            request.form.get(
+                "search_bib",
+                "",
+            )
+            .strip()
+        )
 
+        resultats = rechercher_calculs(
+            season,
+            codex,
+            bib,
+        )
+
+        try:
+
+            index = int(
+                consulter_index
+            )
+
+            document = resultats[index]
+
+        except (
+            TypeError,
+            ValueError,
+            IndexError,
+        ):
+
+            return redirect("/")
+
+        session["lecture_seule"] = True
+
+        definir_document_courant(
+            document
+        )
+
+        return redirect("/")
+
+    #
+    # Changement de langue
+    #
 
     if action == "langue":
 
-        return changer_langue(
+        session["langue"] = request.form.get(
+            "langue",
+            DEFAULT_LANGUAGE,
+        )
+
+        return redirect("/")
+
+    #
+    # Rappel par Id du calcul
+    #
+    # La connaissance de l'Id permet
+    # de sortir du mode lecture seule.
+    #
+
+    if action == "rappeler":
+
+        calculation_id = (
             request.form.get(
-                "langue",
-                DEFAULT_LANGUAGE
+                "calculation_id",
+                "",
+            )
+            .strip()
+        )
+
+        document = rappeler_calcul(
+            calculation_id
+        )
+
+        if document is not None:
+
+            session["lecture_seule"] = False
+
+            definir_document_courant(
+                document
+            )
+
+        return redirect("/")
+
+    #
+    # Recherche publique
+    #
+
+    if action == "rechercher":
+
+        recherche = {
+            "season": (
+                request.form.get(
+                    "search_season",
+                    "",
+                )
+                .strip()
+            ),
+            "codex": (
+                request.form.get(
+                    "search_codex",
+                    "",
+                )
+                .strip()
+            ),
+            "bib": (
+                request.form.get(
+                    "search_bib",
+                    "",
+                )
+                .strip()
+            ),
+        }
+
+        resultats_recherche = (
+            rechercher_calculs(
+                recherche["season"],
+                recherche["codex"],
+                recherche["bib"],
             )
         )
-    
-    #
-    # Calcul du temps électronique équivalent
-    #
 
-    precision_te = int(
-        request.form.get(
-            "precision_te",
-            5
+        document = deepcopy(
+            obtenir_document_courant()
         )
-    )
-
-    precision_tm = int(
-        request.form.get(
-            "precision_tm",
-            5
-        )
-    )
-
-    #
-    # Un TE ne peut pas être inférieur au millième.
-    #
-
-    if precision_te < 3:
-        precision_te = 3
-
-    precision_delta = max(
-        precision_te,
-        precision_tm
-    )
-
-
-    lignes = lire_lignes(request)
-
-    document = obtenir_document_courant()
-
-    lignes_vers_document(
-        document,
-        lignes,
-    )
-
-    dossard_eet_form = request.form.get(
-        "dossard_eet",
-        ""
-    )
- 
-    ligne_eet = trouver_ligne_eet(
-        lignes,
-        dossard_eet_form
-    )
-
-    if ligne_eet is None and dossard_eet_form:
-
-        for ligne in lignes:
-
-            if ligne["dossard"] == dossard_eet_form:
-
-                ligne_eet = ligne
-                ligne["eet"] = True
-                break
-
-    if ligne_eet is None:
 
         return afficher_calcul(
-            txt=txt,
-            langue=langue,
-            lignes=lignes,
-            precision_te=precision_te,
-            precision_tm=precision_tm,
-            calcul_precedent=calcul_precedent,
-        )
-    #
-    # Constitution des références
-    #
-
-    references = extraire_references(
-        lignes,
-        ligne_eet
-    )
-    
-    try:
-
-        deltas = calculer_deltas(
-            references,
-            precision_delta
-        )
-
-    except ValueError:
-        return afficher_calcul(
-            txt=txt,
-            langue=langue,
-            lignes=lignes,
-            precision_te=precision_te,
-            precision_tm=precision_tm,
-            calcul_precedent=calcul_precedent,
+            document,
+            recherche=recherche,
+            resultats_recherche=(
+                resultats_recherche
+            ),
+            recherche_effectuee=True,
         )
 
     #
-    # Calcul de l'EET et mise à jour de la grille
+    # Protection serveur
+    # du mode lecture seule
     #
 
-    (
-        somme_delta_us,
-        somme_delta_txt,
-        correction_us,
-        correction_txt,
-        eet_us,
-        eet_txt,
-    ) = calculer_eet(
-        ligne_eet,
-        deltas,
-        precision_delta,
-        precision_te,
-    )
-    #
-    # Génération du document PDF
-    #
-
-    if action == "pdf":
-        
-        pdf = creer_pdf(
-            lignes,
-            ligne_eet["dossard"],
-            len(references),
-            somme_delta_txt,
-            correction_txt,
-            eet_txt,
-            txt
-        )
-
-        return send_file(
-            pdf,
-            as_attachment=True,
-            download_name=f"calcul_eet-{ligne_eet['dossard']}.pdf",
-            mimetype="application/pdf"
-        )
-    
-    #
-    # Sauvegarde du dernier calcul
-    #
-
-    dernier_calcul = {
-        "correction": correction_txt,
-        "langue": langue,
-        "eet": eet_txt,
-        "somme_delta": somme_delta_txt,
-        "lignes": lignes,
-        "precision_te": precision_te,
-        "precision_tm": precision_tm,
-        "dossard_eet": ligne_eet["dossard"],
-        "nb_references": len(references)
-    }
-
-    ancien = session.get(
-        "dernier_calcul"
+    lecture_seule = session.get(
+        "lecture_seule",
+        False,
     )
 
-    if ancien:
-        session["calcul_precedent"] = ancien
+    if (
+        request.method == "POST"
+        and lecture_seule
+        and action in (
+            "calcul",
+            "effacer",
+            "exemple_fis",
+        )
+    ):
 
-    session["dernier_calcul"] = dernier_calcul
+        return redirect("/")
 
     #
-    # Affichage du résultat
+    # Actions créant un nouveau document
+    #
+
+    if action == "effacer":
+
+        session["lecture_seule"] = False
+
+        definir_document_courant(
+            nouveau_document()
+        )
+
+        return redirect("/")
+
+    if action == "exemple_fis":
+
+        session["lecture_seule"] = False
+
+        document = nouveau_document()
+
+        charger_exemple_fis(
+            document,
+        )
+
+        definir_document_courant(
+            document,
+        )
+
+        return redirect("/")
+
+    #
+    # Calcul ou affichage
+    #
+
+    document = deepcopy(
+        obtenir_document_courant()
+    )
+
+    if request.method == "POST":
+
+        if action == "calcul":
+
+            importer_formulaire(
+                document,
+                request.form,
+            )
+
+            traiter_document(
+                document,
+            )
+
+            sauver_calcul(
+                document,
+            )
+
+            enregistrer_nouveau_calcul(
+                document,
+            )
+
+        elif action == "pdf":
+
+            pdf = creer_pdf(
+                document,
+                txt,
+            )
+
+            eet_index = document[
+                "result"
+            ]["eet_index"]
+
+            eet_bib = ""
+
+            if eet_index is not None:
+
+                eet_bib = document[
+                    "competitors"
+                ][eet_index]["bib"]
+
+            nom_fichier = (
+                f"EET_{eet_bib}.pdf"
+            )
+
+            return send_file(
+                pdf,
+                as_attachment=True,
+                download_name=nom_fichier,
+                mimetype="application/pdf",
+            )
+
+    #
+    # Affichage normal
     #
 
     return afficher_calcul(
-        txt=txt,
-        langue=langue,
-        lignes=lignes,
-        correction=correction_txt,
-        eet=eet_txt,
-        somme_delta=somme_delta_txt,
-        precision_te=precision_te,
-        precision_tm=precision_tm,
-        dossard_eet=ligne_eet["dossard"],
-        calcul_precedent=ancien,
-        nb_references=len(references),
+        document
     )
-

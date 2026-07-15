@@ -241,38 +241,41 @@ def pas_precision(
 
 
 def arrondir_division_fis(
-    dividende,
-    diviseur
+    valeur_us,
+    diviseur,
+    precision,
 ):
     """
-    Retourne dividende / diviseur
-    arrondi selon la règle FIS.
+    Divise une valeur en microsecondes
+    et arrondit le résultat selon la règle FIS.
 
-    Les calculs sont réalisés uniquement
-    avec des entiers.
-
-    L'arrondi est symétrique :
-        5 ou plus -> valeur supérieure
-        4 ou moins -> valeur inférieure
+    Un chiffre suivant supérieur ou égal à 5
+    provoque un arrondi en s'éloignant de zéro.
     """
 
-    if diviseur <= 0:
-        raise ValueError(
-            "Le diviseur doit être strictement positif."
-        )
+    facteur = 10 ** (
+        6 - precision
+    )
 
-    signe = 1
+    valeur_absolue = abs(
+        valeur_us
+    )
 
-    if dividende < 0:
+    quotient, reste = divmod(
+        valeur_absolue,
+        diviseur * facteur,
+    )
 
-        signe = -1
-        dividende = -dividende
-
-    quotient = dividende // diviseur
-    reste = dividende % diviseur
-
-    if reste * 2 >= diviseur:
+    if (
+        reste * 2
+        >= diviseur * facteur
+    ):
 
         quotient += 1
 
-    return signe * quotient
+    resultat = quotient * facteur
+
+    if valeur_us < 0:
+        resultat = -resultat
+
+    return resultat

@@ -34,6 +34,7 @@ TEXTES = {
         "grille_valide": "Grille valide",
         "langue": "Langue",
         "pdf": "PDF",
+        "nom_pdf": "Calcul_EET",
         "precision_te": "Précision TE",
         "precision_tm": "Précision TM",
         "recharger": "Recharger",
@@ -48,6 +49,23 @@ TEXTES = {
         "titre": "Calculateur EET",
         "tm": "TM (TOD)",
         "meta_description": "Calculateur EET (Equivalent Electronic Time) pour les compétitions de ski alpin. Calcul conforme aux règlements FIS et nationaux à partir des temps manuels ou du système B de chronométrage.",
+        "id_calcul": "Id du calcul",
+
+        #
+        # Recherche de calcul
+        #
+
+        "rechercher_calcul": "Rechercher un calcul",
+        "saison": "Saison",
+        "codex": "Codex",
+        "rechercher": "Rechercher",
+        "fermer": "Fermer",
+        "discipline": "Discipline",
+        "manche": "Manche",
+        "date": "Date",
+        "lieu": "Lieu",
+        "consulter": "Consulter",
+        "aucun_calcul_trouve": "Aucun calcul trouvé.",
 
         #
         # Lexique
@@ -213,8 +231,12 @@ TEXTES = {
         "timecalc_aide_remarque_l1": "Tous les calculs sont effectués à la microseconde.",
         "timecalc_aide_remarque_l2": "Lorsque le temps de course est calculé, le résultat est tronqué à la précision sélectionnée et n'est jamais arrondi.",
         "timecalc_aide_remarque_l3": "Les heures de départ et d'arrivée doivent être comprises entre 00:00:00 et 23:59:59.",        
-
-
+        "erreurs": 
+            {"dossard_eet_absent": "Aucun dossard EET n'a été sélectionné.",
+            "dossard_eet_inconnu": "Le dossard EET n'existe pas.",
+            "temps_manuel_absent": "Le temps manuel est absent.",
+            "temps_electronique_absent": "Le temps électronique est absent.",
+            },
     },
 
     "en": {
@@ -241,6 +263,7 @@ TEXTES = {
         "grille_valide": "Valid grid",
         "langue": "Language",
         "pdf": "PDF",
+        "nom_pdf": "EET_Calculation",
         "precision_te": "ET Precision",
         "precision_tm": "MT Precision",
         "recharger": "Reload",
@@ -255,7 +278,24 @@ TEXTES = {
         "titre": "EET Calculator",
         "tm": "MT (TOD)",
         "meta_description": "EET Calculator (Equivalent Electronic Time) for alpine skiing competitions. Compute replacement electronic times according to FIS and national timing procedures using manual timing or timing system B data.",
-       
+        "id_calcul": "Calculation ID",
+
+        #
+        # Calculation search
+        #
+
+        "rechercher_calcul": "Search for a calculation",
+        "saison": "Season",
+        "codex": "Codex",
+        "rechercher": "Search",
+        "fermer": "Close",
+        "discipline": "Discipline",
+        "manche": "Run",
+        "date": "Date",
+        "lieu": "Location",
+        "consulter": "View",
+        "aucun_calcul_trouve": "No calculation found.",
+
         #
         # Glossary
         #
@@ -352,13 +392,13 @@ TEXTES = {
         # About
         #
 
-        "about_title": "EET Calculator - About",
-        "about": "About",
-        "about_development": "Development:",
-        "about_function_l1": "EET Calculator is dedicated to the calculation of the Equivalent Electronic Time (EET) in accordance with the timing rules of the International Ski and Snowboard Federation (FIS).",
-        "about_function_l2": "It calculates an Equivalent Electronic Time from manual and electronic times, in accordance with the timing rules used during FIS and national federation competitions.",
-        "about_function_l3": "The application also includes a time calculator designed for everyday timing operations (time-of-day, duration and time difference calculations).",
-        "about_contact": "Contact:",
+        "a_propos_title": "EET Calculator - About",
+        "a_propos": "About",
+        "a_propos_developpement": "Development:",
+        "a_propos_fonction_l1": "EET Calculator is dedicated to the calculation of the Equivalent Electronic Time (EET) in accordance with the timing rules of the International Ski and Snowboard Federation (FIS).",
+        "a_propos_fonction_l2": "It calculates an Equivalent Electronic Time from manual and electronic times, in accordance with the timing rules used during FIS and national federation competitions.",
+        "a_propos_fonction_l3": "The application also includes a time calculator designed for everyday timing operations (time-of-day, duration and time difference calculations).",
+        "a_propos_contact": "Contact:",
 
         #
         # Time Calculator
@@ -431,6 +471,12 @@ TEXTES = {
         "timecalc_aide_remarque_l2": "When elapsed time is calculated, the result is truncated to the selected precision and is never rounded.",
         "timecalc_aide_remarque_l3": "Start and finish times must be between 00:00:00 and 23:59:59.",
 
+        "erreurs": {
+            "dossard_eet_absent": "No EET bib has been selected.",
+            "dossard_eet_inconnu": "The EET bib does not exist.",
+            "temps_manuel_absent": "The manual time is missing.",
+            "temps_electronique_absent": "The electronic time is missing.",
+        },
     },
 
     "de": {
@@ -457,6 +503,7 @@ TEXTES = {
         "grille_valide": "Eingabe gültig",
         "langue": "Sprache",
         "pdf": "PDF",
+        "nom_pdf": "EET_Berechnung",
         "precision_te": "ET-Genauigkeit",
         "precision_tm": "MT-Genauigkeit",
         "recharger": "Neu laden",
@@ -471,6 +518,23 @@ TEXTES = {
         "titre": "EET Rechner",
         "tm": "MT (TOD)",
         "meta_description": "EET-Rechner (Equivalent Electronic Time) für alpine Skirennen. Berechnung von Ersatzelektronikzeiten gemäß FIS- und nationalen Zeitmessvorschriften auf Basis von Handzeiten oder Zeitmesssystem B.",
+        "id_calcul": "Berechnungs-ID",
+
+        #
+        # Berechnungssuche
+        #
+
+        "rechercher_calcul": "Berechnung suchen",
+        "saison": "Saison",
+        "codex": "Codex",
+        "rechercher": "Suchen",
+        "fermer": "Schließen",
+        "discipline": "Disziplin",
+        "manche": "Lauf",
+        "date": "Datum",
+        "lieu": "Ort",
+        "consulter": "Anzeigen",
+        "aucun_calcul_trouve": "Keine Berechnung gefunden.",
 
         #
         # Glossar
@@ -568,13 +632,13 @@ TEXTES = {
         # Über
         #
 
-        "uber_title": "EET Calculator - Über",
-        "uber": "Über",
-        "uber_entwicklung": "Entwicklung:",
-        "uber_funktion_l1": "EET Calculator dient zur Berechnung der Equivalent Electronic Time (EET) gemäß den Zeitmessregeln des Internationalen Ski- und Snowboardverbandes (FIS).",
-        "uber_funktion_l2": "Die Anwendung berechnet eine Equivalent Electronic Time aus manuellen und elektronischen Zeiten gemäß den Zeitmessregeln bei FIS- und nationalen Verbandswettkämpfen.",
-        "uber_funktion_l3": "Zusätzlich enthält die Anwendung einen Zeitrechner für die täglichen Aufgaben der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",
-        "uber_kontakt": "Kontakt:",
+        "a_propos_title": "EET Calculator - Über",
+        "a_propos": "Über",
+        "a_propos_developpement": "Entwicklung:",
+        "a_propos_fonction_l1": "EET Calculator dient zur Berechnung der Equivalent Electronic Time (EET) gemäß den Zeitmessregeln des Internationalen Ski- und Snowboardverbandes (FIS).",
+        "a_propos_fonction_l2": "Die Anwendung berechnet eine Equivalent Electronic Time aus manuellen und elektronischen Zeiten gemäß den Zeitmessregeln bei FIS- und nationalen Verbandswettkämpfen.",
+        "a_propos_fonction_l3": "Zusätzlich enthält die Anwendung einen Zeitrechner für die täglichen Aufgaben der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",
+        "a_propos_contact": "Kontakt:",
 
         #
         # Zeitrechner
@@ -646,6 +710,12 @@ TEXTES = {
         "timecalc_aide_remarque_l2": "Wird die Laufzeit berechnet, wird das Ergebnis auf die gewählte Genauigkeit abgeschnitten und niemals gerundet.",
         "timecalc_aide_remarque_l3": "Start- und Zielzeiten müssen zwischen 00:00:00 und 23:59:59 liegen.",
 
+        "erreurs": {
+            "dossard_eet_absent": "Es wurde keine EET-Startnummer ausgewählt.",
+            "dossard_eet_inconnu": "Die EET-Startnummer existiert nicht.",
+            "temps_manuel_absent": "Die manuelle Zeit fehlt.",
+            "temps_electronique_absent": "Die elektronische Zeit fehlt.",
+        },
     },
 
 }

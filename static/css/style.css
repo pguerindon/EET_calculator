@@ -49,6 +49,10 @@ body {
     margin-bottom: 20px;
 }
 
+.calculation-id {
+    width: 10ch;
+}
+
 .version
 {
     font-size: 0.45em;
@@ -266,4 +270,20 @@ button {
 .conteneur.resultat-dessous .zone-resultat
 {
     margin-top: 20px;
+}
+
+/*
+ * Recherche de calcul
+ */
+
+.zone-bascule-recherche {
+    margin-bottom: 15px;
+}
+
+.recherche-bib {
+    margin-right: 15px;
+}
+
+.recherche-calcul button {
+    margin-top: 10px;
 }

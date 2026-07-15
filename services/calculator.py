@@ -2,7 +2,7 @@
 Calcul EET.
 
 Ce module effectue le calcul EET à partir
-d'un document métier validé.
+d'un Document Model validé.
 
 Convention du moteur EET
 
@@ -12,98 +12,49 @@ dans l'ordre réel des départs.
 Aucune fonction du moteur ne trie cette liste
 ni les index de référence.
 
-Toutes les opérations utilisent exclusivement
-l'ordre des départs.
+Les concurrents précédant le concurrent EET
+sont retenus en priorité.
+
+Si leur nombre est insuffisant, la liste est
+complétée avec les concurrents suivants afin
+d'obtenir le nombre requis de références.
+
+Convention utilisée dans tout le moteur :
+
+- mt_us  : heure du jour (Time Of Day) en microsecondes
+- et_us  : heure du jour (Time Of Day) en microsecondes
+- eet_us : heure du jour (Time Of Day) en microsecondes
+
+Les seules durées sont :
+
+- delta_us
+- sum_delta_us
+- correction_us
+
+L'EET calculé est une heure du jour.
 """
 
-from services.document import (
-    contient_erreurs,
-    definir_correction_us,
-    definir_reference_indexes,
-    definir_delta_us,
-    definir_sum_delta_us,
-)
-
 from services import constants
-from services.temps import(
 
+from services.temps import (
     arrondir_division_fis,
-    tronquer_us, 
-
+    tronquer_us,
+    us_to_tod,
 )
 
 
 def calculer_document(
-    document
+    document,
 ):
     """
     Effectue le calcul EET complet.
     """
 
-    if contient_erreurs(
-        document
-    ):
+    if document["info"]["errors"]:
         return
 
     _rechercher_references(
         document
-    )
-
-def _rechercher_references(
-    document
-):
-    """
-    Détermine les 10 concurrents de référence
-    pour le calcul de la correction EET.
-
-    Les concurrents sont toujours conservés
-    dans leur ordre de départ.
-    """
-
-    competitors = document["competitors"]
-
-    eet_index = document["calculation"]["eet_index"]
-
-    reference_indexes = []
-
-    premier_index = max(
-        0,
-        eet_index - 10
-    )
-
-    #
-    # Concurrents avant l'EET
-    #
-
-    for index in range(
-        premier_index,
-        eet_index
-    ):
-
-        reference_indexes.append(
-            index
-        )
-
-    #
-    # Complément après l'EET
-    #
-
-    for index in range(
-        eet_index + 1,
-        len(competitors)
-    ):
-
-        if len(reference_indexes) == 10:
-
-            break
-
-        reference_indexes.append(
-            index
-        )
-
-    definir_reference_indexes(
-        document,
-        reference_indexes
     )
 
     _calculer_deltas(
@@ -118,115 +69,168 @@ def _rechercher_references(
         document
     )
 
-    _finaliser_calcul(
-        document
-    )
 
-
-def _calculer_deltas(
-    document
+def _rechercher_references(
+    document,
 ):
     """
-    Calcule les deltas des concurrents de référence.
+    Détermine les concurrents de référence
+    pour le calcul de la correction EET.
+
+    Les concurrents précédant l'EET sont retenus
+    en priorité.
+
+    La liste est complétée par les concurrents
+    suivants afin d'obtenir le nombre requis
+    de références.
     """
 
     competitors = document["competitors"]
 
-    reference_indexes = (
-        document["calculation"]["reference_indexes"]
+    eet_index = document["result"][
+        "eet_index"
+    ]
+
+    reference_indexes = []
+
+    premier_index = max(
+        0,
+        eet_index
+        - constants.REFERENCE_COMPETITOR_COUNT,
     )
+
+    #
+    # Concurrents précédant l'EET
+    #
+
+    for index in range(
+        premier_index,
+        eet_index,
+    ):
+
+        reference_indexes.append(
+            index
+        )
+
+    #
+    # Complément avec les concurrents
+    # suivant l'EET
+    #
+
+    for index in range(
+        eet_index + 1,
+        len(competitors),
+    ):
+
+        if len(reference_indexes) == (
+            constants.REFERENCE_COMPETITOR_COUNT
+        ):
+            break
+
+        reference_indexes.append(
+            index
+        )
+
+    document["result"][
+        "reference_indexes"
+    ] = reference_indexes
+
+
+def _calculer_deltas(
+    document,
+):
+    """
+    Calcule les deltas des concurrents
+    de référence.
+
+    Delta = MT - ET
+    """
+
+    competitors = document["competitors"]
+
+    reference_indexes = document["result"][
+        "reference_indexes"
+    ]
 
     for index in reference_indexes:
 
-        competitor = competitors[index]
+        competitor = competitors[
+            index
+        ]
 
-        delta_us = (
-            competitor["et_us"]
-            - competitor["mt_us"]
-        )
-
-        definir_delta_us(
-            competitor,
-            delta_us
+        competitor["delta_us"] = (
+            competitor["mt_us"]
+            - competitor["et_us"]
         )
 
 
 def _calculer_correction(
-    document
+    document,
 ):
     """
-    Calcule la correction EET.
+    Calcule la somme des deltas
+    et la correction EET.
     """
 
     competitors = document["competitors"]
 
-    reference_indexes = (
-        document["calculation"]["reference_indexes"]
+    reference_indexes = document["result"][
+        "reference_indexes"
+    ]
+
+    sum_delta_us = sum(
+        competitors[index]["delta_us"]
+        for index in reference_indexes
     )
 
-    sum_delta_us = 0
+    document["result"][
+        "sum_delta_us"
+    ] = sum_delta_us
 
-    #
-    # Somme des 10 deltas
-    #
-
-    for index in reference_indexes:
-
-        sum_delta_us += (
-            competitors[index]["delta_us"]
-        )
-
-    definir_sum_delta_us(
-        document,
-        sum_delta_us
-    )
-
-    #
-    # Moyenne arrondie suivant le règlement FIS
-    #
-
-    correction_us = arrondir_division_fis(
+    document["result"][
+        "correction_us"
+    ] = arrondir_division_fis(
         sum_delta_us,
-        len(reference_indexes)
-    )
-
-    definir_correction_us(
-        document,
-        correction_us
+        len(reference_indexes),
+        document["race"]["et_precision"],
     )
 
 
 def _calculer_eet(
-    document
+    document,
 ):
     """
-    Calcule le temps électronique
-    du concurrent EET.
+    Calcule l'Equivalent Electronic Time.
+
+    EET = MT - correction
+
+    L'EET est une heure du jour.
+
+    Le résultat est tronqué à la précision
+    du chronomètre électronique.
     """
 
-    eet_index = (
-        document["calculation"]["eet_index"]
-    )
+    eet_index = document["result"][
+        "eet_index"
+    ]
 
-    competitor = (
-        document["competitors"][eet_index]
-    )
+    competitor = document["competitors"][
+        eet_index
+    ]
 
     eet_us = (
         competitor["mt_us"]
-        + document["calculation"]["correction_us"]
+        - document["result"]["correction_us"]
     )
 
-    tronquer_us(
+    eet_us = tronquer_us(
         eet_us,
-        document["race"]["et_precision"]
+        document["race"]["et_precision"],
     )
 
-    competitor["et_us"] = eet_us
+    competitor["eet_us"] = eet_us
 
-
-def _finaliser_calcul(document):
-
-    document["calculation"]["nb_references"] = len(
-        document["calculation"]["reference_indexes"]
+    competitor["eet_tod"] = us_to_tod(
+        eet_us,
+        document["race"]["et_precision"],
     )

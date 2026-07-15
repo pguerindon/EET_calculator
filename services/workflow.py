@@ -18,6 +18,9 @@ def traiter_document(
         document
     )
 
+    if document["info"]["errors"]:
+        return
+    
     calculer_document(
         document
     )

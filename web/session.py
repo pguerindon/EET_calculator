@@ -5,15 +5,19 @@ Ce module est le seul autorisé
 à manipuler la session Flask.
 """
 
+from copy import deepcopy
+
 from flask import session
 
 from services.document import (
     nouveau_document,
 )
 
+
 CURRENT_DOCUMENT = "current_document"
 
 PREVIOUS_DOCUMENT = "previous_document"
+
 
 def obtenir_document_courant():
     """
@@ -33,55 +37,110 @@ def obtenir_document_courant():
 
         session[
             CURRENT_DOCUMENT
-        ] = document
+        ] = deepcopy(
+            document
+        )
 
-    return document
+    return deepcopy(
+        document
+    )
 
 
 def obtenir_document_precedent():
     """
     Retourne le document précédent.
+
+    None est retourné
+    s'il n'existe pas.
     """
 
-    return session.get(
+    document = session.get(
         PREVIOUS_DOCUMENT
     )
 
+    if document is None:
 
-def remplacer_document(
-    document
-):
-    """
-    Remplace le document courant.
+        return None
 
-    L'ancien document devient
-    le document précédent.
-    """
-
-    precedent = session.get(
-        CURRENT_DOCUMENT
-    )
-
-    if precedent is not None:
-
-        session[
-            PREVIOUS_DOCUMENT
-        ] = precedent
-
-    session[
-        CURRENT_DOCUMENT
-    ] = document
-
-
-def creer_nouveau_document():
-    """
-    Crée un nouveau document.
-    """
-
-    document = nouveau_document()
-
-    remplacer_document(
+    return deepcopy(
         document
     )
 
-    return document
+
+def definir_document_courant(
+    document,
+):
+    """
+    Définit le document courant.
+
+    Le document précédent
+    n'est pas modifié.
+    """
+
+    session[
+        CURRENT_DOCUMENT
+    ] = deepcopy(
+        document
+    )
+
+
+def enregistrer_nouveau_calcul(
+    document,
+):
+    """
+    Enregistre un nouveau calcul.
+
+    Le document courant devient
+    le document précédent.
+    """
+
+    courant = session.get(
+        CURRENT_DOCUMENT
+    )
+
+    if courant is not None:
+
+        session[
+            PREVIOUS_DOCUMENT
+        ] = deepcopy(
+            courant
+        )
+
+    session[
+        CURRENT_DOCUMENT
+    ] = deepcopy(
+        document
+    )
+
+
+def echanger_documents():
+    """
+    Échange les documents
+    courant et précédent.
+    """
+
+    courant = session.get(
+        CURRENT_DOCUMENT
+    )
+
+    precedent = session.get(
+        PREVIOUS_DOCUMENT
+    )
+
+    if precedent is None:
+
+        return
+
+    session[
+        CURRENT_DOCUMENT
+    ] = deepcopy(
+        precedent
+    )
+
+    if courant is not None:
+
+        session[
+            PREVIOUS_DOCUMENT
+        ] = deepcopy(
+            courant
+        )
