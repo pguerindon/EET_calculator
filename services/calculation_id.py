@@ -153,3 +153,39 @@ def verifier_calculation_id(calculation_id):
         )
         == controle
     )
+
+
+def calculer_datetime(calculation_id):
+    """
+    Retourne la date/heure correspondant
+    à un calculation_id.
+    """
+
+    token = calculation_id[:-1]
+
+    controle = calculation_id[-1]
+
+    if (
+        _calculer_caractere_controle(token)
+        != controle
+    ):
+        raise ValueError(
+            "Calculation id invalide."
+        )
+
+    offset = _decode_base62(token)
+
+    timestamp = EPOCH_2026 + offset
+
+    return datetime.fromtimestamp(timestamp)
+
+
+def _decode_base62(token):
+
+    valeur = 0
+
+    for caractere in token:
+        valeur *= len(TOKEN_CHARS)
+        valeur += TOKEN_CHARS.index(caractere)
+
+    return valeur

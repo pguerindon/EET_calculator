@@ -107,7 +107,7 @@ def verifier_nombre_competitors(
     11 concurrents.
     """
 
-    if len(document["competitors"]) != 11:
+    if len(document["competitors"]) != constants.COMPETITOR_COUNT:
 
         ajouter_erreur(
             document,
@@ -185,7 +185,7 @@ def verifier_eet(
 
         return
 
-    document["result"]["eet_index"] = (
+    document["calculation"]["eet_index"] = (
         eet_index
     )
 

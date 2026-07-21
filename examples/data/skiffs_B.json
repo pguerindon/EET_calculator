@@ -1,0 +1,64 @@
+{
+  "calculation_id": "1b1gnw",
+  "mode": "TEST",
+  "race": {
+    "discipline": "GS",
+    "date": "2026-04-05",
+    "location": "Les Menuires",
+    "run": "1",
+    "eet_bib": "8",
+    "codex": "FRA0695",
+    "missing_impulse": "START",
+    "season": "2026"
+  },
+  "competitors": [
+    {
+      "et_tod": "10:17:58.225",
+      "bib": "1"
+    },
+    {
+      "et_tod": "10:18:26.291",
+      "bib": "2"
+    },
+    {
+      "et_tod": "10:18:54.005",
+      "bib": "3"
+    },
+    {
+      "et_tod": "10:19:23.223",
+      "bib": "4"
+    },
+    {
+      "et_tod": "10:19:52.313",
+      "bib": "5"
+    },
+    {
+      "et_tod": "10:20:22.779",
+      "bib": "6"
+    },
+    {
+      "et_tod": "10:20:51.030",
+      "bib": "7"
+    },
+    {
+      "lastname": "RONCO",
+      "club": "SC CARROZ",
+      "et_tod": "10:21:19.651",
+      "nation": "FRA",
+      "firstname": "Matteo",
+      "bib": "8"
+    },
+    {
+      "et_tod": "10:21:48.970",
+      "bib": "9"
+    },
+    {
+      "et_tod": "10:22:20.509",
+      "bib": "10"
+    },
+    {
+      "et_tod": "10:22:54.496",
+      "bib": "12"
+    }
+  ]
+}

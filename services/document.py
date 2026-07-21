@@ -5,7 +5,13 @@ Aucun autre module ne doit créer directement une structure
 du Document Model.
 """
 
+from copy import deepcopy
+from datetime import datetime
+
 from services import constants
+from services.calculation_id import verifier_calculation_id
+from services.document_store import charger_document
+from version import EEP_VERSION
 
 
 # ----------------------------------------------------------------------
@@ -17,15 +23,16 @@ def nouveau_document():
     Retourne un nouveau document EET.
     """
 
-    return {
-        "info": nouveau_document_info(),
-        "race": nouvelle_race(),
-        "competitors": [
-            nouveau_competitor()
-            for _ in range(11)
-        ],
-        "result": nouveau_result(),
-    }
+    document = deepcopy(constants.DOCUMENT_MODEL)
+
+    document["info"]["version"] = EEP_VERSION
+
+    document["competitors"] = [
+        nouveau_competitor()
+        for _ in range(constants.COMPETITOR_COUNT)
+    ]
+
+    return document
 
 
 def nouveau_document_info():
@@ -33,13 +40,9 @@ def nouveau_document_info():
     Retourne les informations générales du document.
     """
 
-    return {
-        "version": constants.DOCUMENT_VERSION,
-        "status": constants.STATUS_NEW,
-        "origin": constants.ORIGIN_MANUAL,
-        "language": "",
-        "errors": []
-    }
+    info = deepcopy(constants.INFO_MODEL)
+    info["version"] = EEP_VERSION
+    return info
 
 
 def nouvelle_race():
@@ -47,16 +50,7 @@ def nouvelle_race():
     Retourne une nouvelle structure de course.
     """
 
-    return {
-        "season": None,
-        "codex": "",
-        "location": "",
-        "date": "",
-        "discipline": "",
-        "run": 1,
-        "et_precision": None,
-        "mt_precision": None,
-    }
+    return deepcopy(constants.RACE_MODEL)
 
 
 def nouveau_competitor():
@@ -64,24 +58,7 @@ def nouveau_competitor():
     Retourne une nouvelle structure de concurrent.
     """
 
-    return {
-    "bib": "",
-
-    "lastname": "",
-    "firstname": "",
-    "nation": "",
-
-    "et_tod": None,
-    "et_us": None,
-
-    "mt_tod": None,
-    "mt_us": None,
-
-    "delta_us": None,
-
-    "eet_tod": None,
-    "eet_us": None,
-    }
+    return deepcopy(constants.COMPETITOR_MODEL)
 
 
 def nouveau_result():
@@ -89,12 +66,7 @@ def nouveau_result():
     Retourne une nouvelle structure de calcul.
     """
 
-    return {
-    "eet_index": None,
-    "reference_indexes": [],
-    "sum_delta_us": None,
-    "correction_us": None,
-    }       
+    return deepcopy(constants.RESULT_MODEL)      
 
 
 def nouvelle_erreur():
@@ -102,10 +74,7 @@ def nouvelle_erreur():
     Retourne une nouvelle erreur.
     """
 
-    return {
-        "code": "",
-        "field": "",
-    }
+    return deepcopy(constants.ERROR_MODEL)
 
 # ----------------------------------------------------------------------
 # Manipulation du document
@@ -146,30 +115,47 @@ def contient_erreurs(document):
     return bool(document["info"]["errors"])
 
 
-def changer_status(document, status):
-    """
-    Modifie le statut du document.
-    """
+# ----------------------------------------------------------------------
+# Rappel d'un calcul ancien depuis l'interface
+# ----------------------------------------------------------------------
 
-    document["info"]["status"] = status
-    
-
-def definir_origin(
-    document,
-    origin
+def rappeler_calcul(
+    calculation_id,
 ):
     """
-    Définit l'origine du document.
+    Rappelle un calcul stocké.
+
+    Retourne None si le calculation_id
+    est invalide ou inconnu.
     """
 
-    document["info"]["origin"] = origin
+    if not verifier_calculation_id(
+        calculation_id
+    ):
+
+        return None
+
+    return charger_document(
+        calculation_id
+    )
 
 
-def obtenir_origin(
-    document
+def formater_date(
+    date_iso,
 ):
     """
-    Retourne l'origine du document.
+    Convertit une date ISO YYYY-MM-DD
+    en JJ/MM/AAAA.
     """
 
-    return document["info"]["origin"]
+    if not date_iso:
+        return ""
+
+    try:
+        return datetime.strptime(
+            date_iso,
+            "%Y-%m-%d",
+        ).strftime("%d/%m/%Y")
+
+    except ValueError:
+        return date_iso

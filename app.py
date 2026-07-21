@@ -2,10 +2,11 @@ from flask import (
     Flask,
     jsonify,
     request,
+    session,
     redirect,
     send_file,
     send_from_directory,
-    session,
+    url_for,
 )
 
 from config import DEFAULT_LANGUAGE, SECRET_KEY
@@ -27,10 +28,11 @@ from services.views import(
 
 from services.eep import (
     recevoir_eep,
-    rappeler_calcul,
     rechercher_calculs,
     sauver_calcul,
 )
+
+from services.document import rappeler_calcul
 
 from services.eep_validator import (
     EEPValidationError,
@@ -42,13 +44,15 @@ from services.importer_form import (
 
 from services.workflow import traiter_document
 
-from services.exemples import charger_exemple_fis
+from services.exemple_fis import charger_exemple_fis
 
 from web.session import (
-    definir_document_courant,
-    obtenir_document_courant,
+    definir_document_travail,
+    definir_mode_lecture_seule,
+    obtenir_document_travail,
     enregistrer_nouveau_calcul,
-    echanger_documents,
+    echanger_calculs,
+    obtenir_mode_lecture_seule,
 )
 
 from services.document import (
@@ -59,6 +63,38 @@ from translation import (
     get_langue,
     TEXTES,
 )
+
+def trace_document(titre, document):
+
+    print(f"\n========== {titre} ==========")
+
+    print("calculation_id :", document.get("calculation_id"))
+
+    race = document.get("race", {})
+    print("missing_impulse :", race.get("missing_impulse"))
+    print("mt_precision    :", race.get("mt_precision"))
+    print("et_precision    :", race.get("et_precision"))
+
+    print("id(document) =", id(document))
+    print("id(race)     =", id(document["race"]))
+    print("id(comp)     =", id(document["competitors"]))
+    print("\nConcurrent 8 :")
+
+    c = document["competitors"][7]
+
+    for cle in (
+        "bib",
+        "name",
+        "surname",
+        "firstname",
+        "lastname",
+        "nation",
+        "club",
+        "mt_tod",
+        "et_tod",
+        "eet_tod",
+    ):
+        print(f"  {cle:10} : {c.get(cle)}")
 
 
 app = Flask(__name__)
@@ -161,7 +197,7 @@ def api_eep():
 @app.route("/reload_previous")
 def reload_previous():
 
-    echanger_documents()
+    echanger_calculs()
 
     return redirect("/")
 
@@ -169,7 +205,7 @@ def reload_previous():
 @app.route("/export_json")
 def export_json():
 
-    document = obtenir_document_courant()
+    document = obtenir_document_travail()
 
     exporter_document_json(
         document,
@@ -196,14 +232,6 @@ def calcul():
     consulter_index = request.form.get(
         "consulter_index"
     )
-
-    print("=" * 60)
-    print("ACTION =", action)
-    print(
-        "CONSULTER INDEX =",
-        consulter_index,
-    )
-    print("=" * 60)
 
     #
     # Contexte
@@ -265,13 +293,15 @@ def calcul():
 
             return redirect("/")
 
-        session["lecture_seule"] = True
-
-        definir_document_courant(
+        definir_mode_lecture_seule(
+            True
+        )
+        definir_document_travail(
             document
         )
 
         return redirect("/")
+
 
     #
     # Changement de langue
@@ -307,13 +337,19 @@ def calcul():
             calculation_id
         )
 
+        trace_document("document = rappeler_calcul", document)
+
         if document is not None:
 
-            session["lecture_seule"] = False
-
-            definir_document_courant(
+            definir_mode_lecture_seule(
+                False
+            )
+            definir_document_travail(
                 document
             )
+
+            # trace_document("après  definir_document_travail", document)
+
 
         return redirect("/")
 
@@ -356,7 +392,7 @@ def calcul():
         )
 
         document = deepcopy(
-            obtenir_document_courant()
+            obtenir_document_travail()
         )
 
         return afficher_calcul(
@@ -373,9 +409,8 @@ def calcul():
     # du mode lecture seule
     #
 
-    lecture_seule = session.get(
-        "lecture_seule",
-        False,
+    lecture_seule = (
+        obtenir_mode_lecture_seule()
     )
 
     if (
@@ -396,9 +431,11 @@ def calcul():
 
     if action == "effacer":
 
-        session["lecture_seule"] = False
+        definir_mode_lecture_seule(
+            False
+        )
 
-        definir_document_courant(
+        definir_document_travail(
             nouveau_document()
         )
 
@@ -406,7 +443,9 @@ def calcul():
 
     if action == "exemple_fis":
 
-        session["lecture_seule"] = False
+        definir_mode_lecture_seule(
+            False
+        )
 
         document = nouveau_document()
 
@@ -414,8 +453,8 @@ def calcul():
             document,
         )
 
-        definir_document_courant(
-            document,
+        definir_document_travail(
+            document
         )
 
         return redirect("/")
@@ -425,28 +464,43 @@ def calcul():
     #
 
     document = deepcopy(
-        obtenir_document_courant()
+        obtenir_document_travail()
     )
 
     if request.method == "POST":
 
+
         if action == "calcul":
+
+            # trace_document("dans calcul avant importer_formulaire", document)
 
             importer_formulaire(
                 document,
                 request.form,
             )
 
+            # trace_document("dans calcul avant traiter_document", document)
+
             traiter_document(
                 document,
             )
+
+            # trace_document("dans calcul avant sauver_calcul", document)
 
             sauver_calcul(
                 document,
             )
 
+            # trace_document("avant enregistrer_nouveau_calcul", document)
+
             enregistrer_nouveau_calcul(
                 document,
+            )
+
+            # trace_document("après enregistrer_nouveau_calcul", document)
+
+            return redirect(
+                url_for("calcul")
             )
 
         elif action == "pdf":
@@ -456,17 +510,7 @@ def calcul():
                 txt,
             )
 
-            eet_index = document[
-                "result"
-            ]["eet_index"]
-
-            eet_bib = ""
-
-            if eet_index is not None:
-
-                eet_bib = document[
-                    "competitors"
-                ][eet_index]["bib"]
+            eet_bib = document["race"]["eet_bib"]
 
             nom_fichier = (
                 f"EET_{eet_bib}.pdf"

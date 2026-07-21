@@ -14,21 +14,27 @@ from services.document import (
 )
 
 
-CURRENT_DOCUMENT = "current_document"
 
-PREVIOUS_DOCUMENT = "previous_document"
+WORK_DOCUMENT = "work_document"
+CURRENT_CALCULATION = "current_calculation"
+PREVIOUS_CALCULATION = "previous_calculation"
+READ_ONLY = "lecture_seule"
+LANGUAGE = "langue"
 
+#
+# Document de travail
+#
 
-def obtenir_document_courant():
+def obtenir_document_travail():
     """
-    Retourne le document courant.
+    Retourne le document de travail.
 
     Si aucun document n'existe,
     un nouveau document est créé.
     """
 
     document = session.get(
-        CURRENT_DOCUMENT
+        WORK_DOCUMENT
     )
 
     if document is None:
@@ -36,7 +42,7 @@ def obtenir_document_courant():
         document = nouveau_document()
 
         session[
-            CURRENT_DOCUMENT
+            WORK_DOCUMENT
         ] = deepcopy(
             document
         )
@@ -46,16 +52,35 @@ def obtenir_document_courant():
     )
 
 
-def obtenir_document_precedent():
+def definir_document_travail(
+    document,
+):
     """
-    Retourne le document précédent.
+    Définit le document
+    de travail.
+    """
+
+    session[
+        WORK_DOCUMENT
+    ] = deepcopy(
+        document
+    )
+
+
+#
+# Calcul courant
+#
+
+def obtenir_calcul_courant():
+    """
+    Retourne le calcul courant.
 
     None est retourné
     s'il n'existe pas.
     """
 
     document = session.get(
-        PREVIOUS_DOCUMENT
+        CURRENT_CALCULATION
     )
 
     if document is None:
@@ -67,22 +92,61 @@ def obtenir_document_precedent():
     )
 
 
-def definir_document_courant(
+def definir_calcul_courant(
     document,
 ):
     """
-    Définit le document courant.
-
-    Le document précédent
-    n'est pas modifié.
+    Définit le calcul courant.
     """
 
     session[
-        CURRENT_DOCUMENT
+        CURRENT_CALCULATION
     ] = deepcopy(
         document
     )
 
+#
+# Calcul précédent
+#
+
+def obtenir_calcul_precedent():
+    """
+    Retourne le calcul précédent.
+
+    None est retourné
+    s'il n'existe pas.
+    """
+
+    document = session.get(
+        PREVIOUS_CALCULATION
+    )
+
+    if document is None:
+
+        return None
+
+    return deepcopy(
+        document
+    )
+
+
+def definir_calcul_precedent(
+    document,
+):
+    """
+    Définit le calcul précédent.
+    """
+
+    session[
+        PREVIOUS_CALCULATION
+    ] = deepcopy(
+        document
+    )
+
+
+#
+# Historique
+#
 
 def enregistrer_nouveau_calcul(
     document,
@@ -90,41 +154,57 @@ def enregistrer_nouveau_calcul(
     """
     Enregistre un nouveau calcul.
 
-    Le document courant devient
-    le document précédent.
+    Le calcul courant devient
+    le calcul précédent.
+
+    Le nouveau calcul devient
+    le calcul courant.
+
+    Le document de travail est
+    synchronisé.
     """
 
     courant = session.get(
-        CURRENT_DOCUMENT
+        CURRENT_CALCULATION
     )
 
     if courant is not None:
 
         session[
-            PREVIOUS_DOCUMENT
+            PREVIOUS_CALCULATION
         ] = deepcopy(
             courant
         )
 
     session[
-        CURRENT_DOCUMENT
+        CURRENT_CALCULATION
+    ] = deepcopy(
+        document
+    )
+
+    session[
+        WORK_DOCUMENT
     ] = deepcopy(
         document
     )
 
 
-def echanger_documents():
+def echanger_calculs():
     """
-    Échange les documents
-    courant et précédent.
+    Échange le calcul courant
+    et le calcul précédent.
+
+    Le document de travail est
+    synchronisé avec le nouveau
+    calcul courant.
     """
 
     courant = session.get(
-        CURRENT_DOCUMENT
+        CURRENT_CALCULATION
     )
 
     precedent = session.get(
-        PREVIOUS_DOCUMENT
+        PREVIOUS_CALCULATION
     )
 
     if precedent is None:
@@ -132,7 +212,7 @@ def echanger_documents():
         return
 
     session[
-        CURRENT_DOCUMENT
+        CURRENT_CALCULATION
     ] = deepcopy(
         precedent
     )
@@ -140,7 +220,49 @@ def echanger_documents():
     if courant is not None:
 
         session[
-            PREVIOUS_DOCUMENT
+            PREVIOUS_CALCULATION
         ] = deepcopy(
             courant
         )
+
+    session[
+        WORK_DOCUMENT
+    ] = deepcopy(
+        precedent
+    )
+
+
+def calcul_precedent_existe():
+    """
+    Indique si un calcul précédent
+    est disponible.
+    """
+
+    return (
+        session.get(
+            PREVIOUS_CALCULATION
+        )
+        is not None
+    )
+
+
+def obtenir_mode_lecture_seule():
+    """
+    Retourne le mode lecture seule.
+    """
+    return session.get(
+        READ_ONLY,
+        False,
+    )
+
+
+def definir_mode_lecture_seule(
+    lecture_seule,
+):
+    """
+    Définit le mode lecture seule.
+    """
+    session[
+        READ_ONLY
+    ] = lecture_seule
+

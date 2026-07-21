@@ -87,7 +87,7 @@ def _rechercher_references(
 
     competitors = document["competitors"]
 
-    eet_index = document["result"][
+    eet_index = document["calculation"][
         "eet_index"
     ]
 
@@ -131,7 +131,7 @@ def _rechercher_references(
             index
         )
 
-    document["result"][
+    document["calculation"][
         "reference_indexes"
     ] = reference_indexes
 
@@ -148,7 +148,7 @@ def _calculer_deltas(
 
     competitors = document["competitors"]
 
-    reference_indexes = document["result"][
+    reference_indexes = document["calculation"][
         "reference_indexes"
     ]
 
@@ -174,7 +174,7 @@ def _calculer_correction(
 
     competitors = document["competitors"]
 
-    reference_indexes = document["result"][
+    reference_indexes = document["calculation"][
         "reference_indexes"
     ]
 
@@ -183,11 +183,11 @@ def _calculer_correction(
         for index in reference_indexes
     )
 
-    document["result"][
+    document["calculation"][
         "sum_delta_us"
     ] = sum_delta_us
 
-    document["result"][
+    document["calculation"][
         "correction_us"
     ] = arrondir_division_fis(
         sum_delta_us,
@@ -210,7 +210,7 @@ def _calculer_eet(
     du chronomètre électronique.
     """
 
-    eet_index = document["result"][
+    eet_index = document["calculation"][
         "eet_index"
     ]
 
@@ -220,7 +220,7 @@ def _calculer_eet(
 
     eet_us = (
         competitor["mt_us"]
-        - document["result"]["correction_us"]
+        - document["calculation"]["correction_us"]
     )
 
     eet_us = tronquer_us(

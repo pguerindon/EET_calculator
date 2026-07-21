@@ -19,6 +19,10 @@ def importer_formulaire(
     dans un document existant.
     """
 
+    document["calculation_id"] = (
+        form_data.get("calculation_id", "").strip()
+    )
+
     _importer_precisions(
         document,
         form_data,

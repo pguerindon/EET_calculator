@@ -7,7 +7,7 @@ from flask import (
     session,
 )
 
-from version import VERSION
+from version import APP_VERSION
 
 from translation import (
     TEXTES,
@@ -23,7 +23,8 @@ from services.temps import (
 )
 
 from web.session import (
-    obtenir_document_precedent,
+    obtenir_calcul_precedent,
+    calcul_precedent_existe,
 )
 
 
@@ -54,7 +55,7 @@ def afficher_calcul(
     )
 
     race = document["race"]
-    result = document["result"]
+    result = document["calculation"]
 
     correction = _formater_duree(
         result["correction_us"],
@@ -135,7 +136,7 @@ def afficher_calcul(
         recherche_effectuee=(
             recherche_effectuee
         ),
-        version=VERSION,
+        version=APP_VERSION,
     )
 
 
@@ -164,12 +165,12 @@ def _preparer_calcul_precedent():
     Prépare les informations du calcul précédent.
     """
 
-    document = obtenir_document_precedent()
-
-    if document is None:
+    if not calcul_precedent_existe():
         return None
 
-    result = document["result"]
+    document = obtenir_calcul_precedent()
+
+    result = document["calculation"]
 
     eet_index = result["eet_index"]
 
@@ -201,7 +202,7 @@ def _afficher_page(
 
     return render_template(
         template,
-        version=VERSION,
+        version=APP_VERSION,
         txt=txt,
         langue=langue,
         page_title=page_title,

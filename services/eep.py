@@ -24,17 +24,15 @@ from services.document_store import (
 )
 
 from services.eep_validator import (
+    EEPValidationError,
     valider_eep_initial,
     valider_eep_secondaire,
 )
 
 
-def recevoir_eep(
-    eep_document,
-):
+def recevoir_eep(eep_document):
     """
-    Traite un document EEP reçu
-    d'un système de chronométrage.
+    Traite un document EEP reçu d'un système de chronométrage.
 
     Sans calculation_id :
         création d'un nouveau calcul.
@@ -45,38 +43,18 @@ def recevoir_eep(
     Retourne le calculation_id.
     """
 
-    if (
-        isinstance(eep_document, dict)
-        and "calculation_id" in eep_document
-    ):
+    calculation_id = (
+        eep_document["calculation_id"]
+        .strip()
+    )
 
-        return _recevoir_secondaire(
+    if calculation_id == "":
+        return _creer_calcul(
             eep_document
         )
 
-    return _creer_calcul(
+    return _recevoir_secondaire(
         eep_document
-    )
-
-
-def rappeler_calcul(
-    calculation_id,
-):
-    """
-    Rappelle un calcul stocké.
-
-    Retourne None si le calculation_id
-    est invalide ou inconnu.
-    """
-
-    if not verifier_calculation_id(
-        calculation_id
-    ):
-
-        return None
-
-    return charger_document(
-        calculation_id
     )
 
 
@@ -173,34 +151,92 @@ def _recevoir_secondaire(
     dans un calcul existant.
     """
 
+    #
+    # Validation du JSON reçu
+    #
+
     valider_eep_secondaire(
         eep_document
     )
 
-    calculation_id = eep_document[
-        "calculation_id"
-    ]
+    #
+    # Récupération de l'identifiant
+    # du calcul
+    #
 
-    if not verifier_calculation_id(
-        calculation_id
-    ):
+    calculation_id = (
+        eep_document["calculation_id"]
+        .strip()
+    )
 
-        return None
+    #
+    # Chargement du document
+    #
 
     document = charger_document(
         calculation_id
     )
 
     if document is None:
-        return None
+        raise EEPValidationError(
+            "Wrong calculation key."
+        )
+
+    #
+    # Vérification que le JSON B
+    # correspond bien au calcul
+    #
+
+    verifier_correspondance_course(
+        document,
+        eep_document,
+    )
+
+    #
+    # Import des temps manuels
+    #
 
     importer_mt(
         document,
         eep_document,
     )
 
+    #
+    # Sauvegarde
+    #
+
     sauver_document(
         document
     )
 
     return calculation_id
+
+
+def verifier_correspondance_course(
+    document,
+    eep_document,
+):
+    race = document["race"]
+    eep_race = eep_document["race"]
+
+    correspondances = (
+        ("season", race["season"], eep_race["season"]),
+        ("codex", race["codex"], eep_race["codex"]),
+        ("run", race["run"], eep_race["run"]),
+        (
+            "missing_impulse",
+            race["missing_impulse"],
+            eep_race["missing_impulse"],
+        ),
+        (
+            "eet_bib",
+            race["eet_bib"],
+            eep_race["eet_bib"],
+        ),
+    )
+
+    for nom, attendu, recu in correspondances:
+        if attendu != recu:
+            raise EEPValidationError(
+                f"Wrong calculation key ({nom} mismatch)."
+            )

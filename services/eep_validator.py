@@ -6,6 +6,14 @@ reçus des systèmes de chronométrage.
 
 Il ne modifie aucune donnée.
 """
+import re
+
+from services.constants import (
+    COMPETITOR_COUNT,
+    COMPETITOR_SCHEMA,
+    RACE_SCHEMA,
+    ROOT_SCHEMA,
+)
 
 
 class EEPValidationError(Exception):
@@ -15,198 +23,324 @@ class EEPValidationError(Exception):
 
     pass
 
+def _valider_schema(
+    data: dict,
+    schema: dict,
+) -> None:
+    """
+    Validate a dictionary against a schema.
+
+    Args:
+        data:
+            Dictionary to validate.
+
+        schema:
+            Validation schema.
+
+    Raises:
+        EEPValidationError:
+            If the dictionary does not conform to the schema.
+    """
+
+    for field, rules in schema.items():
+
+        #
+        # Mandatory / optional field
+        #
+
+        required = rules.get(
+            "required",
+            True,
+        )
+
+        if field not in data:
+
+            if required:
+                raise EEPValidationError(
+                    f"Missing field '{field}'."
+                )
+
+            # Optional field absent
+            continue
+
+        value = data[field]
+
+        #
+        # Type
+        #
+
+        expected_type = rules.get("type")
+
+        if (
+            expected_type is not None
+            and not isinstance(
+                value,
+                expected_type,
+            )
+        ):
+            raise EEPValidationError(
+                f"Invalid type for '{field}'."
+            )
+
+        #
+        # Allowed values
+        #
+
+        allowed = rules.get("allowed")
+
+        if (
+            allowed is not None
+            and value not in allowed
+        ):
+            raise EEPValidationError(
+                f"Invalid value for '{field}'."
+            )
+
+        #
+        # Regular expression
+        #
+
+        pattern = rules.get("pattern")
+
+        if pattern is not None:
+
+            if re.fullmatch(
+                pattern,
+                value,
+            ) is None:
+                raise EEPValidationError(
+                    f"Invalid format for '{field}'."
+                )
+
+        #
+        # Minimum
+        #
+
+        minimum = rules.get("minimum")
+
+        if (
+            minimum is not None
+            and value < minimum
+        ):
+            raise EEPValidationError(
+                f"'{field}' is below minimum value."
+            )
+
+        #
+        # Maximum
+        #
+
+        maximum = rules.get("maximum")
+
+        if (
+            maximum is not None
+            and value > maximum
+        ):
+            raise EEPValidationError(
+                f"'{field}' exceeds maximum value."
+            )
+  
 
 def valider_eep_initial(
-    eep_document,
-):
+    eep_document: dict,
+) -> None:
     """
-    Valide un document EEP initial
-    provenant du système A.
+    Validate an initial EEP request.
+
+    Args:
+        eep_document:
+            EEP document.
+
+    Raises:
+        EEPValidationError:
+            If the document is invalid.
     """
 
-    _valider_document(
-        eep_document
-    )
-
-    _verifier_champ(
+    _valider_eep(
         eep_document,
-        "race",
     )
 
-    _valider_race(
-        eep_document["race"]
-    )
+    #
+    # Business rules
+    #
 
-    _valider_competitors(
-        eep_document["competitors"]
-    )
-
-    nb_et_manquants = sum(
-        1
-        for competitor
-        in eep_document["competitors"]
-        if competitor["et_tod"] is None
-    )
-
-    if nb_et_manquants != 1:
-
+    if eep_document["calculation_id"] != "":
         raise EEPValidationError(
-            "Exactly one ET must be missing."
+            "calculation_id must be empty."
+        )
+
+    missing_count = sum(
+        competitor["et_tod"].strip() == ""
+        for competitor in eep_document["competitors"]
+    )
+
+    if missing_count != 1:
+        raise EEPValidationError(
+            "Exactly one missing ET is required."
         )
 
 
 def valider_eep_secondaire(
-    eep_document,
-):
+    eep_document: dict,
+) -> None:
     """
-    Valide un document EEP provenant
-    du système B.
+    Validate a secondary EEP request.
 
-    Les métadonnées race éventuelles
-    ne sont pas utilisées.
+    Args:
+        eep_document:
+            EEP document.
+
+    Raises:
+        EEPValidationError:
+            If the document is invalid.
+    """
+
+    _valider_eep(
+        eep_document,
+    )
+
+    #
+    # Business rules
+    #
+
+    if eep_document["calculation_id"] == "":
+        raise EEPValidationError(
+            "Missing calculation_id."
+        )
+
+    missing_count = sum(
+        competitor["et_tod"] is None
+        for competitor in eep_document["competitors"]
+    )
+
+    if missing_count != 0:
+        raise EEPValidationError(
+            "No missing ET is allowed."
+        )
+    
+
+def _valider_eep(
+    eep_document: dict,
+) -> None:
+    """
+    Validate the common part of an EEP document.
     """
 
     _valider_document(
-        eep_document
-    )
-
-    _verifier_champ(
         eep_document,
-        "calculation_id",
     )
 
-    calculation_id = eep_document[
-        "calculation_id"
-    ]
-
-    if not isinstance(
-        calculation_id,
-        str,
-    ):
-
-        raise EEPValidationError(
-            "Invalid calculation_id."
-        )
+    _valider_race(
+        eep_document["race"],
+    )
 
     _valider_competitors(
-        eep_document["competitors"]
+        eep_document["competitors"],
     )
-
-    nb_et_manquants = sum(
-        1
-        for competitor
-        in eep_document["competitors"]
-        if competitor["et_tod"] is None
-    )
-
-    if nb_et_manquants != 0:
-
-        raise EEPValidationError(
-            "All ET must be present."
-        )
-
+            
 
 def _valider_document(
-    eep_document,
-):
+    eep_document: dict,
+) -> None:
     """
-    Valide la structure générale
-    d'un document EEP.
+    Validate the overall EEP document structure.
+
+    Args:
+        eep_document:
+            EEP document.
+
+    Raises:
+        EEPValidationError:
+            If the document structure is invalid.
     """
 
     if not isinstance(
         eep_document,
         dict,
     ):
-
         raise EEPValidationError(
             "Invalid EEP document."
         )
 
-    _verifier_champ(
+    _valider_schema(
         eep_document,
-        "competitors",
+        ROOT_SCHEMA,
     )
+
+    if not isinstance(
+        eep_document["race"],
+        dict,
+    ):
+        raise EEPValidationError(
+            "Invalid race."
+        )
 
     if not isinstance(
         eep_document["competitors"],
         list,
     ):
-
         raise EEPValidationError(
             "Invalid competitors."
         )
-
+            
 
 def _valider_race(
-    race,
-):
+    race: dict,
+) -> None:
     """
-    Valide les métadonnées de course.
+    Validate the race object.
+
+    Args:
+        race:
+            Race object.
+
+    Raises:
+        EEPValidationError:
+            If the race object is invalid.
     """
 
     if not isinstance(
         race,
         dict,
     ):
-
         raise EEPValidationError(
             "Invalid race."
         )
 
-    champs_obligatoires = (
-        "season",
-        "codex",
-        "location",
-        "date",
-        "discipline",
-        "run",
+    _valider_schema(
+        race,
+        RACE_SCHEMA,
     )
-
-    for champ in champs_obligatoires:
-
-        _verifier_champ(
-            race,
-            champ,
-        )
-
-    season = race["season"]
-
-    if (
-        not isinstance(season, str)
-        or len(season) != 4
-        or not season.isdigit()
-    ):
-
-        raise EEPValidationError(
-            "Invalid season."
-        )
-
-    codex = race["codex"]
-
-    if (
-        not isinstance(codex, str)
-        or len(codex) != 4
-        or not codex.isdigit()
-    ):
-
-        raise EEPValidationError(
-            "Invalid codex."
-        )
 
 
 def _valider_competitors(
-    competitors,
-):
+    competitors: list,
+) -> None:
     """
-    Valide les concurrents EEP.
+    Validate the competitors list.
+
+    Args:
+        competitors:
+            Competitors list.
+
+    Raises:
+        EEPValidationError:
+            If the competitors list is invalid.
     """
 
-    if len(competitors) != 11:
-
+    if not isinstance(
+        competitors,
+        list,
+    ):
         raise EEPValidationError(
-            "The EEP document must contain "
-            "exactly 11 competitors."
+            "Invalid competitors."
+        )
+
+    if len(
+        competitors
+    ) != COMPETITOR_COUNT:
+        raise EEPValidationError(
+            f"The EEP document must contain exactly {COMPETITOR_COUNT} competitors."
         )
 
     for competitor in competitors:
@@ -215,32 +349,12 @@ def _valider_competitors(
             competitor,
             dict,
         ):
-
             raise EEPValidationError(
                 "Invalid competitor."
             )
 
-        _verifier_champ(
+        _valider_schema(
             competitor,
-            "bib",
+            COMPETITOR_SCHEMA,
         )
 
-        _verifier_champ(
-            competitor,
-            "et_tod",
-        )
-
-
-def _verifier_champ(
-    data,
-    champ,
-):
-    """
-    Vérifie la présence d'un champ obligatoire.
-    """
-
-    if champ not in data:
-
-        raise EEPValidationError(
-            f"Missing field: {champ}."
-        )

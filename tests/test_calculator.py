@@ -44,7 +44,7 @@ def test_calculer_document():
         document
     )
 
-    result = document["result"]
+    result = document["calculation"]
 
     #
     # Vérification du concurrent EET

@@ -20,7 +20,6 @@ TEXTES = {
         "calcul_precedent": "Calcul précédent",
         "calculer": "Calculer EET",
         "correction": "Somme Delta / 10",
-        "date_calcul": "Date du calcul :",
         "delta": "Delta",
         "dossard": "Dossard",
         "dossard_eet": "Dossard EET",
@@ -49,7 +48,6 @@ TEXTES = {
         "titre": "Calculateur EET",
         "tm": "TM (TOD)",
         "meta_description": "Calculateur EET (Equivalent Electronic Time) pour les compétitions de ski alpin. Calcul conforme aux règlements FIS et nationaux à partir des temps manuels ou du système B de chronométrage.",
-        "id_calcul": "Id du calcul",
 
         #
         # Recherche de calcul
@@ -237,6 +235,19 @@ TEXTES = {
             "temps_manuel_absent": "Le temps manuel est absent.",
             "temps_electronique_absent": "Le temps électronique est absent.",
             },
+
+        #
+        # Pdf
+        #
+
+        "pdf_title": "Calcul du temps électronique équivalent (EET)",
+        "date_calcul": "Date du calcul",
+        "calculation_id": "Id du calcul",
+        "departure": "Départ",
+        "arrival": "Arrivée",
+        "missing_impulse": "Impulsion manquante",
+        "eet_bib": "Dossard EET",
+        "location": "Station",
     },
 
     "en": {
@@ -249,7 +260,6 @@ TEXTES = {
         "calcul_precedent": "Previous calculation",
         "calculer": "Calculate EET",
         "correction": "Delta Sum / 10",
-        "date_calcul": "Calculation Date",
         "delta": "Delta",
         "dossard": "Bib",
         "dossard_eet": "EET Bib",
@@ -278,7 +288,6 @@ TEXTES = {
         "titre": "EET Calculator",
         "tm": "MT (TOD)",
         "meta_description": "EET Calculator (Equivalent Electronic Time) for alpine skiing competitions. Compute replacement electronic times according to FIS and national timing procedures using manual timing or timing system B data.",
-        "id_calcul": "Calculation ID",
 
         #
         # Calculation search
@@ -477,6 +486,20 @@ TEXTES = {
             "temps_manuel_absent": "The manual time is missing.",
             "temps_electronique_absent": "The electronic time is missing.",
         },
+
+        #
+        # Pdf
+        #
+
+        "pdf_title": "Equivalent Electronic Time (EET) Calculation",
+        "date_calcul": "Calculation date",
+        "calculation_id": "Calculation ID",
+        "departure": "Start",
+        "arrival": "Finish",
+        "missing_impulse": "Missing impulse",
+        "eet_bib": "EET Bib",
+        "location": "Location",
+
     },
 
     "de": {
@@ -489,7 +512,6 @@ TEXTES = {
         "calcul_precedent": "Vorherige Berechnung",
         "calculer": "EET Berechnen",
         "correction": "Delta Summe / 10",
-        "date_calcul": "Berechnungsdatum:",
         "delta": "Delta",
         "dossard": "Startnummer",
         "dossard_eet": "EET Start-Nr.",
@@ -518,7 +540,7 @@ TEXTES = {
         "titre": "EET Rechner",
         "tm": "MT (TOD)",
         "meta_description": "EET-Rechner (Equivalent Electronic Time) für alpine Skirennen. Berechnung von Ersatzelektronikzeiten gemäß FIS- und nationalen Zeitmessvorschriften auf Basis von Handzeiten oder Zeitmesssystem B.",
-        "id_calcul": "Berechnungs-ID",
+        "calculation_id": "Berechnungs-ID",
 
         #
         # Berechnungssuche
@@ -716,6 +738,20 @@ TEXTES = {
             "temps_manuel_absent": "Die manuelle Zeit fehlt.",
             "temps_electronique_absent": "Die elektronische Zeit fehlt.",
         },
+
+        #
+        # Pdf
+        #
+
+        "pdf_title": "Berechnung der äquivalenten elektronischen Zeit (EET)",
+        "date_calcul": "Berechnungsdatum",
+        "calculation_id": "Berechnungs-ID",
+        "departure": "Start",
+        "arrival": "Ziel",
+        "missing_impulse": "Fehlender Impuls",
+        "eet_bib": "EET-Startnummer",
+        "location": "Ort",
+
     },
 
 }

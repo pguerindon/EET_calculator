@@ -16,6 +16,11 @@ from services.temps import (
     precision_tod,
 )
 
+from services.constants import (
+    RACE_SCHEMA,
+    COMPETITOR_SCHEMA,
+)
+
 
 # ----------------------------------------------------------------------
 # Import initial
@@ -55,12 +60,13 @@ def _importer_race(
 
     race = document["race"]
 
-    race["season"] = race_data["season"]
-    race["codex"] = race_data["codex"]
-    race["location"] = race_data["location"]
-    race["date"] = race_data["date"]
-    race["discipline"] = race_data["discipline"]
-    race["run"] = race_data["run"]
+    #
+    # Copie de tous les champs
+    #
+
+    for field, value in race_data.items():
+        if field in race:
+            race[field] = value
 
 
 def _importer_competitors(
@@ -73,12 +79,13 @@ def _importer_competitors(
 
     competitors = document["competitors"]
 
-    for index, competitor_data in enumerate(
-        competitors_data
+    for competitor, competitor_data in zip(
+        competitors,
+        competitors_data,
     ):
 
         _importer_competitor(
-            competitors[index],
+            competitor,
             competitor_data,
         )
 
@@ -91,25 +98,21 @@ def _importer_competitor(
     Importe un concurrent du système A.
     """
 
-    competitor["bib"] = competitor_data[
-        "bib"
-    ]
+    #
+    # Copie de tous les champs
+    #
 
-    competitor["et_tod"] = competitor_data[
-        "et_tod"
-    ]
+    for field in COMPETITOR_SCHEMA:
 
-    et_tod = competitor["et_tod"]
+        if field in competitor_data:
+            competitor[field] = competitor_data[field]
 
-    if et_tod is not None:
+    #
+    # Normalisation
+    #
 
-        competitor["et_us"] = tod_to_us(
-            et_tod
-        )
-
-    else:
-
-        competitor["et_us"] = None
+    if competitor["et_tod"] == "":
+        competitor["et_tod"] = None
 
 
 def _determiner_et_precision(

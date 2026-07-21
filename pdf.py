@@ -5,7 +5,10 @@ Génération du rapport PDF EET Calculator.
 from io import BytesIO
 from datetime import datetime
 
+from flask import request
 from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import (
     ParagraphStyle,
     getSampleStyleSheet,
@@ -19,20 +22,62 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from version import VERSION
+from services.calculation_id import calculer_datetime, datetime
+from services.constants import COPYRIGHT
+from services.document import formater_date
+from version import APP_VERSION
 
 from services.temps import (
     us_to_duration,
 )
 
-
-def creer_pdf(
-    document,
-    txt,
-):
+def creer_pdf(document, txt):
     """
     Génère le rapport PDF d'un calcul EET.
     """
+
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        topMargin=10,
+        pagesize=A4,
+    )
+
+    #
+    # Styles
+    #
+
+    styles = getSampleStyleSheet()
+    styles_pdf = _creer_styles(styles)
+
+    #
+    # Données
+    #
+
+    race = document["race"]
+    result = document["calculation"]
+    competitors = document["competitors"]
+
+    precision_mt = race["mt_precision"]
+    precision_et = race["et_precision"]
+
+    eet_index = result["eet_index"]
+
+    competitor_eet = None
+
+    if eet_index is not None:
+        competitor_eet = competitors[eet_index]
+
+    document["calculation_id"] = request.form["calculation_id"]
+
+    calculation_id = document["calculation_id"]
+
+
+
+    #
+    # Logos
+    #
 
     logo_fis = Image(
         "static/images/logo_fis.jpg",
@@ -46,61 +91,245 @@ def creer_pdf(
         height=70,
     )
 
-    buffer = BytesIO()
+    elements = []
 
-    doc = SimpleDocTemplate(
-        buffer,
-        topMargin=10,
+    elements.extend(
+        _creer_entete(
+            document,
+            txt,
+            styles_pdf,
+            logo_fis,
+            logo_ffs,
+        )
     )
 
-    styles = getSampleStyleSheet()
+    elements.append(
+        _creer_tableau_competiteurs(
+            document,
+            txt,
+        )
+    )
+
+    elements.append(
+        Spacer(1, 15)
+    )
+
+    elements.append(
+        _creer_tableau_resume(
+            document,
+            txt,
+        )
+    )
+
+    doc.build(
+        elements,
+        onFirstPage=lambda canvas, doc: _dessiner_page(canvas, doc, txt),
+        onLaterPages=lambda canvas, doc: _dessiner_page(canvas, doc, txt),
+    )
+
+    buffer.seek(0)
+
+    return buffer
+
+def _dessiner_page(
+    canvas,
+    doc,
+    txt,
+):
+    """
+    Dessine le pied de page de chaque page.
+    """
+
+    canvas.saveState()
+
+    largeur, hauteur = A4
+
+    canvas.setStrokeColor(colors.grey)
+    canvas.line(
+        doc.leftMargin,
+        25,
+        largeur - doc.rightMargin,
+        25,
+    )
+
+    canvas.setFont(
+        "Helvetica",
+        8,
+    )
+
+    canvas.drawString(
+        doc.leftMargin,
+        12,
+        f"{txt['pdf_title']} {APP_VERSION}",
+    )
+
+    canvas.drawRightString(
+        largeur - doc.rightMargin,
+        12,
+        COPYRIGHT,
+    )
+
+    canvas.restoreState()
+    
+
+def _creer_entete(
+    document,
+    txt,
+    styles,
+    logo_fis,
+    logo_ffs,
+):
+    """
+    Construit l'en-tête du rapport PDF.
+    """
 
     race = document["race"]
-    result = document["result"]
+    calculation = document["calculation"]
     competitors = document["competitors"]
 
-    precision_mt = race["mt_precision"]
-    precision_et = race["et_precision"]
+    #
+    # Préparation des données
+    #
 
-    eet_index = result["eet_index"]
+    competitor_eet = competitors[calculation["eet_index"]]
 
-    dossard_eet = ""
-    eet = ""
+    dossard = (
+        f"{txt['dossard']} "
+        f"{competitor_eet['bib']}"
+    )
 
-    if eet_index is not None:
+    nom = competitor_eet["lastname"]
 
-        competitor_eet = competitors[
-            eet_index
-        ]
+    if competitor_eet["firstname"]:
+        nom += f" {competitor_eet['firstname']}"
 
-        dossard_eet = competitor_eet["bib"]
+    if competitor_eet["nation"]:
+        nom += f" ({competitor_eet['nation']})"
 
-        eet = (
-            competitor_eet["eet_tod"]
-            or ""
+    infos_course = []
+    infos_calcul = []
+
+    #
+    # Informations de course
+    #
+
+    if race["codex"]:
+        infos_course.append(
+            (
+                txt["codex"],
+                race["codex"],
+            )
         )
 
-    nb_references = len(
-        result["reference_indexes"]
+    if race["location"]:
+        infos_course.append(
+            (
+                txt["location"],
+                race["location"],
+            )
+        )
+
+    if race["discipline"]:
+        infos_course.append(
+            (
+                txt["discipline"],
+                race["discipline"],
+            )
+        )
+
+    if (
+        race["missing_impulse"] != "WEB"
+        and race["run"]
+    ):
+        infos_course.append(
+            (
+                txt["manche"],
+                race["run"],
+            )
+        )
+
+    if race["date"]:
+        infos_course.append(
+            (
+                txt["date"],
+                formater_date(
+                    race["date"]
+                ),
+            )
+        )
+
+    #
+    # Informations EEP
+    #
+
+    if race["missing_impulse"] != "WEB":
+
+        impulsion = {
+            "START": txt["departure"],
+            "FINISH": txt["arrival"],
+        }.get(
+            race["missing_impulse"]
+        )
+
+        if impulsion:
+            infos_calcul.append(
+                (
+                    txt["missing_impulse"],
+                    impulsion,
+                )
+            )
+
+    #
+    # Date du calcul
+    #
+
+    if document["calculation_id"]:
+
+        date_calcul = (
+            calculer_datetime(
+                document["calculation_id"]
+            ).strftime(
+                "%d/%m/%Y %H:%M:%S"
+            )
+        )
+
+    else:
+
+        date_calcul = datetime.now().strftime(
+            "%d/%m/%Y %H:%M:%S"
+        )
+
+    infos_calcul.append(
+        (
+            txt["date_calcul"],
+            date_calcul,
+        )
     )
 
-    somme_delta = _formater_duree(
-        result["sum_delta_us"],
-        precision_et,
-    )
+    #
+    # Identifiant du calcul
+    #
 
-    correction = _formater_duree(
-        result["correction_us"],
-        precision_et,
-    )
+    if document["calculation_id"]:
+
+        infos_calcul.append(
+            (
+                txt["calculation_id"],
+                document["calculation_id"],
+            )
+        )
+
+    #
+    # Titre
+    #
 
     entete = Table(
         [
             [
                 logo_fis,
                 Paragraph(
-                    txt["titre"],
-                    styles["Title"],
+                    txt["pdf_title"],
+                    styles["titre"],
                 ),
                 logo_ffs,
             ]
@@ -111,77 +340,153 @@ def creer_pdf(
     entete.setStyle(
         TableStyle(
             [
-                (
-                    "ALIGN",
-                    (0, 0),
-                    (0, 0),
-                    "LEFT",
-                ),
-                (
-                    "ALIGN",
-                    (1, 0),
-                    (1, 0),
-                    "RIGHT",
-                ),
-                (
-                    "VALIGN",
-                    (0, 0),
-                    (-1, -1),
-                    "MIDDLE",
-                ),
+                ("ALIGN", (0, 0), (0, 0), "LEFT"),
+                ("ALIGN", (1, 0), (1, 0), "CENTER"),
+                ("ALIGN", (2, 0), (2, 0), "RIGHT"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ]
         )
     )
 
-    style_version = ParagraphStyle(
-        "Version",
-        parent=styles["Normal"],
-        alignment=1,
-        fontName="Helvetica-Bold",
-        fontSize=11,
-    )
-
-    style_date = ParagraphStyle(
-        "Date",
-        parent=styles["Normal"],
-        alignment=1,
-        fontSize=10,
-    )
+    #
+    # Construction du document
+    #
 
     elements = []
 
-    elements.append(
-        entete
+    elements.append(entete)
+    elements.append(Spacer(1, 12))
+
+    _ajouter_paragraphe(
+        elements,
+        dossard,
+        styles["dossard"],
+    )
+
+    _ajouter_paragraphe(
+        elements,
+        nom,
+        styles["nom"],
     )
 
     elements.append(
-        Paragraph(
-            f"Version {VERSION}",
-            style_version,
-        )
+        Spacer(1, 6)
     )
 
-    elements.append(
-        Spacer(
-            1,
-            10,
+
+    #
+    # Tableau des informations
+    #
+
+    data = []
+
+    for libelle, valeur in infos_course:
+
+        data.append(
+            [
+                Paragraph(
+                    f"{libelle} :",
+                    styles["info_libelle"],
+                ),
+                Paragraph(
+                    str(valeur),
+                    styles["info_valeur"],
+                ),
+            ]
         )
+
+    #
+    # Séparation entre les informations de course
+    # et les informations de calcul.
+    #
+
+    if infos_course and infos_calcul:
+
+        data.append(
+            [
+                Paragraph(
+                    "",
+                    styles["info_valeur"],
+                ),
+                Paragraph(
+                    "",
+                    styles["info_valeur"],
+                ),
+            ]
+        )
+
+    for libelle, valeur in infos_calcul:
+
+        data.append(
+            [
+                Paragraph(
+                    f"{libelle} :",
+                    styles["info_libelle"],
+                ),
+                Paragraph(
+                    str(valeur),
+                    styles["info_valeur"],
+                ),
+            ]
+        )
+
+
+    table_infos = Table(
+        data,
+        colWidths=[145, 215],
     )
 
-    elements.append(
-        Paragraph(
-            f"{txt['date_calcul']} "
-            f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}",
-            style_date,
+
+    style = [
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("GRID", (0, 0), (-1, -1), 0, colors.white),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+    ]
+
+    if infos_course and infos_calcul:
+
+        ligne_separation = len(infos_course)
+
+        style.append(
+            (
+                "BOTTOMPADDING",
+                (0, ligne_separation),
+                (-1, ligne_separation),
+                8,
+            )
         )
+
+    table_infos.setStyle(
+        TableStyle(style)
     )
 
-    elements.append(
-        Spacer(
-            1,
-            10,
-        )
-    )
+
+    elements.append(table_infos)
+    elements.append(Spacer(1, 18))
+
+    return elements
+
+def _creer_tableau_competiteurs(
+    document,
+    txt,
+):
+    """
+    Construit le tableau des concurrents.
+    """
+
+    race = document["race"]
+    result = document["calculation"]
+    competitors = document["competitors"]
+
+    precision_et = race["et_precision"]
+    eet_index = result["eet_index"]
+
+    #
+    # Construction des lignes
+    #
 
     data = [
         [
@@ -199,218 +504,271 @@ def creer_pdf(
         start=1,
     ):
 
-        mt = (
-            competitor["mt_tod"]
-            or ""
-        )
+        mt = competitor["mt_tod"] or ""
+        et = competitor["et_tod"] or ""
 
-        et = (
-            competitor["et_tod"]
-            or ""
-        )
-
-        if (
-            eet_index is not None
-            and index - 1 == eet_index
-        ):
+        if eet_index == index - 1:
 
             ligne_eet_pdf = index
-
-            et = (
-                competitor["eet_tod"]
-                or ""
-            )
+            et = competitor["eet_tod"] or ""
 
         delta = _formater_duree(
             competitor["delta_us"],
             precision_et,
         )
 
-        data.append(
-            [
-                competitor["bib"],
-                mt,
-                et,
-                delta,
-            ]
-        )
+        ligne = [
+            competitor["bib"],
+            mt,
+            et,
+            delta,
+        ]
+
+        data.append(ligne)
 
     table = Table(
-        data
+        data,
+        colWidths=[
+            55,
+            115,
+            115,
+            80,
+        ],
     )
+
+
+    style = [
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
+
+        # Fond de l'en-tête
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D9D9D9")),
+
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 6),
+    ]
 
     if ligne_eet_pdf is not None:
 
-        table.setStyle(
-            TableStyle(
-                [
+        style.extend(
+            [
+                (
+                    "BACKGROUND",
+                    (0, ligne_eet_pdf),
+                    (-1, ligne_eet_pdf),
+                    colors.HexColor("#D9D9D9"),
+                ),
+                (
+                    "FONTNAME",
+                    (0, ligne_eet_pdf),
+                    (-1, ligne_eet_pdf),
+                    "Helvetica-Bold",
+                ),
+            ]
+        )
+
+    for index, competitor in enumerate(
+        competitors,
+        start=1,
+    ):
+
+        if competitor["delta_us"] is not None:
+            if abs(competitor["delta_us"]) > 1_000_000:
+
+                style.append(
                     (
                         "BACKGROUND",
-                        (2, ligne_eet_pdf),
-                        (2, ligne_eet_pdf),
-                        colors.khaki,
+                        (3, index),
+                        (3, index),
+                        colors.yellow,
                     )
-                ]
-            )
-        )
+                )
 
     table.setStyle(
-        TableStyle(
-            [
-                (
-                    "GRID",
-                    (0, 0),
-                    (-1, -1),
-                    1,
-                    colors.black,
-                ),
-                (
-                    "BACKGROUND",
-                    (0, 0),
-                    (-1, 0),
-                    colors.lightgrey,
-                ),
-                (
-                    "FONTNAME",
-                    (0, 0),
-                    (-1, 0),
-                    "Helvetica-Bold",
-                ),
-                (
-                    "ALIGN",
-                    (0, 0),
-                    (-1, -1),
-                    "CENTER",
-                ),
-            ]
-        )
+        TableStyle(style)
     )
 
-    elements.append(
-        table
-    )
+    return table
 
-    elements.append(
-        Spacer(
-            1,
-            20,
-        )
-    )
 
-    resume = Table(
+def _creer_tableau_resume(
+    document,
+    txt,
+):
+    """
+    Construit le tableau récapitulatif du calcul.
+    """
+
+    #
+    # Préparation des données
+    #
+
+    race = document["race"]
+    calculation = document["calculation"]
+
+    eet_tod = ""
+
+    if calculation["eet_index"] is not None:
+        eet_tod = document["competitors"][
+            calculation["eet_index"]
+        ]["eet_tod"]
+
+    precision_et = race["et_precision"]
+
+    data = [
         [
-            [
-                txt["dossard_eet"],
-                dossard_eet,
-            ],
-            [
-                txt["references"],
-                nb_references,
-            ],
-            [
-                txt["somme_delta"],
-                somme_delta,
-            ],
-            [
-                txt["correction"],
-                correction,
-            ],
-            [
-                txt["eet_calculee"],
-                eet,
-            ],
+            txt["eet_bib"],
+            race["eet_bib"],
         ],
-        colWidths=[137, 137],
+        [
+            txt["references"],
+            len(calculation["reference_indexes"]),
+        ],
+        [
+            txt["somme_delta"],
+            _formater_duree(
+                calculation["sum_delta_us"],
+                precision_et,
+            ),
+        ],
+        [
+            txt["correction"],
+            _formater_duree(
+                calculation["correction_us"],
+                precision_et,
+            ),
+        ],
+        [
+            txt["eet_calculee"],
+            eet_tod,
+        ],
+    ]
+
+    #
+    # Création du tableau
+    #
+
+    table = Table(
+        data,
+        colWidths=[
+            180,
+            180,
+        ],
     )
 
-    resume.setStyle(
-        TableStyle(
-            [
-                (
-                    "GRID",
-                    (0, 0),
-                    (-1, -1),
-                    1,
-                    colors.black,
-                ),
-                (
-                    "BACKGROUND",
-                    (0, 0),
-                    (0, -1),
-                    colors.lightgrey,
-                ),
-                (
-                    "FONTNAME",
-                    (0, 0),
-                    (0, -1),
-                    "Helvetica-Bold",
-                ),
-                (
-                    "ALIGN",
-                    (1, 0),
-                    (1, -1),
-                    "RIGHT",
-                ),
-                (
-                    "BACKGROUND",
-                    (1, 4),
-                    (1, 4),
-                    colors.khaki,
-                ),
-                (
-                    "FONTNAME",
-                    (1, 4),
-                    (1, 4),
-                    "Helvetica-Bold",
-                ),
-                (
-                    "TEXTCOLOR",
-                    (0, 0),
-                    (-1, -1),
-                    colors.black,
-                ),
-                (
-                    "FONTSIZE",
-                    (0, 0),
-                    (-1, -1),
-                    11,
-                ),
-            ]
-        )
+    #
+    # Style
+    #
+
+    style = [
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
+
+        ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+
+        ("ALIGN", (1, 0), (1, -1), "RIGHT"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        (
+            "BACKGROUND",
+            (1, 4),
+            (1, 4),
+            colors.khaki,
+        ),
+
+        (
+            "FONTNAME",
+            (1, 4),
+            (1, 4),
+            "Helvetica-Bold",
+        ),
+    ]
+
+    table.setStyle(
+        TableStyle(style)
     )
 
-    elements.append(
-        resume
-    )
+    return table
 
-    def metadonnees(
-        canvas,
-        doc,
-    ):
-        """
-        Définit les métadonnées du PDF.
-        """
 
-        canvas.setTitle(
-            "Calculateur EET"
-        )
+def _creer_styles(styles):
+    """
+    Crée les styles utilisés par le rapport PDF.
+    """
 
-        canvas.setAuthor(
-            "Philippe Guérindon"
-        )
+    return {
 
-        canvas.setSubject(
-            "Equivalent Electronic Time"
-        )
+        "titre": ParagraphStyle(
+            "Titre",
+            parent=styles["Title"],
+            alignment=TA_CENTER,
+            fontName="Helvetica-Bold",
+            fontSize=17,
+            spaceAfter=10,
+        ),
 
-    doc.build(
-        elements,
-        onFirstPage=metadonnees,
-    )
+        "dossard": ParagraphStyle(
+            "Dossard",
+            parent=styles["Normal"],
+            alignment=TA_CENTER,
+            fontName="Helvetica-Bold",
+            fontSize=15,
+            spaceAfter=4,
+        ),
 
-    buffer.seek(0)
+        "nom": ParagraphStyle(
+            "Nom",
+            parent=styles["Normal"],
+            alignment=TA_CENTER,
+            fontName="Helvetica-Bold",
+            fontSize=15,
+            spaceAfter=8,
+        ),
 
-    return buffer
+        "info": ParagraphStyle(
+            "Info",
+            parent=styles["Normal"],
+            alignment=TA_CENTER,
+            fontName="Helvetica",
+            fontSize=11,
+            spaceAfter=3,
+        ),
+
+        "trace": ParagraphStyle(
+            "Trace",
+            parent=styles["Normal"],
+            alignment=TA_CENTER,
+            fontName="Helvetica",
+            fontSize=10,
+            spaceAfter=2,
+        ),
+
+        "info_libelle": ParagraphStyle(
+            "InfoLibelle",
+            parent=styles["Normal"],
+            alignment=TA_RIGHT,
+            fontName="Helvetica-Bold",
+            fontSize=11,
+        ),
+
+        "info_valeur": ParagraphStyle(
+            "InfoValeur",
+            parent=styles["Normal"],
+            alignment=TA_LEFT,
+            fontName="Helvetica",
+            fontSize=11,
+        ),
+    }
+
+
+def _ajouter_paragraphe(elements, texte, style):
+    """
+    Ajoute un paragraphe si le texte n'est pas vide.
+    """
+    if texte:
+        elements.append(Paragraph(texte, style))
 
 
 def _formater_duree(

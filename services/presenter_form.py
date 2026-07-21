@@ -46,7 +46,7 @@ def _competitor_vers_ligne(
         competitor["mt_tod"] or ""
     )
 
-    eet_index = document["result"][
+    eet_index = document["calculation"][
         "eet_index"
     ]
 
