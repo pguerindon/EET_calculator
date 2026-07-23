@@ -1,146 +1,169 @@
 # EET Calculator
 
-## Version 1.21 (EEP 1.0)
+**Version:** 1.21  
+**EEP Protocol:** 1.0
 
-### Nouveautés
+EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** according to the timing rules of the **International Ski and Snowboard Federation (FIS)**.
 
-- Première version conforme au protocole d'échange **EEP 1.0**.
-- Séparation de l'architecture entre **RACE_SCHEMA** (protocole d'échange) et **RACE_MODEL** (modèle interne).
-- Gestion complète des workflows :
-  - calcul d'un nouvel EET ;
-  - recherche publique en lecture seule ;
-  - rappel d'un calcul par `calculation_id`.
-- Génération automatique :
-  - d'un PDF anonymisé pour les recherches publiques ;
-  - d'un PDF nominatif pour le rappel d'un calcul.
-- Permutation des documents de travail dans la session Flask.
-- Validation complète du fonctionnement sous Windows et Ubuntu (Gunicorn + nginx).
+The application determines the missing electronic time of a competitor from the electronic and manual times of the previous competitors.
 
-**APP_VERSION : 1.21**  
-**EEP_VERSION : 1.0**
+All calculations are performed internally in **microseconds** before truncation to the required timing precision, ensuring maximum calculation accuracy.
 
 ---
 
-**Version : 1.21**  
-**Auteur : Philippe Guérindon**
+# Highlights
 
-## Présentation
-
-**Version : 1.10**
-**Auteur : Philippe Guérindon**
-
-## Présentation
-
-EET Calculator est une application web permettant de calculer un **Temps Électronique Équivalent (Equivalent Electronic Time - EET)** conformément aux règles de chronométrage de la **Fédération Internationale de Ski (FIS)**.
-
-L'application permet de déterminer le temps électronique manquant d'un concurrent à partir des temps électroniques et manuels des concurrents précédents.
-
-Le calcul est effectué en **microsecondes** afin de garantir la précision maximale avant l'arrondi à la précision souhaitée.
+- ✅ Fully compliant with FIS EET calculation rules
+- ✅ EEP 1.0 protocol support
+- ✅ Internal business document model
+- ✅ Microsecond calculation engine
+- ✅ Multilingual interface (French, English, German)
+- ✅ Automatic PDF report generation
+- ✅ Public calculation search
+- ✅ Recall of previous calculations
+- ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
 
 ---
 
-## Fonctionnalités
+# What's New in Version 1.21
 
-* Calcul du Temps Électronique Équivalent (EET).
-* Conforme aux règles FIS.
-* Interface responsive (PC, tablette et smartphone).
-* Gestion multilingue :
-
-  * Français
-  * English
-  * Deutsch
-* Génération d'un rapport PDF.
-* Historique des deux derniers calculs.
-* Persistance des calculs pendant toute la session utilisateur.
-* Fonction **Recharger** permettant de permuter les deux derniers calculs.
-
----
-
-## Screenshots
-
-### Main screen
-
-![Main screen](documentation/images/screen1.png)
-
-### Calculation result
-
-![Calculation result](documentation/images/screen2.png)
-
-### Workflow
-
-![Workflow](documentation/images/workflow.png)
-
-## Sample PDF report
-
-📄 [Open sample PDF report](documentation/images/PDF_example.pdf)
+- First version fully compliant with **EEP 1.0**.
+- Separation between the **EEP exchange schema** and the **internal business model**.
+- Complete workflow implementation:
+  - New EET calculation
+  - Public read-only search
+  - Recall by `calculation_id`
+- Automatic generation of:
+  - Anonymous PDF reports for public searches
+  - Complete PDF reports for recalled calculations
+- Session document swapping.
+- Production deployment validated under Ubuntu.
 
 ---
 
-## Architecture
+# Architecture
+
+The application is designed around a single internal business document.
+
+The document represents the complete state of a calculation independently of the web interface, PDF generation or EEP exchange protocol.
 
 ```
-run.py
-    │
-    ▼
-app.py
-    │
-    ├── services/
-    │      ├── formulaire.py
-    │      ├── eet_calculator.py
-    │      ├── eet.py
-    │      ├── temps.py
-    │      └── views.py
-    │
-    ├── pdf.py
-    ├── translation.py
-    └── config.py
+                 Browser
+                     │
+                     ▼
+              Flask Routes
+                     │
+                     ▼
+              Web Actions
+                     │
+                     ▼
+                 Adapter
+                     │
+                     ▼
+                 Workflow
+                     │
+                     ▼
+                Calculator
+                     │
+                     ▼
+                 Validator
+                     │
+                     ▼
+          Internal Business Document
+          (Single Source of Truth)
+             ╱         │         ╲
+         HTML        JSON       PDF
 ```
 
-### Description des modules
+## Workflow
 
-| Module                     | Rôle                                           |
-| -------------------------- | ---------------------------------------------- |
-| app.py                     | Routes Flask et orchestration de l'application |
-| config.py                  | Paramètres généraux de l'application           |
-| translation.py             | Gestion des traductions                        |
-| pdf.py                     | Génération des rapports PDF                    |
-| services/formulaire.py     | Lecture et initialisation du formulaire        |
-| services/eet_calculator.py | Orchestration du calcul EET                    |
-| services/eet.py            | Algorithmes de calcul EET                      |
-| services/temps.py          | Manipulation des temps et conversions          |
-| services/views.py          | Affichage des pages HTML                       |
+<img src="images/workflow.png" alt="Workflow" width="600">
 
 ---
 
-## Installation
+# Main Features
 
-### Prérequis
+- Equivalent Electronic Time (EET) calculation
+- Full compliance with FIS timing rules
+- Responsive user interface
+- Microsecond internal calculations
+- Configurable timing precision
+- Automatic validation of imported data
+- Public calculation search
+- PDF report generation
+- Session history management
+- Reload previous calculation
+- Multilingual interface
 
-* Python 3.12 ou supérieur
-* pip
-* python3-venv
+Supported languages:
 
-### Installation
+- Français
+- English
+- Deutsch
+
+---
+
+# Screenshots
+
+## Main Screen
+
+![Main screen](images/screen1.png)
+
+## Calculation Result
+
+![Calculation result](images/screen2.png)
+
+---
+
+# Sample PDF Report
+
+📄 [Open sample PDF report](images/PDF_example.pdf)
+
+---
+
+# Internal Components
+
+| Module | Purpose |
+|--------|---------|
+| `document.py` | Internal business document |
+| `validator.py` | Validation of imported and edited documents |
+| `calculator.py` | FIS EET calculation engine |
+| `workflow.py` | Business workflow orchestration |
+| `adapter.py` | Conversion between EEP and the internal document |
+| `actions.py` | Flask actions |
+| `session.py` | Session document management |
+| `pdf.py` | PDF report generation |
+| `translation.py` | Internationalization |
+
+---
+
+# Installation
+
+## Requirements
+
+- Python 3.12 or later
+- pip
+- python3-venv
+
+## Create a virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-Activation de l'environnement virtuel :
-
-Linux :
+### Linux
 
 ```bash
 source venv/bin/activate
 ```
 
-Windows :
+### Windows
 
 ```cmd
 venv\Scripts\activate
 ```
 
-Installation des dépendances :
+## Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -148,15 +171,15 @@ pip install -r requirements.txt
 
 ---
 
-## Lancement
+# Running the Application
 
-Développement :
+Development mode:
 
 ```bash
 python run.py
 ```
 
-L'application est alors accessible à l'adresse :
+The application is then available at:
 
 ```
 http://localhost:5000
@@ -164,45 +187,75 @@ http://localhost:5000
 
 ---
 
-## Déploiement
+# Production Deployment
 
-En production, l'application est prévue pour fonctionner avec :
+The application has been validated using:
 
-* Gunicorn
-* Nginx (ou Apache en reverse proxy)
+- Gunicorn
+- Nginx
+- Ubuntu Linux
 
-Consulter les documents présents dans le dossier **Documentation/** pour les procédures complètes de déploiement.
+Deployment procedures are available in the `docs/` directory.
 
 ---
 
-## Structure du projet
+# Project Structure
 
 ```
 app.py
 config.py
-pdf.py
 run.py
-translation.py
 requirements.txt
 
-services/
+actions.py
+adapter.py
+session.py
+
+document.py
+validator.py
+calculator.py
+workflow.py
+
+pdf.py
+translation.py
+
 templates/
 static/
 tests/
-Documentation/
+docs/
 ```
----
-
-## Tests
-
-Les fonctions de calcul sont indépendantes de l'interface Flask et peuvent être testées séparément.
-
-Le dossier **tests/** contient les scripts de validation du moteur de calcul.
 
 ---
 
-## Licence
+# Testing
 
-Application développée par Philippe Guérindon.
+The calculation engine is completely independent from the web interface.
 
-Tous droits réservés.
+Unit tests validate:
+
+- time conversions
+- EET calculations
+- document validation
+- workflow execution
+
+The test suite is located in the `tests/` directory.
+
+---
+
+# Design Principles
+
+The project is built around a simple principle:
+
+> **The internal business document is the single source of truth.**
+
+All interfaces (HTML pages, PDF reports and EEP JSON exchange files) are generated from the same validated document.
+
+This architecture simplifies maintenance, testing and future protocol evolution.
+
+---
+
+# License
+
+Developed by **Philippe Guérindon**.
+
+All rights reserved.
