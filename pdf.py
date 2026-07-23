@@ -198,10 +198,25 @@ def _creer_entete(
         f"{competitor_eet['bib']}"
     )
 
-    nom = competitor_eet["lastname"]
+    lastname = competitor_eet["lastname"]
+    firstname = competitor_eet["firstname"]
 
-    if competitor_eet["firstname"]:
-        nom += f" {competitor_eet['firstname']}"
+    if race["anonymize_pdf"]:
+
+        lastname = _anonymiser_nom(
+            lastname,
+            3,
+        )
+
+        firstname = _anonymiser_nom(
+            firstname,
+            1,
+        )
+
+    nom = lastname
+
+    if firstname:
+        nom += f" {firstname}"
 
     if competitor_eet["nation"]:
         nom += f" ({competitor_eet['nation']})"
@@ -785,4 +800,25 @@ def _formater_duree(
     return us_to_duration(
         valeur_us,
         precision,
+    )
+
+
+def _anonymiser_nom(
+    texte,
+    lettres_visibles,
+):
+    """
+    Conserve les premières lettres d'un texte et
+    remplace les suivantes par des 'x'.
+    """
+
+    if not texte:
+        return ""
+
+    if len(texte) <= lettres_visibles:
+        return texte
+
+    return (
+        texte[:lettres_visibles]
+        + "x" * (len(texte) - lettres_visibles)
     )

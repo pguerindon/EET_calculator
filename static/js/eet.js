@@ -1,3 +1,5 @@
+const btnCalculer = document.getElementById("btn_calculer");
+
 function formaterTemps(chiffres, precision)
 {
     let max = 6 + precision;
@@ -256,11 +258,11 @@ function mettreAJourEtatCalcul()
         message.innerHTML = "";
     }
 
-    document
-        .getElementById(
-            "btn_calculer"
-        )
-        .disabled = !grilleValide;
+    if (btnCalculer)
+    {
+        btnCalculer.disabled =
+            !grilleValide;
+    }
 
     console.log(
         "Dossards :", nbDossards,

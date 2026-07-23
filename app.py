@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    flash,
     jsonify,
     request,
     session,
@@ -53,6 +54,7 @@ from web.session import (
     enregistrer_nouveau_calcul,
     echanger_calculs,
     obtenir_mode_lecture_seule,
+    reinitialiser_session,
 )
 
 from services.document import (
@@ -65,6 +67,14 @@ from translation import (
 )
 
 def trace_document(titre, document):
+
+    print()
+    print("==========", titre, "==========")
+
+    if document is None:
+        print("document : None")
+        print("==============================")
+        return
 
     print(f"\n========== {titre} ==========")
 
@@ -229,6 +239,7 @@ def calcul():
         "action"
     )
 
+
     consulter_index = request.form.get(
         "consulter_index"
     )
@@ -284,6 +295,7 @@ def calcul():
             )
 
             document = resultats[index]
+            document["race"]["anonymize_pdf"] = True
 
         except (
             TypeError,
@@ -337,19 +349,24 @@ def calcul():
             calculation_id
         )
 
-        trace_document("document = rappeler_calcul", document)
+        if document is None:
 
-        if document is not None:
-
-            definir_mode_lecture_seule(
-                False
-            )
-            definir_document_travail(
-                document
+            flash(
+                txt["calcul_introuvable"],
+                "error"
             )
 
-            # trace_document("après  definir_document_travail", document)
+            return redirect("/")
 
+        document["race"]["anonymize_pdf"] = False
+
+        definir_mode_lecture_seule(
+            False
+        )
+
+        definir_document_travail(
+            document
+        )
 
         return redirect("/")
 
@@ -418,8 +435,6 @@ def calcul():
         and lecture_seule
         and action in (
             "calcul",
-            "effacer",
-            "exemple_fis",
         )
     ):
 
@@ -431,16 +446,10 @@ def calcul():
 
     if action == "effacer":
 
-        definir_mode_lecture_seule(
-            False
-        )
-
-        definir_document_travail(
-            nouveau_document()
-        )
+        reinitialiser_session()
 
         return redirect("/")
-
+    
     if action == "exemple_fis":
 
         definir_mode_lecture_seule(

@@ -132,12 +132,13 @@ def rappeler_calcul(
     if not verifier_calculation_id(
         calculation_id
     ):
-
         return None
 
-    return charger_document(
+    document = charger_document(
         calculation_id
     )
+
+    return document
 
 
 def formater_date(

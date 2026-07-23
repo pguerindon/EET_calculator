@@ -7,7 +7,10 @@ from flask import (
     session,
 )
 
-from version import APP_VERSION
+from version import(
+    APP_VERSION,
+    JSON_PROTOCOL_PDF,
+)
 
 from translation import (
     TEXTES,
@@ -195,6 +198,7 @@ def _afficher_page(
     txt,
     langue,
     page_title,
+    **kwargs,
 ):
     """
     Affiche une page standard.
@@ -206,6 +210,7 @@ def _afficher_page(
         txt=txt,
         langue=langue,
         page_title=page_title,
+        **kwargs,
     )
 
 
@@ -221,9 +226,10 @@ def afficher_about():
         txt,
         langue,
         txt["a_propos_title"],
+        json_protocol_pdf=f"{JSON_PROTOCOL_PDF}",
     )
 
-
+ 
 def afficher_help():
     """
     Affiche la page d'aide.

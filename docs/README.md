@@ -1,5 +1,31 @@
 # EET Calculator
 
+## Version 1.21 (EEP 1.0)
+
+### Nouveautés
+
+- Première version conforme au protocole d'échange **EEP 1.0**.
+- Séparation de l'architecture entre **RACE_SCHEMA** (protocole d'échange) et **RACE_MODEL** (modèle interne).
+- Gestion complète des workflows :
+  - calcul d'un nouvel EET ;
+  - recherche publique en lecture seule ;
+  - rappel d'un calcul par `calculation_id`.
+- Génération automatique :
+  - d'un PDF anonymisé pour les recherches publiques ;
+  - d'un PDF nominatif pour le rappel d'un calcul.
+- Permutation des documents de travail dans la session Flask.
+- Validation complète du fonctionnement sous Windows et Ubuntu (Gunicorn + nginx).
+
+**APP_VERSION : 1.21**  
+**EEP_VERSION : 1.0**
+
+---
+
+**Version : 1.21**  
+**Auteur : Philippe Guérindon**
+
+## Présentation
+
 **Version : 1.10**
 **Auteur : Philippe Guérindon**
 

@@ -218,7 +218,7 @@
                 class="recherche-codex"
                 name="search_codex"
                 value="{{ recherche.codex }}"
-                maxlength="4">
+                maxlength="20">
 
 
             <label>
@@ -306,7 +306,7 @@
 
 
                         {% set eet_index =
-                            document_recherche.result.eet_index %}
+                            document_recherche.calculation.eet_index %}
 
 
                         {% set competitor =
@@ -532,21 +532,20 @@
 
             <br>
 
-
             {% if not lecture_seule %}
 
+                <button
+                    id="btn_calculer"
+                    type="submit"
+                    name="action"
+                    value="calcul"
+                    disabled>
 
-            <button
-                id="btn_calculer"
-                type="submit"
-                name="action"
-                value="calcul"
-                disabled>
+                    {{ txt.calculer }}
 
-                {{ txt.calculer }}
+                </button>
 
-            </button>
-
+            {% endif %}
 
             <button
                 id="btn_effacer"
@@ -558,20 +557,19 @@
 
             </button>
 
+            {% if not lecture_seule %}
 
-            <button
-                id="btn_exemple_fis"
-                type="submit"
-                name="action"
-                value="exemple_fis">
+                <button
+                    id="btn_exemple_fis"
+                    type="submit"
+                    name="action"
+                    value="exemple_fis">
 
-                {{ txt.exemple_fis }}
+                    {{ txt.exemple_fis }}
 
-            </button>
-
+                </button>
 
             {% endif %}
-
 
             <button
                 type="button"

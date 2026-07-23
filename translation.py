@@ -18,6 +18,7 @@ TEXTES = {
 
         "home_title": "EET Calculator - Calculateur EET pour le ski alpin",
         "calcul_precedent": "Calcul précédent",
+        "calcul_introuvable": "Aucun calcul ne correspond à cet identifiant.",
         "calculer": "Calculer EET",
         "correction": "Somme Delta / 10",
         "delta": "Delta",
@@ -147,6 +148,30 @@ TEXTES = {
         "session_titre": "Session utilisateur",
 
         #
+        # Protocole
+        #
+
+        "aide_protocole_titre": "Modes d'utilisation",
+        "aide_protocole_intro":
+            "EET Calculator peut être utilisé de deux façons.",
+        "aide_protocole_web":
+            "Interface Web",
+        "aide_protocole_web_l1":
+            "Les données de la course sont saisies directement dans le navigateur.",
+        "aide_protocole_web_l2":
+            "Après le calcul, un rapport PDF peut être généré et le calcul est mémorisé afin de pouvoir être rappelé ultérieurement.",
+        "aide_protocole_json":
+            "Protocole d'échange JSON",
+        "aide_protocole_json_l1":
+            "Un logiciel de chronométrage compatible peut transmettre automatiquement les données de la course à EET Calculator.",
+        "aide_protocole_json_l2":
+            "Les échanges sont réalisés au moyen d'un document JSON conforme au protocole d'échange de l'application.",
+        "aide_protocole_json_l3":
+            "Après validation et calcul, EET Calculator renvoie le document JSON enrichi des résultats du calcul.",
+        "aide_protocole_json_l4":
+            "Ce mode de fonctionnement permet d'intégrer directement le calcul de l'EET dans un logiciel de chronométrage sans ressaisie des données.",
+
+        #
         # Confidentialité
         #
 
@@ -166,8 +191,17 @@ TEXTES = {
         "a_propos_developpement": "Développement :",
         "a_propos_fonction_l1": "EET Calculator est une application dédiée au calcul de l'Equivalent Electronic Time (EET), conformément aux règles de chronométrage de la Fédération Internationale de Ski (FIS).",
         "a_propos_fonction_l2": "Elle permet de calculer un temps électronique équivalent à partir des temps manuels et des temps électroniques, conformément aux règles de chronométrage utilisées lors des compétitions FIS et des fédérations nationales.",
-        "a_propos_fonction_l3": "L'application intègre également une calculatrice horaire destinée aux opérations courantes de chronométrage (calculs d'heures, de durées et d'écarts).",
+        "a_propos_fonction_l3": "L'application peut être utilisée directement depuis un navigateur Web ou intégrée à un logiciel de chronométrage grâce à son protocole d'échange JSON.",
+        "a_propos_fonction_l4": "Elle intègre également une calculatrice horaire destinée aux opérations courantes de chronométrage (calculs d'heures, de durées et d'écarts).",       "a_propos_contact": "Contact:",
         "a_propos_contact": "Contact :",
+
+        #
+        # Documentation
+        #
+
+        "documentation": "Documentation", 
+        "documentation_intro": "Une documentation technique destinée aux développeurs de logiciels de chronométrage est disponible.",
+        "documentation_json":  "Protocole d'échange JSON (PDF)",
 
         #
         # Calculatrice horaire
@@ -258,6 +292,7 @@ TEXTES = {
 
         "home_title": "EET Calculator - Equalized Equivalent Time Calculator for Alpine Skiing",
         "calcul_precedent": "Previous calculation",
+        "calcul_introuvable": "No calculation matches this calculation ID.",
         "calculer": "Calculate EET",
         "correction": "Delta Sum / 10",
         "delta": "Delta",
@@ -387,6 +422,30 @@ TEXTES = {
         "session_titre": "User session",
 
         #
+        # Protocole
+        #
+
+        "aide_protocole_titre": "Operating modes",
+        "aide_protocole_intro":
+            "EET Calculator can be used in two different ways.",
+        "aide_protocole_web":
+            "Web interface",
+        "aide_protocole_web_l1":
+            "Race data is entered directly through the web browser.",
+        "aide_protocole_web_l2":
+            "After the calculation, a PDF report can be generated and the calculation is stored so that it can be recalled later.",
+        "aide_protocole_json":
+            "JSON exchange protocol",
+        "aide_protocole_json_l1":
+            "Compatible timing software can automatically send race data to EET Calculator.",
+        "aide_protocole_json_l2":
+            "Data is exchanged using a JSON document that complies with the application's exchange protocol.",
+        "aide_protocole_json_l3":
+            "After validation and calculation, EET Calculator returns the JSON document enriched with the calculation results.",
+        "aide_protocole_json_l4":
+            "This operating mode allows EET calculations to be integrated directly into timing software without re-entering any data.",
+
+        #
         # Confidentialité
         #
 
@@ -404,10 +463,18 @@ TEXTES = {
         "a_propos_title": "EET Calculator - About",
         "a_propos": "About",
         "a_propos_developpement": "Development:",
-        "a_propos_fonction_l1": "EET Calculator is dedicated to the calculation of the Equivalent Electronic Time (EET) in accordance with the timing rules of the International Ski and Snowboard Federation (FIS).",
-        "a_propos_fonction_l2": "It calculates an Equivalent Electronic Time from manual and electronic times, in accordance with the timing rules used during FIS and national federation competitions.",
-        "a_propos_fonction_l3": "The application also includes a time calculator designed for everyday timing operations (time-of-day, duration and time difference calculations).",
-        "a_propos_contact": "Contact:",
+        "a_propos_fonction_l1": "EET Calculator est une application dédiée au calcul de l'Equivalent Electronic Time (EET), conformément aux règles de chronométrage de la Fédération Internationale de Ski (FIS).",
+        "a_propos_fonction_l2": "Elle permet de calculer un temps électronique équivalent à partir des temps manuels et des temps électroniques, conformément aux règles de chronométrage utilisées lors des compétitions FIS et des fédérations nationales.",
+        "a_propos_fonction_l3": "The application can be used directly through a web browser or integrated into timing software through its JSON exchange protocol.",
+        "a_propos_fonction_l4": "It also includes a time calculator for common timing operations (time, duration and interval calculations).",
+
+        #
+        # Documentation
+        #
+
+        "documentation": "Documentation",
+        "documentation_intro": "Technical documentation for developers of timing software is available.",
+        "documentation_json": "JSON Exchange Protocol (PDF)",
 
         #
         # Time Calculator
@@ -510,6 +577,7 @@ TEXTES = {
 
         "home_title": "EET Calculator - EET-Rechner für alpine Skirennen",
         "calcul_precedent": "Vorherige Berechnung",
+        "calcul_introuvable": "Keine Berechnung entspricht dieser Berechnungs-ID.",
         "calculer": "EET Berechnen",
         "correction": "Delta Summe / 10",
         "delta": "Delta",
@@ -640,6 +708,30 @@ TEXTES = {
         "session_titre": "Benutzersitzung",
 
         #
+        # Protocole
+        #
+
+        "aide_protocole_titre": "Betriebsarten",
+        "aide_protocole_intro":
+            "Der EET Calculator kann auf zwei verschiedene Arten verwendet werden.",
+        "aide_protocole_web":
+            "Weboberfläche",
+        "aide_protocole_web_l1":
+            "Die Renndaten werden direkt im Webbrowser eingegeben.",
+        "aide_protocole_web_l2":
+            "Nach der Berechnung kann ein PDF-Bericht erstellt werden. Die Berechnung wird gespeichert und kann später erneut aufgerufen werden.",
+        "aide_protocole_json":
+            "JSON-Austauschprotokoll",
+        "aide_protocole_json_l1":
+            "Kompatible Zeitmesssoftware kann die Renndaten automatisch an den EET Calculator übermitteln.",
+        "aide_protocole_json_l2":
+            "Der Datenaustausch erfolgt über ein JSON-Dokument gemäß dem Austauschprotokoll der Anwendung.",
+        "aide_protocole_json_l3":
+            "Nach der Validierung und Berechnung gibt der EET Calculator das JSON-Dokument mit den Berechnungsergebnissen zurück.",
+        "aide_protocole_json_l4":
+            "Dieser Betriebsmodus ermöglicht die direkte Integration der EET-Berechnung in eine Zeitmesssoftware, ohne dass Daten erneut eingegeben werden müssen.",
+
+        #
         # Confidentialité
         #
 
@@ -659,8 +751,16 @@ TEXTES = {
         "a_propos_developpement": "Entwicklung:",
         "a_propos_fonction_l1": "EET Calculator dient zur Berechnung der Equivalent Electronic Time (EET) gemäß den Zeitmessregeln des Internationalen Ski- und Snowboardverbandes (FIS).",
         "a_propos_fonction_l2": "Die Anwendung berechnet eine Equivalent Electronic Time aus manuellen und elektronischen Zeiten gemäß den Zeitmessregeln bei FIS- und nationalen Verbandswettkämpfen.",
-        "a_propos_fonction_l3": "Zusätzlich enthält die Anwendung einen Zeitrechner für die täglichen Aufgaben der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",
-        "a_propos_contact": "Kontakt:",
+        "a_propos_fonction_l3": "Die Anwendung kann direkt über einen Webbrowser verwendet oder über ihr JSON-Austauschprotokoll in eine Zeitmesssoftware integriert werden.",
+        "a_propos_fonction_l4": "Sie enthält außerdem einen Zeitrechner für die üblichen Berechnungen im Bereich der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",        "a_propos_contact": "Kontakt:",
+
+        #
+        # Dokumentation
+        #
+
+        "documentation": "Dokumentation",
+        "documentation_intro": "Für Entwickler von Zeitmesssoftware steht eine technische Dokumentation zur Verfügung.",
+        "documentation_json":  "JSON-Austauschprotokoll (PDF)",
 
         #
         # Zeitrechner

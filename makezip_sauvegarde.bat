@@ -7,7 +7,7 @@ echo ==========================================
 echo Creation archive de sauvegarde EET
 echo ==========================================
 
-for /f "tokens=3 delims= " %%i in ('findstr VERSION version.py') do (
+for /f "tokens=3 delims= " %%i in ('findstr APP_VERSION version.py') do (
     set "VER=%%~i"
 )
 

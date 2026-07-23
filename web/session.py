@@ -13,8 +13,6 @@ from services.document import (
     nouveau_document,
 )
 
-
-
 WORK_DOCUMENT = "work_document"
 CURRENT_CALCULATION = "current_calculation"
 PREVIOUS_CALCULATION = "previous_calculation"
@@ -266,3 +264,24 @@ def definir_mode_lecture_seule(
         READ_ONLY
     ] = lecture_seule
 
+
+def reinitialiser_session():
+    """
+    Réinitialise complètement la session utilisateur.
+    """
+
+    definir_document_travail(
+        nouveau_document()
+    )
+
+    definir_calcul_courant(
+        None
+    )
+
+    definir_calcul_precedent(
+        None
+    )
+
+    definir_mode_lecture_seule(
+        False
+    )

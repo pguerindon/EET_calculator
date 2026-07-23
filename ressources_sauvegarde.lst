@@ -1,10 +1,11 @@
 requirements.txt
 update.sh
 *.py
-*.md
+docs\*.*
 services\*.*
 templates\*.*
-static\*.*
+static
+web\*.*
 
 deployment\*.*
 Documentation\*.*

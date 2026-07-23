@@ -287,3 +287,34 @@ button {
 .recherche-calcul button {
     margin-top: 10px;
 }
+
+.flash {
+    margin: 10px 0 15px 0;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.flash.error {
+    background: #ffe6e6;
+    color: #900;
+    border: 1px solid #c66;
+}
+
+.flash.warning {
+    background: #fff5d6;
+    color: #8a6d00;
+    border: 1px solid #d4b44c;
+}
+
+.flash.info {
+    background: #e6f3ff;
+    color: #005a9c;
+    border: 1px solid #7fb3e6;
+}
+
+.flash.success {
+    background: #e8f8e8;
+    color: #1f6b1f;
+    border: 1px solid #66aa66;
+}

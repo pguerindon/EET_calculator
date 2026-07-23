@@ -142,6 +142,7 @@ RACE_MODEL = {
     "discipline": "",
     "run": "1",
     "missing_impulse": "WEB",
+    "anonymize_pdf": False,
     "eet_bib": "",
     "et_precision": None,
     "mt_precision": None,

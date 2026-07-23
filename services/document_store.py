@@ -208,7 +208,7 @@ def _document_calcule(
     try:
 
         eet_index = document[
-            "result"
+            "calculation"
         ]["eet_index"]
 
         if eet_index is None:
@@ -252,7 +252,7 @@ def _correspond_recherche(
     )
 
     result = document.get(
-        "result",
+        "calculation",
         {}
     )
 
