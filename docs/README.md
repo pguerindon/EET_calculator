@@ -56,6 +56,26 @@ Le calcul est effectué en **microsecondes** afin de garantir la précision maxi
 
 ---
 
+## Screenshots
+
+### Main screen
+
+![Main screen](documentation/images/screen1.png)
+
+### Calculation result
+
+![Calculation result](documentation/images/screen2.png)
+
+### Workflow
+
+![Workflow](documentation/images/workflow.png)
+
+## Sample PDF report
+
+📄 [Open sample PDF report](documentation/images/PDF_example.pdf)
+
+---
+
 ## Architecture
 
 ```
