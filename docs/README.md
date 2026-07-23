@@ -35,6 +35,16 @@ All calculations are performed internally in **microseconds** before truncation 
 
 ---
 
+# Documentation
+
+The EET Calculator implements the **EEP (Equivalent Electronic Time Exchange Protocol)**.
+
+The complete protocol specification is available here:
+
+📄 [EEP Specification v1.0](../documentation/EEP_Specification_v1.0.pdf)
+
+---
+
 # What's New in Version 1.21
 
 - First version fully compliant with **EEP 1.0**.
