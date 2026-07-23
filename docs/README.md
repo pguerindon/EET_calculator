@@ -1,3 +1,13 @@
+<p align="center">
+  <img src="images/logo_eet.png" alt="EET Calculator" width="650">
+</p>
+
+<h1 align="center">EET Calculator</h1>
+
+<p align="center">
+  FIS-compliant Equivalent Electronic Time Calculator
+</p>
+
 # EET Calculator
 
 **Version:** 1.21  
