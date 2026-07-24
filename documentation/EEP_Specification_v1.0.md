@@ -1,24 +1,44 @@
 ---
 title: Electronic Equivalent Time Exchange Protocol (EEP)
-subtitle: Specification
-version: "1.0"
-date: 2026
-lang: en
+subtitle: EEP Specification
+date: July 2026
 toc: true
-toc-depth: 2
 numbersections: true
 geometry:
-  - top=1.8cm
-  - bottom=1.8cm
-  - left=2.4cm
-  - right=2.4cm
+  - left=2cm
+  - right=2cm
+  - top=1cm
+  - bottom=1cm
 ---
+
+| Field | Value |
+|-------|-------|
+| Document | Electronic Equivalent Time Exchange Protocol |
+| Document Type | Protocol Specification |
+| Version | 1.0 |
+| Status | Official Release |
+| Publication Date | July 2026 |
+| Author | Philippe Guérindon |
+| Official Repository | https://github.com/pguerindon/EET_calculator |
+
+\newpage
+
 
 # Revision History
 
 | Version | Date | Description             |
 |:--------|:-----|:------------------------|
 | 1.0     | 2026 | Initial public release. |
+
+# Status of this Document
+
+This document defines Version 1.0 of the
+Electronic Equivalent Time Exchange Protocol (EEP).
+
+This document is the official specification of Version 1.0 of the Electronic Equivalent Time Exchange Protocol (EEP).
+
+Future versions may extend this specification while
+preserving backward compatibility whenever possible.
 
 # Introduction
 
@@ -37,6 +57,11 @@ EEP specifies:
 The protocol is independent of any timing software or EET calculation implementation. It defines only the exchange of data required to perform an EET calculation.
 
 The protocol does not define the EET calculation itself.
+
+EEP is intended to serve as an implementation-independent exchange protocol for Equivalent Electronic Time (EET) calculations.
+
+The protocol is openly documented in order to encourage
+interoperability between timing systems and EET software.
 
 ## Design Goals
 
@@ -117,7 +142,7 @@ The root object contains the calculation identifier, processing mode, race infor
 }
 ```
 
-### 5.2 Race Object
+### Race Object
 
 The race object identifies the competition associated with the calculation and specifies the competitor for whom an Equivalent Electronic Time (EET) is requested.
 
@@ -133,7 +158,7 @@ The race object identifies the competition associated with the calculation and s
 | date              | string | No       | Competition date.                                        |
 | location          | string | No       | Competition location.                                    |
 
-#### 5.2.1 Race Object Example
+#### Race Object Example
 
 ```json
 {
@@ -435,3 +460,20 @@ EEP follows common JSON naming conventions.
 | Time of Day | `HH:MM:SS.sss` (minimum three decimal places) |
 
 These conventions are recommendations intended to improve readability and consistency across implementations.
+
+# Copyright and Permissions
+
+Copyright © 2026 Philippe Guérindon
+
+Permission is granted to copy and distribute this
+specification in its original form.
+
+Anyone may implement the EEP protocol in software,
+hardware or services.
+
+Modified versions of this specification shall clearly
+identify the modifications and shall not be presented
+as the official EEP Specification.
+
+The name "EEP Specification" refers exclusively
+to the official specification published by the author.

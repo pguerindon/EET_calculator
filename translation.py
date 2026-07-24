@@ -167,7 +167,7 @@ TEXTES = {
         "aide_protocole_json_l2":
             "Les échanges sont réalisés au moyen d'un document JSON conforme au protocole d'échange de l'application.",
         "aide_protocole_json_l3":
-            "Après validation et calcul, EET Calculator renvoie le document JSON enrichi des résultats du calcul.",
+            "EET Calculator crée un document de calcul, lui attribue une clé de calcul unique, puis le complète avec les informations reçues avant le calcul.",
         "aide_protocole_json_l4":
             "Ce mode de fonctionnement permet d'intégrer directement le calcul de l'EET dans un logiciel de chronométrage sans ressaisie des données.",
 
@@ -441,7 +441,7 @@ TEXTES = {
         "aide_protocole_json_l2":
             "Data is exchanged using a JSON document that complies with the application's exchange protocol.",
         "aide_protocole_json_l3":
-            "After validation and calculation, EET Calculator returns the JSON document enriched with the calculation results.",
+            "EET Calculator creates a Calculation Document, assigns it a unique Calculation Key, and completes it with the received information before the calculation is performed.",
         "aide_protocole_json_l4":
             "This operating mode allows EET calculations to be integrated directly into timing software without re-entering any data.",
 
@@ -727,7 +727,7 @@ TEXTES = {
         "aide_protocole_json_l2":
             "Der Datenaustausch erfolgt über ein JSON-Dokument gemäß dem Austauschprotokoll der Anwendung.",
         "aide_protocole_json_l3":
-            "Nach der Validierung und Berechnung gibt der EET Calculator das JSON-Dokument mit den Berechnungsergebnissen zurück.",
+            "EET Calculator erstellt ein Berechnungsdokument, weist ihm einen eindeutigen Berechnungsschlüssel zu und ergänzt es vor der Berechnung mit den empfangenen Daten.",
         "aide_protocole_json_l4":
             "Dieser Betriebsmodus ermöglicht die direkte Integration der EET-Berechnung in eine Zeitmesssoftware, ohne dass Daten erneut eingegeben werden müssen.",
 
