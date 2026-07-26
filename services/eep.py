@@ -4,8 +4,12 @@ de chronométrage.
 """
 
 from services.document import (
+    contient_erreurs,
+    enregistrer_document,
+    lire_erreurs,
     nouveau_document,
 )
+
 
 from services.importer_eep import (
     importer_document,
@@ -14,11 +18,9 @@ from services.importer_eep import (
 
 from services.calculation_id import (
     generer_calculation_id,
-    verifier_calculation_id,
 )
 
 from services.document_store import (
-    sauver_document,
     charger_document,
     rechercher_documents,
 )
@@ -27,6 +29,10 @@ from services.eep_validator import (
     EEPValidationError,
     valider_eep_initial,
     valider_eep_secondaire,
+)
+
+from services.validator import (
+    valider_document,
 )
 
 
@@ -40,7 +46,7 @@ def recevoir_eep(eep_document):
     Avec calculation_id :
         import des temps du système B.
 
-    Retourne le calculation_id.
+    Retourne la réponse EEP.
     """
 
     calculation_id = (
@@ -78,38 +84,6 @@ def rechercher_calculs(
     )
 
 
-def sauver_calcul(
-    document,
-):
-    """
-    Sauvegarde un calcul EEP.
-
-    Un document sans calculation_id
-    n'est pas stocké.
-
-    Retourne True si le document
-    a été sauvegardé.
-    """
-
-    calculation_id = document["info"].get(
-        "calculation_id"
-    )
-
-    if not calculation_id:
-        return False
-
-    if not verifier_calculation_id(
-        calculation_id
-    ):
-        return False
-
-    sauver_document(
-        document
-    )
-
-    return True
-
-
 def _creer_calcul(
     eep_document,
 ):
@@ -117,9 +91,17 @@ def _creer_calcul(
     Crée un nouveau calcul EEP.
     """
 
+    #
+    # Validation du protocole EEP
+    #
+
     valider_eep_initial(
-        eep_document
+        eep_document,
     )
+
+    #
+    # Création du document
+    #
 
     document = nouveau_document()
 
@@ -128,19 +110,53 @@ def _creer_calcul(
         eep_document,
     )
 
-    calculation_id = (
-        generer_calculation_id()
+    #
+    # Validation métier
+    #
+
+    valider_document(
+        document,
     )
 
-    document["info"]["calculation_id"] = (
-        calculation_id
-    )
+    #
+    # Construction de la réponse
+    #
 
-    sauver_document(
-        document
-    )
+    response = {
+        "status": (
+            "warning"
+            if contient_erreurs(document)
+            else "ok"
+        ),
+        "messages": lire_erreurs(
+            document,
+        ),
+    }
 
-    return calculation_id
+    #
+    # Sauvegarde uniquement
+    # si le document est valide
+    #
+
+    if not contient_erreurs(
+        document,
+    ):
+
+        calculation_id = (
+            generer_calculation_id()
+        )
+
+        document["info"]["calculation_id"] = (
+            calculation_id
+        )
+
+        enregistrer_document(document)
+
+        response["calculation_id"] = (
+            calculation_id
+        )
+
+    return response
 
 
 def _recevoir_secondaire(
@@ -156,7 +172,7 @@ def _recevoir_secondaire(
     #
 
     valider_eep_secondaire(
-        eep_document
+        eep_document,
     )
 
     #
@@ -174,7 +190,7 @@ def _recevoir_secondaire(
     #
 
     document = charger_document(
-        calculation_id
+        calculation_id,
     )
 
     if document is None:
@@ -202,14 +218,32 @@ def _recevoir_secondaire(
     )
 
     #
+    # Validation du document
+    #
+
+    valider_document(
+        document,
+    )
+
+    #
     # Sauvegarde
     #
 
-    sauver_document(
-        document
-    )
+    enregistrer_document(document)
 
-    return calculation_id
+    return {
+        "status": (
+            "warning"
+            if contient_erreurs(
+                document,
+            )
+            else "ok"
+        ),
+        "calculation_id": calculation_id,
+        "messages": lire_erreurs(
+            document,
+        ),
+    }
 
 
 def verifier_correspondance_course(

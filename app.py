@@ -30,10 +30,9 @@ from services.views import(
 from services.eep import (
     recevoir_eep,
     rechercher_calculs,
-    sauver_calcul,
 )
 
-from services.document import rappeler_calcul
+from services.document import contient_erreurs, enregistrer_document, rappeler_calcul
 
 from services.eep_validator import (
     EEPValidationError,
@@ -48,6 +47,7 @@ from services.workflow import traiter_document
 from services.exemple_fis import charger_exemple_fis
 
 from web.session import (
+    calcul_precedent_existe,
     definir_document_travail,
     definir_mode_lecture_seule,
     obtenir_document_travail,
@@ -175,7 +175,7 @@ def api_eep():
 
     try:
 
-        calculation_id = recevoir_eep(
+        response = recevoir_eep(
             eep_document
         )
 
@@ -184,24 +184,24 @@ def api_eep():
         return jsonify(
             {
                 "status": "error",
-                "error": str(erreur),
+                "messages": [
+                    str(erreur)
+                ],
             }
         ), 400
 
-    if calculation_id is None:
+    if response is None:
 
         return jsonify(
             {
                 "status": "error",
+                "messages": [
+                    "Internal error."
+                ],
             }
         ), 400
 
-    return jsonify(
-        {
-            "status": "ok",
-            "calculation_id": calculation_id,
-        }
-    )
+    return jsonify(response)
 
 
 @app.route("/reload_previous")
@@ -446,7 +446,9 @@ def calcul():
 
     if action == "effacer":
 
-        reinitialiser_session()
+        definir_document_travail(
+            nouveau_document()
+        )
 
         return redirect("/")
     
@@ -478,35 +480,46 @@ def calcul():
 
     if request.method == "POST":
 
-
         if action == "calcul":
 
-            # trace_document("dans calcul avant importer_formulaire", document)
+            document = obtenir_document_travail()
 
             importer_formulaire(
                 document,
                 request.form,
             )
 
-            # trace_document("dans calcul avant traiter_document", document)
-
             traiter_document(
                 document,
             )
 
-            # trace_document("dans calcul avant sauver_calcul", document)
+            if not contient_erreurs(document):
 
-            sauver_calcul(
-                document,
-            )
+                if document["race"]["missing_impulse"] == "WEB":
 
-            # trace_document("avant enregistrer_nouveau_calcul", document)
+                    #
+                    # Calcul 100 % Web
+                    #
+                    enregistrer_nouveau_calcul(
+                        document
+                    )
 
-            enregistrer_nouveau_calcul(
-                document,
-            )
+                else:
 
-            # trace_document("après enregistrer_nouveau_calcul", document)
+                    #
+                    # Calcul provenant d'un import JSON
+                    #
+                    if document["info"].get(
+                        "calculation_id"
+                    ):
+
+                        enregistrer_document(
+                            document
+                        )
+
+                    definir_document_travail(
+                        document
+                    )
 
             return redirect(
                 url_for("calcul")
@@ -535,6 +548,11 @@ def calcul():
     #
     # Affichage normal
     #
+
+    print(
+        "[GET] precedent =",
+        calcul_precedent_existe()
+    )
 
     return afficher_calcul(
         document

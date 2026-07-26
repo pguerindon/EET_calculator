@@ -126,6 +126,16 @@ MIN_MT_PRECISION = 2
 MAX_MT_PRECISION = 6
 
 # ============================================================================
+# Errors constantsz
+# ============================================================================
+
+ERROR_INVALID_COMPETITOR_COUNT = "INVALID_COMPETITOR_COUNT"
+ERROR_DUPLICATE_BIB            = "DUPLICATE_BIB"
+ERROR_INVALID_ET_COUNT         = "INVALID_ET_COUNT"
+ERROR_INVALID_ET_PRECISION     = "INVALID_ET_PRECISION"
+ERROR_INVALID_MT               = "INVALID_MT"
+
+# ============================================================================
 # Internal document models
 # ============================================================================
 
@@ -185,4 +195,5 @@ DOCUMENT_MODEL = {
 ERROR_MODEL = {
     "code": "",
     "field": "",
+    "message": "",
 }

@@ -84,29 +84,66 @@ def charger_document(
         )
 
 
+def lister_documents():
+    """
+    Retourne tous les documents présents
+    dans le stockage.
+
+    Les documents invalides ou illisibles
+    sont ignorés.
+    """
+
+    documents = []
+
+    for fichier in CALCULS_DIR.glob("*.json"):
+
+        document = _charger_fichier(fichier)
+
+        if document is None:
+            continue
+
+        documents.append(document)
+
+    return documents
+
+
+def supprimer_document(
+    calculation_id,
+):
+    """
+    Supprime un document.
+
+    Si le document n'existe pas,
+    la fonction ne fait rien.
+    """
+
+    fichier = CALCULS_DIR / (
+        f"{calculation_id}.json"
+    )
+
+    if fichier.exists():
+        fichier.unlink()
+
+
+def trouver_calcul_existant(document):
+
+    cle = _cle_metier(document)
+
+    documents = lister_documents()
+
+    for document_existant in documents:
+
+        if _cle_metier(document_existant) == cle:
+            return document_existant["info"]["calculation_id"]
+
+    return None
+
+
 def rechercher_documents(
     season,
     codex,
     bib,
 ):
-    """
-    Recherche les calculs terminés
-    selon les critères renseignés.
-
-    Critères possibles :
-
-    - saison ;
-    - codex ;
-    - dossard EET.
-
-    Les critères renseignés sont
-    combinés par ET.
-
-    Au moins un critère doit être
-    renseigné.
-
-    Retourne une liste de documents.
-    """
 
     resultats = []
 
@@ -122,11 +159,6 @@ def rechercher_documents(
         bib or ""
     ).strip()
 
-    #
-    # Une recherche sans critère
-    # n'est pas autorisée.
-    #
-
     if not (
         season
         or codex
@@ -134,24 +166,7 @@ def rechercher_documents(
     ):
         return resultats
 
-    if not CALCULS_DIR.exists():
-        return resultats
-
-    for fichier in CALCULS_DIR.glob(
-        "*.json"
-    ):
-
-        document = _charger_fichier(
-            fichier
-        )
-
-        if document is None:
-            continue
-
-        if not _document_calcule(
-            document
-        ):
-            continue
+    for document in lister_documents():
 
         if not _correspond_recherche(
             document,
@@ -330,3 +345,16 @@ def _correspond_recherche(
             return False
 
     return True
+
+
+def _cle_metier(document):
+
+    race = document["race"]
+
+    return (
+        race["season"],
+        race["codex"],
+        race["run"],
+        race["eet_bib"],
+        race["missing_impulse"],
+    )

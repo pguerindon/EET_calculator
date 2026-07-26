@@ -1,3 +1,7 @@
+"""
+Exécute le workflow métier d'un document.
+"""
+
 from services.validator import (
     valider_document,
 )

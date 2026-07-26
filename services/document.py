@@ -10,7 +10,12 @@ from datetime import datetime
 
 from services import constants
 from services.calculation_id import verifier_calculation_id
-from services.document_store import charger_document
+from services.document_store import (
+    trouver_calcul_existant,
+    charger_document,
+    sauver_document,
+    supprimer_document,
+)
 from version import EEP_VERSION
 
 
@@ -83,20 +88,16 @@ def nouvelle_erreur():
 def ajouter_erreur(
     document,
     code,
+    message="",
     field="",
 ):
-    """
-    Ajoute une erreur au document.
-    """
-
     erreur = nouvelle_erreur()
 
     erreur["code"] = code
+    erreur["message"] = message
     erreur["field"] = field
 
-    document["info"]["errors"].append(
-        erreur
-    )
+    document["info"]["errors"].append(erreur)
 
 
 def vider_erreurs(document):
@@ -114,6 +115,13 @@ def contient_erreurs(document):
 
     return bool(document["info"]["errors"])
 
+
+def lire_erreurs(document):
+    """
+    Retourne la liste des erreurs du document.
+    """
+
+    return document["info"]["errors"]
 
 # ----------------------------------------------------------------------
 # Rappel d'un calcul ancien depuis l'interface
@@ -140,6 +148,21 @@ def rappeler_calcul(
 
     return document
 
+
+def enregistrer_document(document):
+
+    calculation_id = trouver_calcul_existant(
+        document
+    )
+
+    if calculation_id:
+        supprimer_document(
+            calculation_id
+        )
+
+    sauver_document(
+        document
+    )
 
 def formater_date(
     date_iso,

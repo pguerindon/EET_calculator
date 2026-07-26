@@ -1,4 +1,4 @@
-APP_VERSION = "1.21"
+APP_VERSION = "1.22"
 EEP_VERSION = "1.0"
 JSON_PROTOCOL_PDF = (
     f"EEP_Specification_v{EEP_VERSION}.pdf"

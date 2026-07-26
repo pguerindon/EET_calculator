@@ -75,13 +75,6 @@ def valider_competitors(
     if contient_erreurs(document):
         return
 
-    verifier_mt(
-        document,
-    )
-
-    if contient_erreurs(document):
-        return
-
     verifier_eet(
         document,
     )
@@ -95,8 +88,12 @@ def valider_calculation(
     au calcul.
     """
 
-    pass
+    #verifier_mt(
+    #    document,
+    #)
 
+    pass
+    
 
 
 def verifier_nombre_competitors(

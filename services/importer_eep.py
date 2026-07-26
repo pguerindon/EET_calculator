@@ -111,8 +111,16 @@ def _importer_competitor(
     # Normalisation
     #
 
-    if competitor["et_tod"] == "":
-        competitor["et_tod"] = None
+    competitor["et_tod"] = (
+        competitor["et_tod"] or None
+    )
+
+    if competitor["et_tod"]:
+        competitor["et_us"] = tod_to_us(
+            competitor["et_tod"]
+        )
+    else:
+        competitor["et_us"] = None
 
 
 def _determiner_et_precision(
@@ -172,21 +180,20 @@ def importer_mt(
         if competitor is None:
             continue
 
-        mt_tod = competitor_data[
-            "et_tod"
-        ]
+        mt_tod = competitor_data["et_tod"]
+
+        if mt_tod == "":
+            mt_tod = None
 
         competitor["mt_tod"] = mt_tod
 
-        if mt_tod is not None:
+        if mt_tod is None:
 
-            competitor["mt_us"] = tod_to_us(
-                mt_tod
-            )
+            competitor["mt_us"] = None
 
         else:
 
-            competitor["mt_us"] = None
+            competitor["mt_us"] = tod_to_us(mt_tod)
 
     _determiner_mt_precision(
         document

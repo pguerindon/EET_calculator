@@ -169,16 +169,6 @@ def valider_eep_initial(
             "calculation_id must be empty."
         )
 
-    missing_count = sum(
-        competitor["et_tod"].strip() == ""
-        for competitor in eep_document["competitors"]
-    )
-
-    if missing_count != 1:
-        raise EEPValidationError(
-            "Exactly one missing ET is required."
-        )
-
 
 def valider_eep_secondaire(
     eep_document: dict,
@@ -206,16 +196,6 @@ def valider_eep_secondaire(
     if eep_document["calculation_id"] == "":
         raise EEPValidationError(
             "Missing calculation_id."
-        )
-
-    missing_count = sum(
-        competitor["et_tod"] is None
-        for competitor in eep_document["competitors"]
-    )
-
-    if missing_count != 0:
-        raise EEPValidationError(
-            "No missing ET is allowed."
         )
     
 
