@@ -446,6 +446,10 @@ def calcul():
 
     if action == "effacer":
 
+        definir_mode_lecture_seule(
+            False
+        )
+
         definir_document_travail(
             nouveau_document()
         )
@@ -548,11 +552,6 @@ def calcul():
     #
     # Affichage normal
     #
-
-    print(
-        "[GET] precedent =",
-        calcul_precedent_existe()
-    )
 
     return afficher_calcul(
         document
