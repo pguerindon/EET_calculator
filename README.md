@@ -60,7 +60,10 @@ EET Calculator implements the **Equivalent Electronic Time Exchange Protocol (EE
 
 The complete protocol specification is available here:
 
-📄 [EEP Specification v1.0](../documentation/EEP_Specification_v1.0.pdf)
+## Documentation
+
+- [EEP Specification (Markdown)](documentation/EEP_Specification_v1.1.md)
+- [EEP Specification (PDF)](documentation/EEP_Specification_v1.1.pdf)
 
 ---
 
