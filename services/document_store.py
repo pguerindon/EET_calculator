@@ -12,6 +12,9 @@ import os
 
 from config import CALCULS_DIR
 
+from services.constants import ERROR_BUSINESS_KEY_MISMATCH, ERROR_UNKNOWN_CALCULATION_ID
+from services.exceptions import EEPValidationError
+
 def sauver_document(
     document,
 ):
@@ -357,4 +360,41 @@ def _cle_metier(document):
         race["run"],
         race["eet_bib"],
         race["missing_impulse"],
+    )
+
+
+def supprimer_calcul(
+    eep_document,
+):
+    """
+    Supprime un calcul.
+
+    Le calculation_id doit exister et
+    correspondre à la même clé métier.
+    """
+
+    calculation_id = (
+        eep_document["calculation_id"]
+    )
+
+    document = charger_document(
+        calculation_id
+    )
+
+    if document is None:
+        raise EEPValidationError(
+            ERROR_UNKNOWN_CALCULATION_ID
+        )
+
+    if (
+        _cle_metier(document)
+        !=
+        _cle_metier(eep_document)
+    ):
+        raise EEPValidationError(
+            ERROR_BUSINESS_KEY_MISMATCH
+        )
+
+    supprimer_document(
+        calculation_id
     )

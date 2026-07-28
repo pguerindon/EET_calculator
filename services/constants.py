@@ -126,7 +126,7 @@ MIN_MT_PRECISION = 2
 MAX_MT_PRECISION = 6
 
 # ============================================================================
-# Errors constantsz
+# Errors constants
 # ============================================================================
 
 ERROR_INVALID_COMPETITOR_COUNT = "INVALID_COMPETITOR_COUNT"
@@ -134,6 +134,13 @@ ERROR_DUPLICATE_BIB            = "DUPLICATE_BIB"
 ERROR_INVALID_ET_COUNT         = "INVALID_ET_COUNT"
 ERROR_INVALID_ET_PRECISION     = "INVALID_ET_PRECISION"
 ERROR_INVALID_MT               = "INVALID_MT"
+
+# ============================================================================
+# EEP / Document store errors
+# ============================================================================
+
+ERROR_UNKNOWN_CALCULATION_ID   = "UNKNOWN_CALCULATION_ID"
+ERROR_BUSINESS_KEY_MISMATCH    = "BUSINESS_KEY_MISMATCH"
 
 # ============================================================================
 # Internal document models

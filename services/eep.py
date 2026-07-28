@@ -3,6 +3,7 @@ Gestion des échanges EEP avec les systèmes
 de chronométrage.
 """
 
+from services import document_store
 from services.document import (
     contient_erreurs,
     enregistrer_document,
@@ -27,6 +28,7 @@ from services.document_store import (
 
 from services.eep_validator import (
     EEPValidationError,
+    valider_eep_delete,
     valider_eep_initial,
     valider_eep_secondaire,
 )
@@ -37,17 +39,22 @@ from services.validator import (
 
 
 def recevoir_eep(eep_document):
-    """
-    Traite un document EEP reçu d'un système de chronométrage.
 
-    Sans calculation_id :
-        création d'un nouveau calcul.
+    if est_requete_delete(eep_document):
 
-    Avec calculation_id :
-        import des temps du système B.
+        valider_eep_delete(
+            eep_document,
+        )
 
-    Retourne la réponse EEP.
-    """
+        document_store.supprimer_calcul(
+            eep_document,
+        )
+
+        return {
+            "status": "ok",
+            "calculation_id":
+                eep_document["calculation_id"],
+        }
 
     calculation_id = (
         eep_document["calculation_id"]
@@ -274,3 +281,14 @@ def verifier_correspondance_course(
             raise EEPValidationError(
                 f"Wrong calculation key ({nom} mismatch)."
             )
+
+
+def est_requete_delete(
+    eep_document,
+):
+    return (
+        "mode" in eep_document
+        and
+        eep_document["mode"] == "DELETE"
+    )
+

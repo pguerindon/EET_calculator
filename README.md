@@ -544,6 +544,11 @@ No redesign of the business model should be required.
 
 # License
 
-Developed by **Philippe Guérindon**
+Copyright © 2026 Philippe Guérindon
 
-© 2026 — All rights reserved.
+This software is proprietary.
+
+See the accompanying **LICENSE** file for the complete license terms.
+
+The accompanying **EEP Specification** is distributed under its own
+copyright and permission terms.

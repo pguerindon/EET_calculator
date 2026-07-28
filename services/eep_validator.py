@@ -14,14 +14,8 @@ from services.constants import (
     RACE_SCHEMA,
     ROOT_SCHEMA,
 )
+from services.exceptions import EEPValidationError
 
-
-class EEPValidationError(Exception):
-    """
-    Erreur de validation d'un document EEP.
-    """
-
-    pass
 
 def _valider_schema(
     data: dict,
@@ -338,3 +332,31 @@ def _valider_competitors(
             COMPETITOR_SCHEMA,
         )
 
+
+def valider_eep_delete(
+    eep_document: dict,
+) -> None:
+    """
+    Validate a DELETE EEP request.
+
+    Args:
+        eep_document:
+            EEP document.
+
+    Raises:
+        EEPValidationError:
+            If the document is invalid.
+    """
+
+    _valider_eep(
+        eep_document,
+    )
+
+    #
+    # Business rules
+    #
+
+    if eep_document["mode"] != "DELETE":
+        raise EEPValidationError(
+            "mode must be DELETE."
+        )
