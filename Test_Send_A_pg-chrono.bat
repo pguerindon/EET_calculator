@@ -7,7 +7,7 @@ echo.
 
 curl.exe -X POST https://pg-chrono.fr/api/eep ^
   -H "Content-Type: application/json" ^
-  --data-binary "@skiffs_A.json"
+  --data-binary "@c:/skiFFS_utf-8/tmp/temp_EET.json"
 
 echo.
 echo.

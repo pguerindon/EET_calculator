@@ -29,6 +29,8 @@ def sauver_document(
         "info"
     ]["calculation_id"]
 
+ 
+
     CALCULS_DIR.mkdir(
         parents=True,
         exist_ok=True,
@@ -47,6 +49,8 @@ def sauver_document(
         encoding="utf-8",
     ) as f:
 
+        # trace_document2("dans sauver_document avant json.dump, document = ", document)
+        
         json.dump(
             document,
             f,
@@ -398,3 +402,78 @@ def supprimer_calcul(
     supprimer_document(
         calculation_id
     )
+
+
+def verifier_calculs(calculation_ids):
+
+    calculs = {}
+
+    for calculation_id in calculation_ids:
+
+        fichier = CALCULS_DIR / (
+            f"{calculation_id}.json"
+        )
+
+        document = _charger_fichier(
+            fichier
+        )
+
+        if document is None:
+
+            calculs[calculation_id] = {
+                "exists": False
+            }
+
+        else:
+
+            calculs[calculation_id] = {
+                "exists": True,
+                "mode": document.get(
+                    "mode",
+                    "",
+                ),
+            }
+
+    return calculs
+
+
+def trace_document2(titre, document):
+
+    print()
+    print("==========", titre, "==========")
+
+    if document is None:
+        print("document : None")
+        print("==============================")
+        return
+
+    print(f"\n========== {titre} ==========")
+
+    print("calculation_id :", document.get("calculation_id"))
+    print("document.calculation :", document["calculation"])
+
+    race = document.get("race", {})
+    print("missing_impulse :", race.get("missing_impulse"))
+    print("mt_precision    :", race.get("mt_precision"))
+    print("et_precision    :", race.get("et_precision"))
+
+    print("id(document) =", id(document))
+    print("id(race)     =", id(document["race"]))
+    print("id(comp)     =", id(document["competitors"]))
+    print("\nConcurrent 8 :")
+
+    c = document["competitors"][7]
+
+    for cle in (
+        "bib",
+        "name",
+        "surname",
+        "firstname",
+        "lastname",
+        "nation",
+        "club",
+        "mt_tod",
+        "et_tod",
+        "eet_tod",
+    ):
+        print(f"  {cle:10} : {c.get(cle)}")

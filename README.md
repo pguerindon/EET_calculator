@@ -12,8 +12,8 @@
 
 # EET Calculator
 
-**Version:** 1.22
-**EEP Protocol:** 1.0
+**Version:** 1.23
+**EEP Protocol:** 1.1
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
 
@@ -26,31 +26,33 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 # Highlights
 
 - ✅ Fully compliant with FIS EET calculation rules
-- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.0
+- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.1
 - ✅ Internal business document (*Single Source of Truth*)
 - ✅ Microsecond calculation engine
 - ✅ Independent Web and JSON workflows
 - ✅ Calculation Key support
+- ✅ Calculation synchronization API
+- ✅ Direct calculation recall API
+- ✅ Automatic server version reporting
 - ✅ Automatic PDF report generation
 - ✅ Public calculation search
 - ✅ Multilingual interface (French, English, German)
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
 
+
 ---
 
-# What's New in Version 1.22
+# What's New in Version 1.23
 
-Version 1.22 stabilizes the internal architecture of the application.
+Version 1.23 extends the interoperability capabilities of the EET Calculator while maintaining full compatibility with the EEP 1.1 protocol.
 
 Major improvements include:
 
-- Complete separation between **Web calculations** and **persistent JSON calculations**.
-- Independent management of the displayed document and the Web session history.
-- Two-level Web calculation history allowing instant document swapping.
-- Persistent calculations identified by a **Calculation Key**.
-- Improved read-only workflow.
-- Simplified session management.
-- Cleaner separation of responsibilities between business modules.
+- Direct recall of a calculation through its Calculation Key URL.
+- New synchronization API allowing timing software to verify which stored calculations are still available on the server.
+- Automatic reporting of the implemented EEP protocol version and EET Calculator version in every JSON response.
+- Improved handling of recalled calculations and Calculation Keys.
+- More robust Web routes and error handling.
 
 ---
 
@@ -182,7 +184,9 @@ Calculation
 Persistent Storage
       │
       ├── Recall by Calculation Key
-      └── Public Search
+      ├── Synchronization API
+      ├── Public Search
+      └── PDF Export
 ```
 
 Although independent, both workflows rely on the same internal business document and calculation engine.
@@ -212,6 +216,7 @@ The application provides all the tools required by Technical Delegates and timin
 - Calculation swap
 - Persistent JSON calculations
 - Recall by Calculation Key
+- Calculation synchronization
 - Public search
 - Automatic PDF report generation
 
@@ -271,7 +276,20 @@ The recalled document can then be:
 
 ---
 
-## 4. Public Search
+## 4. Calculation Synchronization
+
+Timing software may synchronize its local storage with the server.
+
+A list of Calculation Keys is submitted to the server, which returns:
+
+- whether each calculation still exists;
+- its current mode (real or test).
+
+This allows automatic removal of expired test calculations from the local cache.
+
+---
+
+## 5. Public Search
 
 Stored calculations may also be retrieved using:
 
@@ -292,7 +310,6 @@ Public search displays anonymous PDF reports while preserving competitor privacy
 | `calculator.py` | FIS EET calculation engine |
 | `workflow.py` | Business workflow orchestration |
 | `adapter.py` | Conversion between EEP JSON and the internal document |
-| `actions.py` | Flask actions |
 | `session.py` | Session management and Web history |
 | `pdf.py` | PDF report generation |
 | `translation.py` | Internationalization |
@@ -307,7 +324,6 @@ config.py
 run.py
 requirements.txt
 
-actions.py
 adapter.py
 calculator.py
 document.py
@@ -535,7 +551,6 @@ This guarantees:
 The architecture has been designed to facilitate future extensions, including:
 
 - additional exchange protocols
-- REST API
 - authentication and user management
 - digital signatures
 - federation integration

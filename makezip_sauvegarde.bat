@@ -7,12 +7,14 @@ echo ==========================================
 echo Creation archive de sauvegarde EET
 echo ==========================================
 
-for /f "tokens=3 delims= " %%i in ('findstr APP_VERSION version.py') do (
-    set "VER=%%~i"
+rem Lecture de la version depuis version.py
+for /f %%i in ('python -c "from version import APP_VERSION; print(APP_VERSION)"') do (
+    set "VER=%%i"
 )
 
-set "VER=%VER:"=%"
-set ZIPFILE=EET_Sauvegarde_v%VER%.zip
+echo VER=[%VER%]
+
+set "ZIPFILE=EET_Sauvegarde_v%VER%.zip"
 
 if exist "%ZIPFILE%" del "%ZIPFILE%"
 
@@ -20,7 +22,7 @@ if exist "%ZIPFILE%" del "%ZIPFILE%"
 
 if errorlevel 1 (
     echo.
-    echo Erreur lors de la creation de l'archive
+    echo Erreur lors de la creation de l'archive.
     pause
     exit /b 1
 )
@@ -28,4 +30,5 @@ if errorlevel 1 (
 echo.
 echo Archive creee :
 echo %ZIPFILE%
+
 pause

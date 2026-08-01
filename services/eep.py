@@ -36,6 +36,7 @@ from services.eep_validator import (
 from services.validator import (
     valider_document,
 )
+from version import APP_VERSION, EEP_VERSION
 
 
 def recevoir_eep(eep_document):
@@ -129,15 +130,21 @@ def _creer_calcul(
     # Construction de la réponse
     #
 
+    messages = lire_erreurs(
+        document,
+    ).copy()
+
+    _ajouter_versions(
+        messages,
+    )
+
     response = {
         "status": (
             "warning"
             if contient_erreurs(document)
             else "ok"
         ),
-        "messages": lire_erreurs(
-            document,
-        ),
+        "messages": messages,
     }
 
     #
@@ -157,7 +164,9 @@ def _creer_calcul(
             calculation_id
         )
 
-        enregistrer_document(document)
+        enregistrer_document(
+            document
+        )
 
         response["calculation_id"] = (
             calculation_id
@@ -236,7 +245,21 @@ def _recevoir_secondaire(
     # Sauvegarde
     #
 
-    enregistrer_document(document)
+    enregistrer_document(
+        document,
+    )
+
+    #
+    # Construction de la réponse
+    #
+
+    messages = lire_erreurs(
+        document,
+    ).copy()
+
+    _ajouter_versions(
+        messages,
+    )
 
     return {
         "status": (
@@ -246,10 +269,10 @@ def _recevoir_secondaire(
             )
             else "ok"
         ),
-        "calculation_id": calculation_id,
-        "messages": lire_erreurs(
-            document,
+        "calculation_id": (
+            calculation_id
         ),
+        "messages": messages,
     }
 
 
@@ -292,3 +315,22 @@ def est_requete_delete(
         eep_document["mode"] == "DELETE"
     )
 
+
+def _ajouter_versions(
+    messages,
+):
+    """
+    Ajoute les versions du protocole
+    et de l'implémentation aux
+    messages de retour.
+    """
+
+    messages.insert(
+        0,
+        f"EEP protocol version {EEP_VERSION}"
+    )
+
+    messages.insert(
+        1,
+        f"EET Calculator version {APP_VERSION}"
+    )

@@ -4,6 +4,38 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
+## [1.23] - 2026-08-01
+
+### Added
+
+- Added direct calculation recall through the `/api/calculation/<calculation_id>` route.
+- Added the `/api/calculations/check` API allowing timing software to synchronize local Calculation Keys with the server.
+- Added automatic reporting of the implemented **EEP protocol version** and **EET Calculator version** in every EEP JSON response.
+
+### Changed
+
+- Calculation recalls now preserve the Calculation Key in the Web interface.
+- Improved interoperability between EET Calculator and external timing software implementing the EEP protocol.
+- Improved robustness of Calculation Key handling.
+- Improved robustness of Calculation Key recall and synchronization.
+
+### Fixed
+
+- Fixed handling of empty Calculation Key URLs (`/api/calculation/`).
+
+### Validation
+
+Validated the following scenarios:
+
+- JSON A import.
+- JSON B import.
+- Direct recall by Calculation Key.
+- Calculation synchronization API.
+- Automatic version reporting.
+- PDF generation after recalled calculations.
+- Deployment validation on Ubuntu Server (OVH) using Gunicorn and Nginx.
+- Version compatibility checks with external timing software.
+
 ---
 
 ## [1.22] - 2026-07-26

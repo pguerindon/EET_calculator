@@ -110,6 +110,17 @@ def afficher_calcul(
         False,
     )
 
+    calculation_id = document["info"].get(
+        "calculation_id",
+        ""
+    )
+
+    if not calculation_id:
+        calculation_id = session.pop(
+            "calculation_id",
+            ""
+        )
+
     return render_template(
         "calcul.html",
         txt=txt,
@@ -126,12 +137,7 @@ def afficher_calcul(
         calculation_id=(
             ""
             if lecture_seule
-            else document[
-                "info"
-            ].get(
-                "calculation_id",
-                "",
-            )
+            else calculation_id
         ),
         lecture_seule=lecture_seule,
         recherche=recherche,

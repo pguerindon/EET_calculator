@@ -3,7 +3,7 @@ Génération du rapport PDF EET Calculator.
 """
 
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime, UTC
 
 from flask import request
 from reportlab.lib import colors
@@ -22,7 +22,7 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from services.calculation_id import calculer_datetime, datetime
+from services.calculation_id import calculer_datetime
 from services.constants import COPYRIGHT
 from services.document import formater_date
 from version import APP_VERSION
@@ -298,20 +298,21 @@ def _creer_entete(
     # Date du calcul
     #
 
+
     if document["calculation_id"]:
 
         date_calcul = (
-            calculer_datetime(
-                document["calculation_id"]
-            ).strftime(
-                "%d/%m/%Y %H:%M:%S"
-            )
+            calculer_datetime(document["calculation_id"])
+            .strftime("%d/%m/%Y %H:%M:%S")
+            + " UTC"
         )
 
     else:
 
-        date_calcul = datetime.now().strftime(
-            "%d/%m/%Y %H:%M:%S"
+        date_calcul = (
+            datetime.now(UTC)
+            .strftime("%d/%m/%Y %H:%M:%S")
+            + " UTC"
         )
 
     infos_calcul.append(

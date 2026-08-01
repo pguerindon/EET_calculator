@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    abort,
     flash,
     jsonify,
     request,
@@ -19,6 +20,7 @@ from export_json import (
     exporter_document_json,
 )
 
+from services.document_store import verifier_calculs
 from services.views import(
     afficher_about,
     afficher_calcul, 
@@ -32,7 +34,7 @@ from services.eep import (
     rechercher_calculs,
 )
 
-from services.document import contient_erreurs, enregistrer_document, rappeler_calcul
+from services.document import enregistrer_document, rappeler_calcul
 
 from services.eep_validator import (
     EEPValidationError,
@@ -47,7 +49,6 @@ from services.workflow import traiter_document
 from services.exemple_fis import charger_exemple_fis
 
 from web.session import (
-    calcul_precedent_existe,
     definir_document_travail,
     definir_mode_lecture_seule,
     obtenir_document_travail,
@@ -79,6 +80,7 @@ def trace_document(titre, document):
     print(f"\n========== {titre} ==========")
 
     print("calculation_id :", document.get("calculation_id"))
+    print("document.calculation :", document["calculation"])
 
     race = document.get("race", {})
     print("missing_impulse :", race.get("missing_impulse"))
@@ -157,6 +159,90 @@ def timecalc():
 def help_timecalc():
 
     return afficher_help_timecalc()
+
+
+@app.post("/api/calculations/check")
+def api_check_calculations():
+    """
+    Vérifie l'existence et le mode des calculs demandés.
+    """
+
+    data = request.get_json(silent=True)
+
+    if data is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    calculation_ids = data.get("calculation_ids")
+
+    if not isinstance(calculation_ids, list):
+        return jsonify({"error": "calculation_ids must be a list"}), 400
+
+    return jsonify({
+        "calculations": verifier_calculs(calculation_ids)
+    })
+
+
+@app.route(
+    "/api/calculation/",
+    defaults={
+        "calculation_id": ""
+    },
+)
+@app.route(
+    "/api/calculation/<calculation_id>"
+)
+def api_calculation(
+    calculation_id,
+):
+    """
+    Ouvre un calcul enregistré à partir
+    de son calculation_id.
+    """
+
+    langue = get_langue()
+    txt = TEXTES[langue]
+
+    if not calculation_id:
+
+        flash(
+            txt["calcul_introuvable"],
+            "error",
+        )
+
+        return redirect(
+            url_for("calcul")
+        )
+
+    document = rappeler_calcul(
+        calculation_id
+    )
+
+    if document is None:
+
+        flash(
+            txt["calcul_introuvable"],
+            "error",
+        )
+
+        session["calculation_id"] = (
+            calculation_id
+        )
+
+        return redirect(
+            url_for("calcul")
+        )
+
+    definir_mode_lecture_seule(
+        False
+    )
+
+    definir_document_travail(
+        document
+    )
+
+    return afficher_calcul(
+        document
+    )
 
 
 @app.route(
@@ -446,13 +532,7 @@ def calcul():
 
     if action == "effacer":
 
-        definir_mode_lecture_seule(
-            False
-        )
-
-        definir_document_travail(
-            nouveau_document()
-        )
+        reinitialiser_session()
 
         return redirect("/")
     
@@ -486,44 +566,30 @@ def calcul():
 
         if action == "calcul":
 
-            document = obtenir_document_travail()
+            # trace_document("dans calcul avant importer_formulaire", document)
 
             importer_formulaire(
                 document,
                 request.form,
             )
 
+            # trace_document("dans calcul avant traiter_document", document)
+
             traiter_document(
                 document,
             )
 
-            if not contient_erreurs(document):
+            enregistrer_document(
+                document,
+            )
 
-                if document["race"]["missing_impulse"] == "WEB":
+            # trace_document("avant enregistrer_nouveau_calcul", document)
 
-                    #
-                    # Calcul 100 % Web
-                    #
-                    enregistrer_nouveau_calcul(
-                        document
-                    )
+            enregistrer_nouveau_calcul(
+                document,
+            )
 
-                else:
-
-                    #
-                    # Calcul provenant d'un import JSON
-                    #
-                    if document["info"].get(
-                        "calculation_id"
-                    ):
-
-                        enregistrer_document(
-                            document
-                        )
-
-                    definir_document_travail(
-                        document
-                    )
+            # trace_document("après enregistrer_nouveau_calcul", document)
 
             return redirect(
                 url_for("calcul")

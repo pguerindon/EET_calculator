@@ -164,6 +164,53 @@ def enregistrer_document(document):
         document
     )
 
+
+def normaliser_document(document):
+    """
+    Met un document en conformité avec la structure
+    attendue.
+
+    Les informations existantes sont conservées.
+    Les sections, listes et clés manquantes sont créées.
+    """
+
+    modele = nouveau_document()
+
+    _fusionner(document, modele)
+
+    return document
+
+
+def _fusionner(document, modele):
+
+    for cle, valeur in modele.items():
+
+        if cle not in document:
+            document[cle] = deepcopy(valeur)
+            continue
+
+        if (
+            isinstance(document[cle], dict)
+            and isinstance(valeur, dict)
+        ):
+            _fusionner(
+                document[cle],
+                valeur
+            )
+
+        elif (
+            isinstance(document[cle], list)
+            and isinstance(valeur, list)
+            and len(valeur) == 1
+        ):
+            for element in document[cle]:
+                if isinstance(element, dict):
+                    _fusionner(
+                        element,
+                        valeur[0]
+                    )
+                    
+
 def formater_date(
     date_iso,
 ):

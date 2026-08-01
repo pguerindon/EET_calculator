@@ -20,6 +20,8 @@ def exporter_document_json(
         encoding="utf-8",
     ) as fichier:
 
+        print(fichier.resolve())
+
         json.dump(
             document,
             fichier,

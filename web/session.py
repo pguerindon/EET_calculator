@@ -6,12 +6,16 @@ Ce module est le seul autorisé
 """
 
 from copy import deepcopy
+import json
 
 from flask import session
 
+
 from services.document import (
+    normaliser_document,
     nouveau_document,
 )
+from services.validator import valider_document
 
 WORK_DOCUMENT = "work_document"
 CURRENT_CALCULATION = "current_calculation"
@@ -24,6 +28,19 @@ LANGUAGE = "langue"
 #
 
 def obtenir_document_travail():
+    document = session.get(WORK_DOCUMENT)
+
+    if document is None:
+        document = nouveau_document()
+    else:
+        normaliser_document(document)
+
+    session[WORK_DOCUMENT] = deepcopy(document)
+
+    return deepcopy(document)
+
+
+def obtenir_document_travailold():
     """
     Retourne le document de travail.
 
@@ -185,6 +202,12 @@ def enregistrer_nouveau_calcul(
     ] = deepcopy(
         document
     )
+
+    print(json.dumps(
+        document["calculation"],
+        indent=4,
+        ensure_ascii=False
+    ))
 
 
 def echanger_calculs():

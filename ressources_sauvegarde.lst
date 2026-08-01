@@ -1,7 +1,7 @@
 requirements.txt
 update.sh
 *.py
-docs
+*.md
 services\*.*
 templates\*.*
 static
