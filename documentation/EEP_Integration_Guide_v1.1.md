@@ -39,7 +39,7 @@ This guide explains how to integrate a Timing System with the EET Calculator usi
 This guide describes:
 
 - EET Calculator architecture;
-- Calculation Model;
+- Calculation Document;
 - Initial Request;
 - Optional Secondary Request;
 - EEP Endpoints;
@@ -70,31 +70,29 @@ The Calculation Document is then available in the web interface using its Calcul
 
 ![](../images/system_overview.png){ width=80% }
 
-# Calculation Model
-
-The EET Calculator manages each calculation as a Calculation Document identified by a unique Calculation Key.
-
-A Calculation Document:
-
-- is created by an Initial Request;
-- may be enriched by Optional Secondary Requests;
-- is then processed through the web interface.
-
-The Calculation Key uniquely identifies the Calculation Document throughout its lifetime.
-
 ## Calculation Document
 
 The Calculation Document is the persistent representation of an EET calculation.
 
-It contains all information required for calculation and reporting.
+Its structure and lifecycle are defined in the EEP Specification.
 
-It may be progressively enriched by Optional Secondary Requests before calculation.
+A Calculation Document:
+
+- is created by an Initial Request;
+- may be progressively enriched by Optional Secondary Requests;
+- is then processed through the EET Calculator web interface.
+
+Each Calculation Document is uniquely identified by a Calculation Key throughout its lifetime.
+
+At any time, only one Calculation Document exists on the server for a given Calculation Key.
+
+Whenever an Initial Request is accepted, the newly created Calculation Document replaces any previously stored Calculation Document associated with the same Calculation Key.
 
 ## Calculation Key
 
 It is assigned when the Calculation Document is created.
 
-The same Calculation Key shall be used in all subsequent requests related to that Calculation Document.
+The Calculation Key shall be used in all Optional Secondary Requests related to that Calculation Document.
 
 ## Calculation Lifecycle
 
@@ -115,11 +113,19 @@ Creates a new Calculation Document from the supplied Electronic Times (ET).
 
 ## Processing
 
-Upon successful validation, the server creates and persists a new Calculation Document.
+Upon successful validation:
+
+- a new Calculation Document is created;
+- a new Calculation Key is assigned;
+- the Calculation Document is persisted on the server.
+
+The Calculation Key is returned to the client application and should be stored locally together with the Calculation Document for future synchronization, direct recall and Optional Secondary Requests.
 
 ## Multiple Requests
 
-Each request is independent. Repeating the same request creates a new Calculation Document with a different Calculation Key.
+Each Initial Request is independent.
+
+Submitting the same Electronic Times more than once creates a new Calculation Document with a new Calculation Key.
 
 # Optional Secondary Request
 
@@ -129,24 +135,79 @@ Enriches an existing Calculation Document by providing Manual Times (MT).
 
 ## Processing
 
-Upon successful validation, updates and persists the Calculation Document identified by its Calculation Key.
+Upon successful validation:
+
+- the supplied Manual Times are incorporated into the Calculation Document identified by its Calculation Key;
+- a new version of the Calculation Document is created;
+- the previous version is removed from the server;
+- the new version is persisted using the same Calculation Key.
 
 ## Multiple Requests
 
-Each request updates the same Calculation Document. Previously supplied Manual Times are replaced by the new values.
+Multiple Optional Secondary Requests may be submitted for the same Calculation Key.
+
+Each accepted request updates the Calculation Document identified by its Calculation Key.
 
 # Calculation Synchronization
 
-Timing software may periodically synchronize its locally stored Calculation Keys with the EET Calculator server.
+Timing software may periodically synchronize any locally stored Calculation Keys with the EET Calculator server.
 
-The client submits a list of Calculation Keys.
+The synchronization request allows the client application to determine whether each locally stored calculation still exists on the server.
 
-For each key, the server reports:
+## Request
 
-- whether the calculation still exists;
-- its processing mode.
+**POST** `/api/eep/synchronization`
 
-This allows client software to remove expired TEST calculations while preserving valid calculations.
+Request body:
+
+```json
+{
+  "calculation_ids": [
+    "1fpH6G",
+    "1fpZPH",
+    "1fqkBF",
+    "1fqlPg"
+  ]
+}
+```
+
+The `calculation_ids` array contains the Calculation Keys currently stored by the client application.
+
+## Response
+
+Example:
+
+```json
+{
+  "calculations": {
+    "1fpH6G": {
+      "exists": true
+    },
+    "1fpZPH": {
+      "exists": false
+    },
+    "1fqkBF": {
+      "exists": true
+    }
+  }
+}
+```
+
+For each submitted Calculation Key:
+
+- `exists = true` indicates that the calculation is still available on the server.
+- `exists = false` indicates that the calculation has been removed from the server.
+
+## Recommended Client Behaviour
+
+For each synchronized Calculation Key:
+
+- if `exists` is `true`, keep the local calculation;
+- if `exists` is `false`, the client application may inform the user that the calculation no longer exists on the server and optionally delete the obsolete local file after user confirmation.
+
+To keep the local repository consistent with the server, it is recommended to perform a synchronization immediately after a successful Initial Request has been accepted by the server. This allows newly created calculations to be registered locally while identifying obsolete calculations that may no longer exist on the server.
+
+Synchronization helps maintain consistency between the local calculation repository and the calculations currently available on the EET Calculator server.
 
 # Direct Calculation Recall
 
@@ -160,6 +221,26 @@ This mechanism allows:
 - further processing by the Technical Delegate.
 
 The recalled Calculation Key remains visible in the user interface.
+
+## Direct Link
+
+A Calculation Document may be opened directly by constructing a URL containing its Calculation Key.
+
+Format:
+
+```text
+https://pg-chrono.fr/api/calculation/<CalculationKey>
+```
+
+Example:
+
+```text
+https://pg-chrono.fr/api/calculation/1fpH6G
+```
+
+Opening this URL in the user's default web browser recalls the corresponding Calculation Document.
+
+If the Calculation Key is unknown or no longer exists on the server, the application displays an appropriate error message.
 
 # EEP Endpoints
 
@@ -176,10 +257,7 @@ Every successful EEP request returns the associated Calculation Key.
 
 Error responses are defined in the EEP Specification.
 
-Calculation Synchronization returns, for each supplied Calculation Key:
-
-- existence;
-- processing mode.
+Calculation Synchronization returns the existence status of each supplied Calculation Key.
 
 Calculation Recall opens the corresponding Calculation Document in the web interface.
 
@@ -196,8 +274,9 @@ Client software should treat these messages as informational only.
 
 # Integration Recommendations
 
-- Preserve the Calculation Key for the lifetime of the Calculation Document.
-- Avoid duplicate Initial Requests.
+- Preserve the Calculation Key returned by a successful Initial Request.
+- Use the Calculation Key only for Optional Secondary Requests referring to the same Calculation Document.
+- If the Electronic Times of the Initial Request are incorrect and a new calculation must be started, submit a new Initial Request without a Calculation Key.
 - Periodically synchronize locally stored Calculation Keys.
 - Use server version information to detect implementation differences.
 - Ignore informational server messages not required by the application.
