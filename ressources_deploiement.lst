@@ -5,6 +5,7 @@ docs
 services\*.*
 templates\*.*
 static
+tools
 web\*.*
 
 

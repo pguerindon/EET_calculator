@@ -5,6 +5,7 @@ update.sh
 services\*.*
 templates\*.*
 static
+tools
 web\*.*
 
 deployment\*.*

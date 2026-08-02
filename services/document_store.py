@@ -225,6 +225,10 @@ def _document_calcule(
     """
     Indique si le document contient
     un résultat EET calculé.
+
+    Fonction utilitaire conservée pour
+    les traitements de stockage et les
+    évolutions futures.
     """
 
     try:
@@ -435,6 +439,62 @@ def verifier_calculs(calculation_ids):
             }
 
     return calculs
+
+
+def supprimer_document(
+    calculation_id,
+):
+    """
+    Supprime un document.
+    """
+
+    fichier = (
+        CALCULS_DIR
+        / f"{calculation_id}.json"
+    )
+
+    try:
+        fichier.unlink()
+    except FileNotFoundError:
+        pass
+
+
+def purger_documents(
+    saison,
+):
+    """
+    Supprime tous les documents
+    de la saison indiquée.
+
+    Retourne la liste des
+    Calculation Keys supprimées.
+    """
+
+    calculs_supprimes = []
+
+    documents = lister_documents()
+
+    for document in documents:
+
+        if (
+            document["race"]["season"]
+            != saison
+        ):
+            continue
+
+        calculation_id = (
+            document["info"]["calculation_id"]
+        )
+
+        supprimer_document(
+            calculation_id,
+        )
+
+        calculs_supprimes.append(
+            calculation_id
+        )
+
+    return calculs_supprimes
 
 
 def trace_document2(titre, document):

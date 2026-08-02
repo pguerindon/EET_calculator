@@ -11,6 +11,8 @@ The latest version appears first.
 - Added direct calculation recall through the `/api/calculation/<calculation_id>` route.
 - Added the `/api/calculations/check` API allowing timing software to synchronize local Calculation Keys with the server.
 - Added automatic reporting of the implemented **EEP protocol version** and **EET Calculator version** in every EEP JSON response.
+- Automatic yearly purge of calculations from season N-2.
+- Added maintenance script `tools/purge_calculations.py`.
 
 ### Changed
 
