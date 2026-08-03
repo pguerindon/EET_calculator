@@ -138,14 +138,15 @@ TEXTES = {
         #
         # Session
         #
-
-        "session_confidentialite": "La conservation des calculs est limitée au navigateur et à l'appareil utilisé. Les données ne sont pas enregistrées dans une base de données permanente.",
-        "session_duree": "Ces informations sont conservées dans la session du navigateur pendant 8 heures après la dernière utilisation de l'application.",
-        "session_fin": "Au-delà de ce délai, ou après suppression des données de navigation du navigateur, les calculs mémorisés sont automatiquement supprimés.",
-        "session_intro": "Le calculateur mémorise automatiquement :",
-        "session_ligne_1": "le dernier calcul effectué ;",
-        "session_ligne_2": "le calcul précédent.",
         "session_titre": "Session utilisateur",
+        "session_intro": "Le calculateur mémorise automatiquement dans la session du navigateur :",
+        "session_ligne_1": "le dernier calcul effectué ;",
+        "session_ligne_2": "le calcul précédent ;",
+        "session_ligne_3": "la Calculation Key du calcul en cours.",
+        "session_confidentialite": "Les calculs sont également enregistrés sur le serveur afin de permettre leur rappel, leur synchronisation avec un logiciel de chronométrage compatible EEP et leur traitement ultérieur.",
+        "session_duree": "Les informations conservées dans la session du navigateur sont supprimées automatiquement après 8 heures d'inactivité.",
+        "session_fin": "Les calculs enregistrés sur le serveur sont conservés selon la politique de rétention de l'application puis supprimés automatiquement.",
+
 
         #
         # Protocole
@@ -175,11 +176,10 @@ TEXTES = {
         # Confidentialité
         #
 
-        "confidentialite_titre": "Confidentialité",
-        "confidentialite_intro": "L'application EET Calculator ne collecte aucune donnée personnelle.",
+        "confidentialite_titre": "Confidentialité", "confidentialite_intro": "L'application EET Calculator ne collecte aucune donnée personnelle.",
         "confidentialite_compte": "Aucun compte utilisateur n'est requis et aucune adresse électronique n'est demandée.",
-        "confidentialite_session": "Les calculs effectués sont conservés uniquement dans la session du navigateur afin de permettre le rappel du dernier calcul et du calcul précédent. Ces informations sont automatiquement supprimées à l'expiration de la session.",
-        "confidentialite_stockage": "Aucune base de données n'est utilisée et aucune trace des calculs réalisés n'est conservée sur le serveur.",
+        "confidentialite_session": "Les calculs sont enregistrés sur le serveur uniquement afin de permettre leur rappel, leur synchronisation avec un logiciel de chronométrage compatible EEP et leur traitement ultérieur par le Délégué Technique.",
+        "confidentialite_stockage": "Chaque calcul est identifié par une Calculation Key unique. Les calculs sont automatiquement supprimés conformément à la politique de rétention de l'application.",
         "confidentialite_ip": "L'application n'enregistre pas les adresses IP des utilisateurs et n'effectue aucun suivi statistique ou publicitaire.",
 
         #
@@ -413,13 +413,11 @@ TEXTES = {
         # Session
         #
 
-        "session_confidentialite": "Calculations are stored only in the browser and on the device being used. No data is stored in a permanent database.",
-        "session_duree": "This information is stored in the browser session for 8 hours after the last use of the application.",
-        "session_fin": "After this period, or if the browser data is cleared, the stored calculations are automatically deleted.",
-        "session_intro": "The calculator automatically stores:",
-        "session_ligne_1": "the last calculation performed;",
-        "session_ligne_2": "the previous calculation.",
-        "session_titre": "User session",
+        "session_titre": "User Session", "session_intro": "The calculator automatically stores in the browser session:",
+        "session_ligne_1": "the most recent calculation;", "session_ligne_2": "the previous calculation;",
+        "session_ligne_3": "the Calculation Key of the current calculation.", "session_confidentialite": "Calculations are also stored on the server to allow direct recall, synchronization with EEP-compatible timing software and subsequent processing.",
+        "session_duree": "Information stored in the browser session is automatically removed after 8 hours of inactivity.",
+        "session_fin": "Calculations stored on the server are retained according to the application's retention policy and are then automatically deleted.",
 
         #
         # Protocole
@@ -449,12 +447,11 @@ TEXTES = {
         # Confidentialité
         #
 
-        "confidentialite_titre": "Privacy",
-        "confidentialite_intro": "The EET Calculator application does not collect any personal data.",
+        "confidentialite_titre": "Privacy", "confidentialite_intro": "The EET Calculator application does not collect any personal data.",
         "confidentialite_compte": "No user account is required and no email address is requested.",
-        "confidentialite_session": "Calculations are stored only in the browser session to allow retrieval of the last calculation and the previous calculation. This information is automatically deleted when the session expires.",
-        "confidentialite_stockage": "No database is used and no record of the calculations performed is stored on the server.",
-        "confidentialite_ip": "The application does not record users' IP addresses and does not perform any statistical or advertising tracking.",        
+        "confidentialite_session": "Calculations are stored on the server solely to allow direct recall, synchronization with EEP-compatible timing software and subsequent processing by the Technical Delegate.",
+        "confidentialite_stockage": "Each calculation is identified by a unique Calculation Key. Calculations are automatically deleted in accordance with the application's retention policy.",
+        "confidentialite_ip": "The application does not record users' IP addresses and performs no statistical or advertising tracking.",
 
         #
         # About
@@ -699,13 +696,12 @@ TEXTES = {
         # Session
         #
 
-        "session_confidentialite": "Die Berechnungen werden ausschließlich im Browser und auf dem verwendeten Gerät gespeichert. Es erfolgt keine Speicherung in einer dauerhaften Datenbank.",
-        "session_duree": "Diese Informationen werden nach der letzten Nutzung der Anwendung 8 Stunden lang in der Browsersitzung gespeichert.",
-        "session_fin": "Nach Ablauf dieser Frist oder nach dem Löschen der Browserdaten werden die gespeicherten Berechnungen automatisch entfernt.",
-        "session_intro": "Der Rechner speichert automatisch:",
-        "session_ligne_1": "die letzte Berechnung;",
-        "session_ligne_2": "die vorherige Berechnung.",
-        "session_titre": "Benutzersitzung",
+        "session_titre": "Benutzersitzung", "session_intro": "Der Rechner speichert automatisch in der Browsersitzung:",
+        "session_ligne_1": "die zuletzt durchgeführte Berechnung;", "session_ligne_2": "die vorherige Berechnung;",
+        "session_ligne_3": "den Calculation Key der aktuellen Berechnung.",
+        "session_confidentialite": "Berechnungen werden außerdem auf dem Server gespeichert, um den direkten Abruf, die Synchronisation mit EEP-kompatibler Zeitmesssoftware sowie die weitere Verarbeitung zu ermöglichen.",
+        "session_duree": "Die in der Browsersitzung gespeicherten Informationen werden nach 8 Stunden Inaktivität automatisch gelöscht.",
+        "session_fin": "Auf dem Server gespeicherte Berechnungen werden gemäß der Aufbewahrungsrichtlinie der Anwendung gespeichert und anschließend automatisch gelöscht.",
 
         #
         # Protocole
@@ -735,12 +731,11 @@ TEXTES = {
         # Confidentialité
         #
 
-        "confidentialite_titre": "Datenschutz",
-        "confidentialite_intro": "Die Anwendung EET Calculator erhebt keine personenbezogenen Daten.",
-        "confidentialite_compte": "Es ist kein Benutzerkonto erforderlich und keine E-Mail-Adresse wird abgefragt.",
-        "confidentialite_session": "Die Berechnungen werden ausschließlich in der Browsersitzung gespeichert, um den letzten und den vorherigen Berechnungsvorgang erneut anzeigen zu können. Diese Informationen werden nach Ablauf der Sitzung automatisch gelöscht.",
-        "confidentialite_stockage": "Es wird keine Datenbank verwendet und keine Aufzeichnungen der durchgeführten Berechnungen auf dem Server gespeichert.",
-        "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt keine statistische oder werbliche Nachverfolgung durch.",
+        "confidentialite_titre": "Datenschutz", "confidentialite_intro": "Die Anwendung EET Calculator erhebt keine personenbezogenen Daten.",
+        "confidentialite_compte": "Es ist weder ein Benutzerkonto noch eine E-Mail-Adresse erforderlich.",
+        "confidentialite_session": "Berechnungen werden ausschließlich auf dem Server gespeichert, um ihren direkten Abruf, die Synchronisation mit EEP-kompatibler Zeitmesssoftware sowie ihre weitere Verarbeitung durch den Technischen Delegierten zu ermöglichen.",
+        "confidentialite_stockage": "Jede Berechnung wird durch einen eindeutigen Calculation Key identifiziert. Berechnungen werden gemäß der Aufbewahrungsrichtlinie der Anwendung automatisch gelöscht.",
+        "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt weder statistische Auswertungen noch Werbetracking durch.",       "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt keine statistische oder werbliche Nachverfolgung durch.",
 
         #
         # Über
