@@ -237,7 +237,6 @@ The application provides all the tools required by Technical Delegates and timin
 
 A Technical Delegate manually enters:
 
-- race information,
 - competitor bib numbers,
 - manual times,
 - electronic times.
