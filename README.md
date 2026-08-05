@@ -249,7 +249,7 @@ The two latest Web calculations remain available for instant swapping.
 
 ## 2. JSON Import
 
-Timing software may export a calculation request using the **EEP 1.0** format.
+Timing software may export a calculation request using the **EEP 1.1** format.
 
 The imported document is:
 
