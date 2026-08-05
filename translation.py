@@ -16,7 +16,8 @@ TEXTES = {
         # Interface principale
         #
 
-        "home_title": "EET Calculator - Calculateur EET pour le ski alpin",
+        "home_title": "Equivalent Electronic Time (EET) Calculator",
+        "meta_description": "Calculateur d'Equivalent Electronic Time (EET) conforme aux règles de chronométrage de la FIS. Calcule l'Equivalent Electronic Time lorsqu'un temps électronique du système A est manquant.",
         "calcul_precedent": "Calcul précédent",
         "calcul_introuvable": "Aucun calcul ne correspond à cet identifiant.",
         "calculer": "Calculer EET",
@@ -48,7 +49,6 @@ TEXTES = {
         "temps_manuel": "Temps manuel (TOD)",
         "titre": "Calculateur EET",
         "tm": "TM (TOD)",
-        "meta_description": "Calculateur EET (Equivalent Electronic Time) pour les compétitions de ski alpin. Calcul conforme aux règlements FIS et nationaux à partir des temps manuels ou du système B de chronométrage.",
 
         #
         # Recherche de calcul
@@ -290,7 +290,8 @@ TEXTES = {
         # Interface principale
         #
 
-        "home_title": "EET Calculator - Equalized Equivalent Time Calculator for Alpine Skiing",
+        "home_title": "Equivalent Electronic Time (EET) Calculator",
+        "meta_description": "Equivalent Electronic Time (EET) Calculator for alpine ski competitions. Computes the Equivalent Electronic Time according to FIS timing rules when an electronic time from timing system A is missing.",
         "calcul_precedent": "Previous calculation",
         "calcul_introuvable": "No calculation matches this calculation ID.",
         "calculer": "Calculate EET",
@@ -322,7 +323,6 @@ TEXTES = {
         "temps_manuel": "Manual time (TOD)",
         "titre": "EET Calculator",
         "tm": "MT (TOD)",
-        "meta_description": "EET Calculator (Equivalent Electronic Time) for alpine skiing competitions. Compute replacement electronic times according to FIS and national timing procedures using manual timing or timing system B data.",
 
         #
         # Calculation search
@@ -572,7 +572,8 @@ TEXTES = {
         # Interface principale
         #
 
-        "home_title": "EET Calculator - EET-Rechner für alpine Skirennen",
+        "home_title": "Equivalent Electronic Time (EET) Calculator",
+        "meta_description": "Equivalent Electronic Time (EET)-Rechner für alpine Skirennen. Berechnet die Equivalent Electronic Time gemäß den Zeitnahmeregeln der FIS, wenn eine elektronische Zeit von Zeitmesssystem A fehlt.",
         "calcul_precedent": "Vorherige Berechnung",
         "calcul_introuvable": "Keine Berechnung entspricht dieser Berechnungs-ID.",
         "calculer": "EET Berechnen",
@@ -604,7 +605,6 @@ TEXTES = {
         "temps_manuel": "Manuelle Zeit (TOD)",
         "titre": "EET Rechner",
         "tm": "MT (TOD)",
-        "meta_description": "EET-Rechner (Equivalent Electronic Time) für alpine Skirennen. Berechnung von Ersatzelektronikzeiten gemäß FIS- und nationalen Zeitmessvorschriften auf Basis von Handzeiten oder Zeitmesssystem B.",
         "calculation_id": "Berechnungs-ID",
 
         #
