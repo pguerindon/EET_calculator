@@ -101,7 +101,9 @@ The Calculation Key shall be used in all Optional Secondary Requests related to 
 3. Optional synchronization with the server.
 4. Completion and calculation through the web interface.
 
-Calculation Documents may subsequently be deleted by an explicit DELETE request or automatically according to the server retention policy.
+Calculation Documents may subsequently be deleted automatically according to the server retention policy.
+- 7 days for a TEST calculation
+- Otherwise calculation prior to season n-2
 
 ![](../images/calculation_document_lifecycle.png){ width=90% }
 

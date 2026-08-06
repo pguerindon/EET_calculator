@@ -63,6 +63,7 @@ tests/cookies.txt
 Invoke-RestMethod
 
 #fichiers locaux
+documentation/*.bat
 Test_Send_A_ubuntu.bat
 Test_Send_B_ubuntu.bat
 build_document.bat
