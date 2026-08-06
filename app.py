@@ -579,6 +579,9 @@ def calcul():
                 document,
             )
 
+            # trace_document("dans calcul après traiter_document", document)
+
+
             enregistrer_document(
                 document,
             )

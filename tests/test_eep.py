@@ -119,7 +119,7 @@ def test_flux_eep():
     assert document is not None
 
     assert (
-        document["info"]["calculation_id"]
+        document["calculation_id"]
         == calculation_id
     )
 
@@ -534,7 +534,7 @@ def test_flux_a_saisie_mt_interface():
     assert document is not None
 
     assert (
-        document["info"]["calculation_id"]
+        document["calculation_id"]
         == calculation_id
     )
 

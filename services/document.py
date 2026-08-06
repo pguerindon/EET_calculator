@@ -9,7 +9,7 @@ from copy import deepcopy
 from datetime import datetime
 
 from services import constants
-from services.calculation_id import verifier_calculation_id
+from services.calculation_id import generer_calculation_id, verifier_calculation_id
 from services.document_store import (
     trouver_calcul_existant,
     charger_document,
@@ -151,20 +151,23 @@ def rappeler_calcul(
 
 def enregistrer_document(document):
 
-    calculation_id = trouver_calcul_existant(
-        document
+    if document["race"]["missing_impulse"] == "WEB":
+        return
+
+    ancien_calculation_id = (
+        trouver_calcul_existant(document)
     )
 
-    if calculation_id:
+    if ancien_calculation_id:
         supprimer_document(
-            calculation_id
+            ancien_calculation_id
         )
 
     sauver_document(
         document
     )
 
-
+    
 def normaliser_document(document):
     """
     Met un document en conformité avec la structure

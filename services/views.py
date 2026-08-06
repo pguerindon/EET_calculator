@@ -110,7 +110,7 @@ def afficher_calcul(
         False,
     )
 
-    calculation_id = document["info"].get(
+    calculation_id = document.get(
         "calculation_id",
         ""
     )

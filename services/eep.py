@@ -160,7 +160,7 @@ def _creer_calcul(
             generer_calculation_id()
         )
 
-        document["info"]["calculation_id"] = (
+        document["calculation_id"] = (
             calculation_id
         )
 

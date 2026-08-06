@@ -25,11 +25,7 @@ def sauver_document(
     calculation_id est remplacé.
     """
 
-    calculation_id = document[
-        "info"
-    ]["calculation_id"]
-
- 
+    calculation_id = document["calculation_id"]
 
     CALCULS_DIR.mkdir(
         parents=True,
@@ -141,7 +137,7 @@ def trouver_calcul_existant(document):
     for document_existant in documents:
 
         if _cle_metier(document_existant) == cle:
-            return document_existant["info"]["calculation_id"]
+            return document_existant["calculation_id"]
 
     return None
 
@@ -483,7 +479,7 @@ def purger_documents(
             continue
 
         calculation_id = (
-            document["info"]["calculation_id"]
+            document["calculation_id"]
         )
 
         supprimer_document(

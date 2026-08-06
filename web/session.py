@@ -203,11 +203,11 @@ def enregistrer_nouveau_calcul(
         document
     )
 
-    print(json.dumps(
-        document["calculation"],
-        indent=4,
-        ensure_ascii=False
-    ))
+    #  print(json.dumps(
+    #  document["calculation"],
+    #  indent=4,
+    #  ensure_ascii=False
+    # ))
 
 
 def echanger_calculs():
