@@ -1,5 +1,6 @@
 const btnCalculer = document.getElementById("btn_calculer");
 const btnBrouillon =  document.getElementById("btn_brouillon");
+const calculationId = document.getElementById("calculation_id").value.trim();
 
 function formaterTemps(chiffres, precision)
 {
@@ -265,10 +266,16 @@ function mettreAJourEtatCalcul()
             !grilleValide;
     }
 
+    if (btnBrouillon)
+    {
+        btnBrouillon.disabled =
+            nbTEComplets === 11;
+    }
 
     if (btnBrouillon)
     {
         btnBrouillon.disabled =
+            calculationId === "" ||
             nbTEComplets === 11;
     }
 
