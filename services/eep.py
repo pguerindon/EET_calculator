@@ -6,6 +6,7 @@ de chronométrage.
 from services import document_store
 from services.document import (
     contient_erreurs,
+    effacer_resultat_eet,
     enregistrer_document,
     lire_erreurs,
     nouveau_document,
@@ -228,9 +229,22 @@ def _recevoir_secondaire(
     # Import des temps manuels
     #
 
+    #
+    # Import des temps manuels
+    #
+
     importer_mt(
         document,
         eep_document,
+    )
+
+    #
+    # Suppression d'un éventuel résultat EET
+    # issu d'un calcul précédent
+    #
+
+    effacer_resultat_eet(
+        document,
     )
 
     #

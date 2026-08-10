@@ -34,7 +34,7 @@ from services.eep import (
     rechercher_calculs,
 )
 
-from services.document import enregistrer_document, rappeler_calcul
+from services.document import enregistrer_brouillon, enregistrer_document, rappeler_calcul
 
 from services.eep_validator import (
     EEPValidationError,
@@ -593,6 +593,26 @@ def calcul():
             )
 
             # trace_document("après enregistrer_nouveau_calcul", document)
+
+            return redirect(
+                url_for("calcul")
+            )
+
+
+        elif action == "brouillon":
+
+            importer_formulaire(
+                document,
+                request.form,
+            )
+
+            enregistrer_brouillon(
+                document,
+            )
+
+            definir_document_travail(
+                document
+            )
 
             return redirect(
                 url_for("calcul")

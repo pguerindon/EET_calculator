@@ -167,6 +167,22 @@ def enregistrer_document(document):
         document
     )
 
+
+def enregistrer_brouillon(document):
+    sauver_document(
+        document,
+    )
+
+
+def effacer_resultat_eet(document):
+    document["calculation"]["correction_us"] = None
+    document["calculation"]["reference_indexes"] = []
+    document["calculation"]["sum_delta_us"] = None
+
+    for competitor in document["competitors"]:
+        competitor["eet_tod"] = None
+        competitor["eet_us"] = None
+
     
 def normaliser_document(document):
     """

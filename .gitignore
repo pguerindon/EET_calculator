@@ -63,6 +63,7 @@ tests/cookies.txt
 Invoke-RestMethod
 
 #fichiers locaux
+README_SERVER.md
 documentation/*.bat
 build_document.bat
 Test*.bat

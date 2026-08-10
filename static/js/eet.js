@@ -1,4 +1,5 @@
 const btnCalculer = document.getElementById("btn_calculer");
+const btnBrouillon =  document.getElementById("btn_brouillon");
 
 function formaterTemps(chiffres, precision)
 {
@@ -262,6 +263,13 @@ function mettreAJourEtatCalcul()
     {
         btnCalculer.disabled =
             !grilleValide;
+    }
+
+
+    if (btnBrouillon)
+    {
+        btnBrouillon.disabled =
+            nbTEComplets === 11;
     }
 
     console.log(

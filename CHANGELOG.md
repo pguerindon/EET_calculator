@@ -4,7 +4,46 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
-## [1.23] - 2026-08-01
+## [1.24] - 2026-08-10
+
+### Added
+
+- Added the ability to save an incomplete calculation as a draft after retrieving the calculation by its Calculation Key.
+- Added incremental manual time entry, allowing a calculation to be completed over multiple sessions without losing previously entered manual times.
+- Added the `brouillon` form action for saving the current calculation document without performing an EET calculation.
+
+### Changed
+
+- Draft calculations can now be saved without requiring the calculation grid to be complete or valid.
+- The current document is preserved in the Web session after saving a draft.
+- The draft button remains available until an EET has been calculated.
+- Receiving EEP JSON B now invalidates any previously calculated EET and returns the calculation to a ready-to-calculate state.
+- When JSON B is received, the electronic times from the timing system replace the corresponding manual times in the document.
+- Previously calculated EET results are cleared when JSON B is received.
+
+### Fixed
+
+- Fixed the handling of calculations where manual times had already been entered and an EET had been calculated before receiving EEP JSON B.
+- Fixed preservation of manually entered times when saving and subsequently recalling a draft calculation.
+
+### Validation
+
+Validated the following scenarios:
+
+- Saving a calculation with a partially completed manual time grid after retrieving the calculation by its Calculation Key.
+- Recalling a saved draft by Calculation Key.
+- Incrementally completing a calculation through multiple draft saves.
+- Saving a complete grid before performing the EET calculation.
+- Calculating an EET after recalling a draft.
+- Receiving JSON B after a manually calculated EET.
+- Clearing a previously calculated EET when JSON B is received.
+- Recalling the updated calculation by Calculation Key after JSON B reception.
+- Recalculating the EET from the updated document.
+- Draft button state before and after EET calculation.
+
+---
+
+## [1.23] - 2026-08-06
 
 ### Added
 
@@ -24,6 +63,8 @@ The latest version appears first.
 ### Fixed
 
 - Fixed handling of empty Calculation Key URLs (`/api/calculation/`).
+- Harmonized `calculation_id` handling by moving it to the document root.
+- Restored correct separation between Web calculations (Flask session only) and persistent EEP calculations.
 
 ### Validation
 

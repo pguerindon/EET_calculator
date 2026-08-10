@@ -12,7 +12,7 @@
 
 # EET Calculator
 
-**Version:** 1.23
+**Version:** 1.24
 **EEP Protocol:** 1.1
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
@@ -37,24 +37,25 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 - ✅ Automatic PDF report generation
 - ✅ Public calculation search
 - ✅ Multilingual interface (French, English, German)
+- ✅ Draft calculation saving
+- ✅ Incremental manual time entry
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
-
 
 ---
 
-# What's New in Version 1.23
+# What's New in Version 1.24
 
-Version 1.23 extends the interoperability capabilities of the EET Calculator while maintaining full compatibility with the EEP 1.1 protocol.
+Version 1.24 introduces draft saving for calculations requiring manual time entry while improving the handling of calculations updated through the EEP protocol.
 
 Major improvements include:
 
-- Direct recall of a calculation through its Calculation Key URL.
-- New synchronization API allowing timing software to verify which stored calculations are still available on the server.
-- Automatic reporting of the implemented EEP protocol version and EET Calculator version in every JSON response.
-- Improved handling of recalled calculations and Calculation Keys.
-- More robust Web routes and error handling.
-
----
+- Saving an incomplete calculation as a draft before the EET is calculated.
+- Incremental manual time entry, allowing manual times to be entered over multiple sessions without losing previously entered data.
+- Draft saving without requiring the calculation grid to be complete or valid.
+- Automatic preservation of the current document after saving a draft.
+- Improved handling of EEP JSON B messages received after an EET has already been calculated manually.
+- Automatic invalidation of a previously calculated EET when JSON B provides the electronic times.
+- Ability to recall the updated calculation through its Calculation Key and perform the calculation again.
 
 # Documentation
 
