@@ -1,24 +1,53 @@
+"""
+Tests du module document.
+"""
+
 from services import document
 from services import constants
 
-doc = document.nouveau_document()
 
-assert doc["info"]["version"] != ""
-assert doc["info"]["errors"] == []
+def test_document():
+    """
+    Vérifie le fonctionnement de base du document.
+    """
 
-assert len(doc["competitors"]) == constants.COMPETITOR_COUNT
+    doc = document.nouveau_document()
 
-assert "race" in doc
-assert "calculation" in doc
+    assert doc["info"]["version"] != ""
+    assert doc["info"]["errors"] == []
 
-assert doc["race"]["run"] == 1
+    assert len(
+        doc["competitors"]
+    ) == constants.COMPETITOR_COUNT
 
-doc["competitors"][0]["bib"] = "12"
-assert doc["competitors"][1]["bib"] == ""
+    assert "race" in doc
+    assert "calculation" in doc
 
-doc["calculation"]["reference_indexes"].append(3)
+    assert doc["race"]["run"] == "1"
 
-doc2 = document.nouveau_document()
-assert doc2["calculation"]["reference_indexes"] == []
+    doc["competitors"][0]["bib"] = "12"
 
-print("Tous les tests Document sont OK")
+    assert (
+        doc["competitors"][1]["bib"]
+        == ""
+    )
+
+    doc["calculation"]["reference_indexes"].append(
+        3
+    )
+
+    doc2 = document.nouveau_document()
+
+    assert (
+        doc2["calculation"]["reference_indexes"]
+        == []
+    )
+
+    print(
+        "Tous les tests Document sont OK"
+    )
+
+
+if __name__ == "__main__":
+
+    test_document()

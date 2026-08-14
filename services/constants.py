@@ -134,6 +134,7 @@ ERROR_DUPLICATE_BIB            = "DUPLICATE_BIB"
 ERROR_INVALID_ET_COUNT         = "INVALID_ET_COUNT"
 ERROR_INVALID_ET_PRECISION     = "INVALID_ET_PRECISION"
 ERROR_INVALID_MT               = "INVALID_MT"
+ERROR_UNSUPPORTED_MODE         = "UNSUPPORTED_MODE"
 
 # ============================================================================
 # EEP / Document store errors

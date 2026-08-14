@@ -367,43 +367,6 @@ def _cle_metier(document):
     )
 
 
-def supprimer_calcul(
-    eep_document,
-):
-    """
-    Supprime un calcul.
-
-    Le calculation_id doit exister et
-    correspondre à la même clé métier.
-    """
-
-    calculation_id = (
-        eep_document["calculation_id"]
-    )
-
-    document = charger_document(
-        calculation_id
-    )
-
-    if document is None:
-        raise EEPValidationError(
-            ERROR_UNKNOWN_CALCULATION_ID
-        )
-
-    if (
-        _cle_metier(document)
-        !=
-        _cle_metier(eep_document)
-    ):
-        raise EEPValidationError(
-            ERROR_BUSINESS_KEY_MISMATCH
-        )
-
-    supprimer_document(
-        calculation_id
-    )
-
-
 def verifier_calculs(calculation_ids):
 
     calculs = {}

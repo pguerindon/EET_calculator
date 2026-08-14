@@ -34,15 +34,15 @@ def test_temps():
     # Tests de l'arrondi FIS
     # ------------------------------------------------------------------
 
-    assert arrondir_division_fis(11574, 10) == 1157
-    assert arrondir_division_fis(11575, 10) == 1158
-    assert arrondir_division_fis(11576, 10) == 1158
+    assert arrondir_division_fis(11574, 10, 6) == 1157
+    assert arrondir_division_fis(11575, 10, 6) == 1158
+    assert arrondir_division_fis(11576, 10, 6) == 1158
 
-    assert arrondir_division_fis(-11574, 10) == -1157
-    assert arrondir_division_fis(-11575, 10) == -1158
-    assert arrondir_division_fis(-11576, 10) == -1158
+    assert arrondir_division_fis(-11574, 10, 6) == -1157
+    assert arrondir_division_fis(-11575, 10, 6) == -1158
+    assert arrondir_division_fis(-11576, 10, 6) == -1158
 
-    assert arrondir_division_fis(0, 10) == 0
+    assert arrondir_division_fis(0, 10, 6) == 0
 
     print("Tous les tests de temps sont OK")
 

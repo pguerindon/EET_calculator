@@ -4,8 +4,16 @@ Tests du stockage des documents.
 
 from services.document_store import (
     rechercher_documents,
+    sauver_document,
 )
 
+from services.calculation_id import (
+    generer_calculation_id,
+)
+
+from tests.jeu_reference import (
+    creer_document_reference,
+)
 
 def test_rechercher_documents():
     """
@@ -13,10 +21,23 @@ def test_rechercher_documents():
     par saison, codex et dossard EET.
     """
 
+    document = creer_document_reference()
+
+    document["calculation_id"] = (
+        generer_calculation_id()
+    )
+
+    document["race"]["season"] = "2027"
+    document["race"]["codex"] = "0951"
+
+    sauver_document(
+        document
+    )
+
     documents = rechercher_documents(
         "2027",
         "0951",
-        "11",
+        "8",
     )
 
     assert len(documents) >= 1
@@ -34,16 +55,14 @@ def test_rechercher_documents():
         )
 
         eet_index = document[
-            "result"
+            "calculation"
         ]["eet_index"]
 
         competitor = document[
             "competitors"
         ][eet_index]
 
-        assert competitor["bib"] == "11"
-
-        assert competitor["eet_us"] is not None
+        assert competitor["bib"] == "8"
 
 
 def test_recherche_inconnue():

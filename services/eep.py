@@ -4,6 +4,7 @@ de chronométrage.
 """
 
 from services import document_store
+from services.constants import ERROR_UNSUPPORTED_MODE
 from services.document import (
     contient_erreurs,
     effacer_resultat_eet,
@@ -29,7 +30,6 @@ from services.document_store import (
 
 from services.eep_validator import (
     EEPValidationError,
-    valider_eep_delete,
     valider_eep_initial,
     valider_eep_secondaire,
 )
@@ -44,19 +44,9 @@ def recevoir_eep(eep_document):
 
     if est_requete_delete(eep_document):
 
-        valider_eep_delete(
-            eep_document,
+        raise EEPValidationError(
+            ERROR_UNSUPPORTED_MODE
         )
-
-        document_store.supprimer_calcul(
-            eep_document,
-        )
-
-        return {
-            "status": "ok",
-            "calculation_id":
-                eep_document["calculation_id"],
-        }
 
     calculation_id = (
         eep_document["calculation_id"]

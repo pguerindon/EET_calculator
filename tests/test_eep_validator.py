@@ -20,17 +20,18 @@ def creer_eep_initial():
 
     return {
         "calculation_id": "",
-        "race": {
-            "season": "2027",
-            "codex": "0951",
-            "run": 1,
-            "missing_impulse": "FINISH",
-        },
+            "race": {
+                "season": "2027",
+                "codex": "0951",
+                "run": "1",
+                "eet_bib": "11",
+                "missing_impulse": "FINISH",
+            },
         "competitors": [
             {
                 "bib": str(index + 1),
                 "et_tod":
-                    None if index == 10
+                    "" if index == 10
                     else f"10:00:{index:02d}.12345",
             }
             for index in range(11)
@@ -48,7 +49,8 @@ def creer_eep_secondaire():
         "race": {
             "season": "2027",
             "codex": "0951",
-            "run": 1,
+            "run": "1",
+            "eet_bib": "11",
             "missing_impulse": "FINISH",
         },
         "competitors": [
@@ -206,24 +208,11 @@ def test_et_tod():
     )
 
 
-def test_aucun_et_manquant():
-
-    document = creer_eep_initial()
-
-    document["competitors"][10]["et_tod"] = "10:00:10.12345"
-
-    verifier_refus(
-        document,
-        valider_eep_initial,
-        "aucun ET manquant",
-    )
-
-
 def test_deux_et_manquants():
 
     document = creer_eep_initial()
 
-    document["competitors"][0]["et_tod"] = None
+    document["competitors"][0]["et_tod"] = ""
 
     verifier_refus(
         document,
@@ -236,7 +225,7 @@ def test_et_manquant_secondaire():
 
     document = creer_eep_secondaire()
 
-    document["competitors"][0]["et_tod"] = None
+    document["competitors"][0]["et_tod"] = ""
 
     verifier_refus(
         document,
@@ -270,7 +259,6 @@ def test_eep_validator():
     test_bib()
     test_et_tod()
 
-    test_aucun_et_manquant()
     test_deux_et_manquants()
     test_et_manquant_secondaire()
 

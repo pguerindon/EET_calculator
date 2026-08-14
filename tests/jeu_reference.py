@@ -1,14 +1,5 @@
 from services.document import (
     nouveau_document,
-    nouveau_competitor,
-    ajouter_competitor,
-    definir_et_precision,
-    definir_bib,
-    definir_mt_us,
-    definir_et_us,
-    definir_eet_index,
-    definir_reference_indexes,
-    definir_missing_impulse,
 )
 
 from services import constants
@@ -22,16 +13,10 @@ def creer_document_reference():
 
     document = nouveau_document()
 
-    definir_et_precision(
-        document,
-        5
-    )
+    document["race"]["et_precision"] = 5
 
-    definir_missing_impulse(
-        document,
-        constants.IMPULSE_FINISH
-    )
-    
+    document["race"]["missing_impulse"] = "FINISH"
+
     mt = [
         1_000_000,
         2_000_000,
@@ -62,36 +47,18 @@ def creer_document_reference():
 
     for index in range(11):
 
-        competitor = nouveau_competitor()
+        competitor = document["competitors"][index]
 
-        definir_bib(
-            competitor,
-            index + 1
-        )
+        competitor["bib"] = str(index + 1)
 
-        definir_mt_us(
-            competitor,
-            mt[index]
-        )
+        competitor["mt_us"] = mt[index]
 
-        definir_et_us(
-            competitor,
-            et[index]
-        )
+        competitor["et_us"] = et[index]
 
-        ajouter_competitor(
-            document,
-            competitor
-        )
+    document["calculation"]["eet_index"] = 7
 
-    definir_eet_index(
-        document,
-        7
-    )
-
-    definir_reference_indexes(
-        document,
-        [0, 1, 2, 3, 4, 5, 6, 8, 9, 10]
-    )
+    document["calculation"]["reference_indexes"] = [
+        0, 1, 2, 3, 4, 5, 6, 8, 9, 10
+    ]
 
     return document

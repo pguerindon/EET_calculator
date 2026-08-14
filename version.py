@@ -1,5 +1,6 @@
 APP_VERSION = "1.24"
-EEP_VERSION = "1.1"
+EEP_VERSION = "1.2"
+
 JSON_PROTOCOL_PDF = (
     f"EEP_Specification_v{EEP_VERSION}.pdf"
 )
@@ -10,8 +11,4 @@ APP_VERSION_MESSAGE = (
 
 EEP_VERSION_MESSAGE = (
     f"EEP protocol version {EEP_VERSION}"
-)
-
-JSON_PROTOCOL_PDF = (
-    f"EEP_Specification_v{EEP_VERSION}.pdf"
 )

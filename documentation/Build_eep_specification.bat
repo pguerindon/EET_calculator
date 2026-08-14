@@ -2,9 +2,9 @@
 
 echo Building EEP Specification...
 
-pandoc EEP_Specification_v1.0.md ^
+pandoc EEP_Specification_v1.2.md ^
   --pdf-engine=xelatex ^
-  -o EEP_Specification_v1.0.pdf
+  -o EEP_Specification_v1.2.pdf
 
 if errorlevel 1 (
     echo.
@@ -13,8 +13,8 @@ if errorlevel 1 (
     exit /b 1
 )
 
-pandoc EEP_Specification_v1.0.md ^
-  -o EEP_Specification_v1.0.docx
+pandoc EEP_Specification_v1.2.md ^
+  -o EEP_Specification_v1.2.docx
 
 echo.
 echo Build completed successfully.

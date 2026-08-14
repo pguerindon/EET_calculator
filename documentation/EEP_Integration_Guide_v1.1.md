@@ -25,7 +25,7 @@ geometry:
 
 | Version | Date | Description |
 |:--------|:-----|:------------|
-| 1.1 | 2026 | Added synchronization workflow, direct calculation recall, server version reporting and integration recommendations. |
+| 1.1 | 2026 | Added synchronization workflow, direct calculation recall, server version reporting and integration recommendations. This version is also applicable to EEP Specification Version 1.2. |
 | 1.0 | 2026 | Initial public release. |
 
 ## Introduction
@@ -102,8 +102,9 @@ The Calculation Key shall be used in all Optional Secondary Requests related to 
 4. Completion and calculation through the web interface.
 
 Calculation Documents may subsequently be deleted automatically according to the server retention policy.
+
 - 7 days for a TEST calculation
-- Otherwise calculation prior to season n-2
+- Otherwise, calculations from season N-2 and earlier may be deleted.
 
 ![](../images/calculation_document_lifecycle.png){ width=90% }
 

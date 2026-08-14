@@ -462,11 +462,11 @@ TEXTES = {
         "a_propos_title": "EET Calculator - About",
         "a_propos": "About",
         "a_propos_developpement": "Development:",
-        "a_propos_fonction_l1": "EET Calculator est une application dédiée au calcul de l'Equivalent Electronic Time (EET), conformément aux règles de chronométrage de la Fédération Internationale de Ski (FIS).",
-        "a_propos_fonction_l2": "Elle permet de calculer un temps électronique équivalent à partir des temps manuels et des temps électroniques, conformément aux règles de chronométrage utilisées lors des compétitions FIS et des fédérations nationales.",
+        "a_propos_fonction_l1": "EET Calculator is an application dedicated to calculating the Equivalent Electronic Time (EET), in accordance with the timing rules of the International Ski and Snowboard Federation (FIS).",
+        "a_propos_fonction_l2": "It calculates an equivalent electronic time from manual and electronic times, in accordance with the timing rules used in FIS competitions and by national federations.",
         "a_propos_fonction_l3": "The application can be used directly through a web browser or integrated into timing software through its JSON exchange protocol.",
         "a_propos_fonction_l4": "It also includes a time calculator for common timing operations (time, duration and interval calculations).",
-
+        "a_propos_contact": "Contact:",
         #
         # Documentation
         #
@@ -750,7 +750,8 @@ TEXTES = {
         "a_propos_fonction_l1": "EET Calculator dient zur Berechnung der Equivalent Electronic Time (EET) gemäß den Zeitmessregeln des Internationalen Ski- und Snowboardverbandes (FIS).",
         "a_propos_fonction_l2": "Die Anwendung berechnet eine Equivalent Electronic Time aus manuellen und elektronischen Zeiten gemäß den Zeitmessregeln bei FIS- und nationalen Verbandswettkämpfen.",
         "a_propos_fonction_l3": "Die Anwendung kann direkt über einen Webbrowser verwendet oder über ihr JSON-Austauschprotokoll in eine Zeitmesssoftware integriert werden.",
-        "a_propos_fonction_l4": "Sie enthält außerdem einen Zeitrechner für die üblichen Berechnungen im Bereich der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",        "a_propos_contact": "Kontakt:",
+        "a_propos_fonction_l4": "Sie enthält außerdem einen Zeitrechner für die üblichen Berechnungen im Bereich der Zeitmessung (Uhrzeiten, Zeitdauern und Zeitdifferenzen).",
+        "a_propos_contact": "Kontakt:",
 
         #
         # Dokumentation

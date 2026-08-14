@@ -30,7 +30,7 @@ geometry:
 
 | Version | Date | Description |
 |:--------|:-----|:------------|
-| 1.2 | 2026 | Removed the DELETE operation and associated validation rules. |
+| 1.2 | 2026 | Removed DELETE processing and associated validation rules. DELETE requests may still be recognized for backward compatibility but are no longer supported for security and data integrity reasons. |
 | 1.1 | 2026 | Added DELETE operation and associated validation rules. |
 | 1.0 | 2026 | Initial public release. |
 
@@ -263,17 +263,15 @@ Implementations MAY perform additional business validation without affecting int
 | **VR-09** | `missing_impulse` SHALL be either `START` or `FINISH`. |
 | **VR-10** | Unknown members SHALL be ignored to preserve forward compatibility. |
 
-## DELETE Request Validation
+## Backward Compatibility — DELETE Requests
 
-For a DELETE Request:
+For backward compatibility with Version 1.1, an EEP Version 1.2 implementation MAY recognize a request with `mode` set to `DELETE`.
 
-| Rule | Description |
-|:-----|:------------|
-| **DV-01** | The JSON document SHALL be valid. |
-| **DV-02** | `mode` SHALL be `DELETE`. |
-| **DV-03** | `calculation_id` SHALL be present. |
-| **DV-04** | The `race` object SHALL contain `season`, `codex`, `run`, `missing_impulse` and `eet_bib`. |
-| **DV-05** | Before deleting a stored calculation, the receiver SHALL verify that `calculation_id`, `season`, `codex`, `run`, `missing_impulse` and `eet_bib` are identical in the received request and in the stored calculation. |
+Such a request SHALL NOT be processed and SHALL NOT result in the deletion of any stored calculation.
+
+The implementation SHALL return an error with the code `UNSUPPORTED_MODE`.
+
+The `DELETE` mode is no longer a supported EEP operation in Version 1.2.
 
 # Protocol Examples
 
@@ -291,7 +289,7 @@ Optional competitor members are shown only for the competitor whose electronic t
 ## Initial Request
 
 ```http
-POST /eet HTTP/1.1
+POST /eet HTTP/1.2
 Content-Type: application/json
 ```
 
@@ -366,7 +364,7 @@ Content-Type: application/json
 ## Initial Response
 
 ```http
-HTTP/1.1 200 OK
+HTTP/1.2 200 OK
 Content-Type: application/json
 ```
 
@@ -380,7 +378,7 @@ Content-Type: application/json
 ## Optional Secondary Request
 
 ```http
-POST /eet HTTP/1.1
+POST /eet HTTP/1.2
 Content-Type: application/json
 ```
 
@@ -451,46 +449,7 @@ Content-Type: application/json
 ## Secondary Response
 
 ```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-```
-
-```json
-{
-  "status": "ok",
-  "calculation_id": "A7F4K2"
-}
-```
-## DELETE Request
-
-A DELETE Request MAY use the same JSON document structure as an Optional Secondary Request, except that `mode` SHALL be `DELETE`.
-
-The `competitors` member MAY be omitted. If present, it SHALL be ignored by the receiver.
-
-
-```http
-POST /eet HTTP/1.1
-Content-Type: application/json
-```
-
-```json
-{
-  "calculation_id": "A7F4K2",
-  "mode": "DELETE",
-  "race": {
-    "season": "2026",
-    "codex": "1234",
-    "run": "1",
-    "missing_impulse": "START",
-    "eet_bib": "14"
-  }
-}
-```
-
-## DELETE Response
-
-```http
-HTTP/1.1 200 OK
+HTTP/1.2 200 OK
 Content-Type: application/json
 ```
 
@@ -533,7 +492,6 @@ When a request cannot be processed, the EET Calculator returns an HTTP 400 (Bad 
     ]
 }
 ```
-
 The `messages` member is an array, allowing multiple validation errors to be returned in a single response.
 
 The following error codes are defined by the EEP protocol.
@@ -547,6 +505,7 @@ The following error codes are defined by the EEP protocol.
 | `INVALID_MT` | One or more manual times are invalid. |
 | `UNKNOWN_CALCULATION_ID` | The specified `calculation_id` does not correspond to any stored calculation. |
 | `BUSINESS_KEY_MISMATCH` | The supplied business key (`season`, `codex`, `run`, `eet_bib`, `missing_impulse`) does not match the calculation identified by `calculation_id`. |
+| `UNSUPPORTED_MODE` | The requested processing mode is not supported by this version of the EEP implementation. |
 
 Error codes are stable protocol identifiers intended for machine processing and **must not be translated**. Client applications may display localized messages corresponding to these codes.
 

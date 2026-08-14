@@ -10,20 +10,8 @@ from services.validator import (
     valider_document,
 )
 
-from services import constants
-
 from services.document import (
     contient_erreurs,
-    nouveau_document,
-    nouveau_competitor,
-    ajouter_competitor,
-    definir_et_precision,
-    definir_missing_impulse,
-    definir_bib,
-    definir_mt_us,
-    definir_et_us,
-    definir_eet_index,
-    definir_reference_indexes,
 )
 
 
