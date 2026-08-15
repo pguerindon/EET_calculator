@@ -217,6 +217,7 @@ The competitor whose electronic timing impulse is missing is identified by an em
 
 The following hierarchy summarizes the structure of the EEP JSON document.
 
+```text
 Root Object
 |
 +-- calculation_id
@@ -243,6 +244,7 @@ Root Object
     +-- surname
     +-- nation
     +-- club
+```
     
 # Validation Rules
 

@@ -9,6 +9,7 @@ from flask import (
 
 from version import(
     APP_VERSION,
+    INTEGRATION_GUIDE_PDF,
     JSON_PROTOCOL_PDF,
 )
 
@@ -233,6 +234,7 @@ def afficher_about():
         langue,
         txt["a_propos_title"],
         json_protocol_pdf=f"{JSON_PROTOCOL_PDF}",
+        integration_guide_pdf=f"{INTEGRATION_GUIDE_PDF}",
     )
 
  

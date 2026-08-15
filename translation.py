@@ -203,6 +203,7 @@ TEXTES = {
         "documentation": "Documentation", 
         "documentation_intro": "Une documentation technique destinée aux développeurs de logiciels de chronométrage est disponible.",
         "documentation_json":  "Protocole d'échange JSON (PDF)",
+        "documentation_integration": "Guide d'intégration EEP v1.1 (PDF)",
 
         #
         # Calculatrice horaire
@@ -474,6 +475,7 @@ TEXTES = {
         "documentation": "Documentation",
         "documentation_intro": "Technical documentation for developers of timing software is available.",
         "documentation_json": "JSON Exchange Protocol (PDF)",
+        "documentation_integration": "EEP Integration Guide v1.1 (PDF)",
 
         #
         # Time Calculator
@@ -760,6 +762,7 @@ TEXTES = {
         "documentation": "Dokumentation",
         "documentation_intro": "Für Entwickler von Zeitmesssoftware steht eine technische Dokumentation zur Verfügung.",
         "documentation_json":  "JSON-Austauschprotokoll (PDF)",
+        "documentation_integration": "EEP-Integrationshandbuch v1.1 (PDF)",
 
         #
         # Zeitrechner

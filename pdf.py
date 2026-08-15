@@ -25,6 +25,9 @@ from reportlab.platypus import (
 from services.calculation_id import calculer_datetime
 from services.constants import COPYRIGHT
 from services.document import formater_date
+from services.flags import (
+    chemin_drapeau,
+)
 from version import APP_VERSION
 
 from services.temps import (
@@ -73,8 +76,6 @@ def creer_pdf(document, txt):
 
     calculation_id = document["calculation_id"]
 
-
-
     #
     # Logos
     #
@@ -85,11 +86,29 @@ def creer_pdf(document, txt):
         height=60,
     )
 
-    logo_ffs = Image(
-        "static/images/logo_ffs.jpg",
-        width=70,
-        height=70,
-    )
+    #
+    # Logo de droite
+    #
+
+    if document["race"]["missing_impulse"] == "WEB":
+
+        logo_droit = Image(
+            "static/images/logo_ffs.jpg",
+            width=70,
+            height=70,
+        )
+
+    else:
+
+        chemin = chemin_drapeau(
+            document["race"]["codex"]
+        )
+
+        logo_droit = Image(
+            str(chemin),
+            width=70,
+            height=70,
+        )
 
     elements = []
 
@@ -99,7 +118,7 @@ def creer_pdf(document, txt):
             txt,
             styles_pdf,
             logo_fis,
-            logo_ffs,
+            logo_droit,
         )
     )
 
