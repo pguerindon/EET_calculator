@@ -13,7 +13,7 @@
 # EET Calculator
 
 **Version:** 1.24
-**EEP Protocol:** 1.1
+**EEP Protocol:** 1.2
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
 
@@ -26,7 +26,7 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 # Highlights
 
 - ✅ Fully compliant with FIS EET calculation rules
-- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.1
+- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.2
 - ✅ Internal business document (*Single Source of Truth*)
 - ✅ Microsecond calculation engine
 - ✅ Independent Web and JSON workflows
@@ -37,25 +37,24 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 - ✅ Automatic PDF report generation
 - ✅ Public calculation search
 - ✅ Multilingual interface (French, English, German)
-- ✅ Draft calculation saving
-- ✅ Incremental manual time entry
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
+
 
 ---
 
 # What's New in Version 1.24
 
-Version 1.24 introduces draft saving for calculations requiring manual time entry while improving the handling of calculations updated through the EEP protocol.
+Version 1.24 updates the EET Calculator to EEP Specification 1.2 and strengthens EEP document validation.
 
 Major improvements include:
 
-- Saving an incomplete calculation as a draft before the EET is calculated.
-- Incremental manual time entry, allowing manual times to be entered over multiple sessions without losing previously entered data.
-- Draft saving without requiring the calculation grid to be complete or valid.
-- Automatic preservation of the current document after saving a draft.
-- Improved handling of EEP JSON B messages received after an EET has already been calculated manually.
-- Automatic invalidation of a previously calculated EET when JSON B provides the electronic times.
-- Ability to recall the updated calculation through its Calculation Key and perform the calculation again.
+- EEP Specification updated to version 1.2.
+- Validation that exactly one Electronic Time (ET) is missing in an EEP Initial Request.
+- Validation of the consistency of Initial and Secondary EEP documents.
+- Updated EEP documentation and integration documentation.
+- Country flags can be used in PDF reports according to the country code contained in the race CODEX, with the FIS logo used as fallback.
+
+---
 
 # Documentation
 
@@ -65,8 +64,10 @@ The complete protocol specification is available here:
 
 ## Documentation
 
-- [EEP Specification (Markdown)](documentation/EEP_Specification_v1.1.md)
-- [EEP Specification (PDF)](documentation/EEP_Specification_v1.1.pdf)
+- [EEP Specification (Markdown)](documentation/EEP_Specification_v1.2.md)
+- [EEP Specification (PDF)](documentation/EEP_Specification_v1.2.pdf)
+- [EEP Integration Guide (Markdown)](documentation/EEP_Integration_Guide_v1.2.md)
+- [EEP Integration Guide (PDF)](documentation/EEP_Integration_Guide_v1.2.pdf)
 
 ---
 
@@ -186,8 +187,7 @@ Persistent Storage
       │
       ├── Recall by Calculation Key
       ├── Synchronization API
-      ├── Public Search
-      └── PDF Export
+      └── Public Search
 ```
 
 Although independent, both workflows rely on the same internal business document and calculation engine.
@@ -217,7 +217,6 @@ The application provides all the tools required by Technical Delegates and timin
 - Calculation swap
 - Persistent JSON calculations
 - Recall by Calculation Key
-- Calculation synchronization
 - Public search
 - Automatic PDF report generation
 
@@ -238,6 +237,7 @@ The application provides all the tools required by Technical Delegates and timin
 
 A Technical Delegate manually enters:
 
+- race information,
 - competitor bib numbers,
 - manual times,
 - electronic times.
@@ -250,7 +250,7 @@ The two latest Web calculations remain available for instant swapping.
 
 ## 2. JSON Import
 
-Timing software may export a calculation request using the **EEP 1.1** format.
+Timing software may export a calculation request using the **EEP 1.2** format.
 
 The imported document is:
 

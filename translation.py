@@ -46,8 +46,8 @@ TEXTES = {
         "retour": "Retour",
         "somme_delta": "Somme Delta",
         "te": "TE (TOD)",
-        "temps_electronique": "Temps électronique (TOD)",
-        "temps_manuel": "Temps manuel (TOD)",
+        "temps_electronique": "Temps électroniques (TOD)",
+        "temps_manuel": "Temps manuels (TOD)",
         "titre": "Calculateur EET",
         "tm": "TM (TOD)",
 
@@ -203,7 +203,7 @@ TEXTES = {
         "documentation": "Documentation", 
         "documentation_intro": "Une documentation technique destinée aux développeurs de logiciels de chronométrage est disponible.",
         "documentation_json":  "Protocole d'échange JSON (PDF)",
-        "documentation_integration": "Guide d'intégration EEP v1.1 (PDF)",
+        "documentation_integration": "Guide d'intégration EEP (PDF)",
 
         #
         # Calculatrice horaire
@@ -322,8 +322,8 @@ TEXTES = {
         "retour": "Back",
         "somme_delta": "Delta Sum",
         "te": "ET (TOD)",
-        "temps_electronique": "Electronic time (TOD)",
-        "temps_manuel": "Manual time (TOD)",
+        "temps_electronique": "Electronic times (TOD)",
+        "temps_manuel": "Manual times (TOD)",
         "titre": "EET Calculator",
         "tm": "MT (TOD)",
 
@@ -475,7 +475,7 @@ TEXTES = {
         "documentation": "Documentation",
         "documentation_intro": "Technical documentation for developers of timing software is available.",
         "documentation_json": "JSON Exchange Protocol (PDF)",
-        "documentation_integration": "EEP Integration Guide v1.1 (PDF)",
+        "documentation_integration": "EEP Integration Guide (PDF)",
 
         #
         # Time Calculator
@@ -606,8 +606,8 @@ TEXTES = {
         "retour": "Zurück",
         "somme_delta": "Delta Summe",
         "te": "ET (TOD)",
-        "temps_electronique": "Elektronische Zeit (TOD)",
-        "temps_manuel": "Manuelle Zeit (TOD)",
+        "temps_electronique": "Elektronische Zeiten (TOD)",
+        "temps_manuel": "Manuelle Zeiten (TOD)",
         "titre": "EET Rechner",
         "tm": "MT (TOD)",
         "calculation_id": "Berechnungs-ID",
@@ -762,7 +762,7 @@ TEXTES = {
         "documentation": "Dokumentation",
         "documentation_intro": "Für Entwickler von Zeitmesssoftware steht eine technische Dokumentation zur Verfügung.",
         "documentation_json":  "JSON-Austauschprotokoll (PDF)",
-        "documentation_integration": "EEP-Integrationshandbuch v1.1 (PDF)",
+        "documentation_integration": "EEP-Integrationshandbuch (PDF)",
 
         #
         # Zeitrechner
