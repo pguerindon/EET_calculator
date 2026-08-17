@@ -62,6 +62,21 @@ tests/cookies.txt
 -Method
 Invoke-RestMethod
 
+# Documentation interne
+documentation/Deploiement_EET_Ubuntu_Debian_v1.01.docx
+documentation/EEP_v1.0_Normative_Specification_Draft.docx
+documentation/EET_Checklist_Securite.docx
+documentation/EET_Prerequis_Deploiement.docx
+documentation/EET_Reverse_Proxy_Nginx.docx
+documentation/Memo_Git_EET_Calculator.docx
+documentation/MÉMO_EET_commandes_ubuntu.docx
+documentation/MÉMO_EET_commandes_windows.docx
+documentation/Server_Administration.md
+documentation/Specification_Architecture_EET_Calculator_v1.docx
+documentation/VPS_Commandes_Securite.docx
+documentation/VPS_Commandes_Trafic.docx
+documentation/VPS_Installation.txt
+
 #fichiers locaux
 README_SERVER.md
 documentation/*.bat
