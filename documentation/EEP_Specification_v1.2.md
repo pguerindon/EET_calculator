@@ -470,15 +470,15 @@ Content-Type: application/json
 
 EEP follows common JSON naming conventions.
 
-| Convention | Rule |
-|:-----------|:-----|
-| Member names | lowercase |
-| Word separator | underscore (`_`) |
-| Arrays | plural nouns |
-| Boolean values | JSON `true` / `false` |
-| Null values | JSON `null` |
-| Date format | ISO 8601 (`YYYY-MM-DD`) |
-| Time of Day | `HH:MM:SS.sss` (minimum three decimal places) |
+| Convention          | Rule |
+|---------------------|------|
+| Member names        | lowercase |
+| Word separator      | underscore (`_`) |
+| Arrays              | plural nouns |
+| Boolean values      | JSON `true` / `false` |
+| Absent values       | empty string (`""`); JSON `null` is not permitted |
+| Date format         | ISO 8601 (`YYYY-MM-DD`) |
+| Time of Day         | `HH:MM:SS.sss` (minimum three decimal places) |
 
 These conventions are recommendations intended to improve readability and consistency across implementations.
 
