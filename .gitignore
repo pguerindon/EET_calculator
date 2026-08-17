@@ -78,10 +78,14 @@ documentation/VPS_Commandes_Trafic.docx
 documentation/VPS_Installation.txt
 
 #fichiers locaux
+maintenance.html
+makezip_sauvegarde.bat
+ressources_sauvegarde.lst
 README_SERVER.md
 documentation/*.bat
 build_document.bat
 Test*.bat
+test_api*.ps1
 *.json
 tuto_git.md
 opt
