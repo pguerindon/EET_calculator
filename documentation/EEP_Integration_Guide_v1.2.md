@@ -91,13 +91,13 @@ At any time, only one Calculation Document exists on the server for a given Busi
 
 The Business Key identifies the EET calculation independently of the Calculation Key assigned by the server.
 
-It is composed of the following race members:
+It is composed of the following five race members, all represented as strings:
 
 ```text
 (season, codex, run, eet_bib, missing_impulse)
 ```
 
-Two Calculation Documents have the same Business Key when all five members have identical values.
+Two Calculation Documents have the same Business Key when all five string values are identical.
 
 When an Initial Request is accepted, if a Calculation Document already exists with the same Business Key, the existing document is removed and the newly created document is persisted in its place.
 
@@ -156,17 +156,17 @@ In both cases, the new Calculation Document receives a new Calculation Key.
 For example:
 
 ```text
-Initial Request A
-    Business Key = (2026, FRA1234, 1, 25, start)
-    -> Calculation Key = Ab12Cd
+Initial Request #1
+    Business Key = ("2026", "FRA1234", "1", "25", "start")
+    -> Calculation Key = "Ab12Cd"
 
-Initial Request B
-    Business Key = (2026, FRA1234, 1, 25, start)
-    -> replaces the document identified by Ab12Cd
-    -> Calculation Key = Xy34Zk
+Initial Request #2
+    Business Key = ("2026", "FRA1234", "1", "25", "start")
+    -> replaces the document identified by "Ab12Cd"
+    -> Calculation Key = "Xy34Zk"
 ```
 
-After Initial Request B has been accepted, only the new Calculation Document persists for that Business Key.
+After Initial Request #2 has been accepted, only the new Calculation Document persists for that Business Key.
 
 # Optional Secondary Request
 
