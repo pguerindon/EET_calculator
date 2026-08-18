@@ -157,11 +157,11 @@ For example:
 
 ```text
 Initial Request A
-    Business Key = (2026, FRA1234, 1, 25, SYSTEM)
+    Business Key = (2026, FRA1234, 1, 25, start)
     -> Calculation Key = Ab12Cd
 
 Initial Request B
-    Business Key = (2026, FRA1234, 1, 25, SYSTEM)
+    Business Key = (2026, FRA1234, 1, 25, start)
     -> replaces the document identified by Ab12Cd
     -> Calculation Key = Xy34Zk
 ```
