@@ -16,11 +16,7 @@ from services.temps import (
     precision_tod,
 )
 
-from services.constants import (
-    RACE_SCHEMA,
-    COMPETITOR_SCHEMA,
-)
-
+from services.constants import COMPETITOR_SCHEMA
 
 # ----------------------------------------------------------------------
 # Import initial

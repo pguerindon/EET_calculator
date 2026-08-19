@@ -3,7 +3,6 @@ Gestion des échanges EEP avec les systèmes
 de chronométrage.
 """
 
-from services import document_store
 from services.constants import ERROR_UNSUPPORTED_MODE
 from services.document import (
     contient_erreurs,

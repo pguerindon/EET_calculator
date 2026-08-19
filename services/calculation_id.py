@@ -9,7 +9,7 @@ Un calculation_id contient 6 caractères :
 """
 
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 
 
 TOKEN_CHARS = (
@@ -177,7 +177,10 @@ def calculer_datetime(calculation_id):
 
     timestamp = EPOCH_2026 + offset
 
-    return datetime.fromtimestamp(timestamp)
+    return datetime.fromtimestamp(
+        timestamp,
+        UTC,
+    )
 
 
 def _decode_base62(token):

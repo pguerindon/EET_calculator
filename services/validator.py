@@ -10,8 +10,6 @@ from services.document import (
     vider_erreurs,
 )
 
-from pprint import pprint
-
 def valider_document(
     document,
 ):

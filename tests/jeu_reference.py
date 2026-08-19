@@ -2,9 +2,6 @@ from services.document import (
     nouveau_document,
 )
 
-from services import constants
-
-
 def creer_document_reference():
     """
     Crée un document de référence

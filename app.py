@@ -1,6 +1,5 @@
 from flask import (
     Flask,
-    abort,
     flash,
     jsonify,
     request,

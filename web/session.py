@@ -15,7 +15,6 @@ from services.document import (
     normaliser_document,
     nouveau_document,
 )
-from services.validator import valider_document
 
 WORK_DOCUMENT = "work_document"
 CURRENT_CALCULATION = "current_calculation"

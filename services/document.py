@@ -9,7 +9,7 @@ from copy import deepcopy
 from datetime import datetime
 
 from services import constants
-from services.calculation_id import generer_calculation_id, verifier_calculation_id
+from services.calculation_id import verifier_calculation_id
 from services.document_store import (
     trouver_calcul_existant,
     charger_document,

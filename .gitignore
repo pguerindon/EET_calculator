@@ -63,6 +63,7 @@ tests/cookies.txt
 Invoke-RestMethod
 
 # Documentation interne
+documentation/Architecture_serveur_EET_Calculator.docx
 documentation/Deploiement_EET_Ubuntu_Debian_v1.01.docx
 documentation/EEP_v1.0_Normative_Specification_Draft.docx
 documentation/EET_Checklist_Securite.docx
