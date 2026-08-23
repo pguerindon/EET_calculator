@@ -146,8 +146,7 @@ TEXTES = {
         "session_ligne_3": "la Calculation Key du calcul en cours, lorsqu'il est associé à un calcul enregistré sur le serveur.",
         "session_duree": "Les informations conservées dans la session du navigateur sont supprimées automatiquement après 8 heures d'inactivité.",
         "session_confidentialite": "Lorsqu'un calcul enregistré sur le serveur est rappelé à l'aide de sa Calculation Key, il est chargé dans la session afin de permettre sa consultation et son traitement dans l'interface.",
-        "session_fin": "Les informations du calcul conservées dans la session sont supprimées après 8 heures d'inactivité. Le calcul enregistré sur le serveur reste conservé selon la politique de rétention de l'application.",
-
+        "session_fin": "Le calcul enregistré sur le serveur reste conservé selon la politique de rétention de l'application, indépendamment de la durée de vie de la session.",
         #
         # Protocole
         #
@@ -418,9 +417,9 @@ TEXTES = {
         "session_titre": "User Session", "session_intro": "The calculator automatically stores in the browser session:",
         "session_ligne_1": "the most recent calculation;", "session_ligne_2": "the previous calculation;",
         "session_ligne_3": "the Calculation Key of the current calculation, when it is associated with a calculation stored on the server.",
-        "session_duree": "Information stored in the browser session is automatically removed after 8 hours of inactivity.",
-        "session_confidentialite": "When a calculation stored on the server is recalled using its Calculation Key, it is loaded into the session to allow it to be viewed and processed through the interface.",
-        "session_fin": "The calculation information stored in the session is deleted after 8 hours of inactivity. The calculation stored on the server remains available according to the application's retention policy.",
+        "session_duree": "Information stored in the browser session is automatically deleted after 8 hours of inactivity.",
+        "session_confidentialite": "When a calculation stored on the server is recalled using its Calculation Key, it is loaded into the session so that it can be viewed and processed through the interface.",
+        "session_fin": "The calculation stored on the server remains available according to the application's retention policy, independently of the lifetime of the session.",
 
         #
         # Protocole
@@ -706,7 +705,7 @@ TEXTES = {
         "session_ligne_3": "der Calculation Key der aktuellen Berechnung, wenn diese mit einer auf dem Server gespeicherten Berechnung verknüpft ist.",
         "session_duree": "Die in der Browsersitzung gespeicherten Informationen werden nach 8 Stunden Inaktivität automatisch gelöscht.",
         "session_confidentialite": "Wenn eine auf dem Server gespeicherte Berechnung mithilfe ihres Calculation Key abgerufen wird, wird sie in die Sitzung geladen, damit sie über die Benutzeroberfläche angezeigt und verarbeitet werden kann.",
-        "session_fin": "Die in der Sitzung gespeicherten Berechnungsdaten werden nach 8 Stunden Inaktivität gelöscht. Die auf dem Server gespeicherte Berechnung bleibt gemäß der Aufbewahrungsrichtlinie der Anwendung erhalten.",
+        "session_fin": "Die auf dem Server gespeicherte Berechnung bleibt unabhängig von der Lebensdauer der Sitzung gemäß der Aufbewahrungsrichtlinie der Anwendung erhalten.",
 
         #
         # Protocole
