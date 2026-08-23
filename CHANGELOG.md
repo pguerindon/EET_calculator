@@ -4,7 +4,7 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
-## [1.24] - 2026-08-10
+## [1.24] - 2026-08-23
 
 ### Added
 
