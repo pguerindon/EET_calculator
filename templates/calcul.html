@@ -491,13 +491,9 @@
 
                     <td class="delta-cell delta">
 
-                        {% if ligne.eet %}
+                        {% if not ligne.eet %}
 
-                            EET
-
-                        {% else %}
-
-                            {{ ligne.delta }}
+                            {{ ligne.delta }} toto
 
                         {% endif %}
 

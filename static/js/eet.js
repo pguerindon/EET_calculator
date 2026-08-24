@@ -75,10 +75,20 @@ function mettreAJourDeltas()
             precisionTE,
             precisionTM
         );
+
     document
         .querySelectorAll(".ligne")
         .forEach(ligne =>
         {
+            if (
+                ligne.classList.contains(
+                    "ligne-eet-calculee"
+                )
+            )
+            {
+                return;
+            }
+
             const tm =
                 ligne.querySelector(".tm")
                      .value.trim();
@@ -145,6 +155,7 @@ function mettreAJourDeltas()
             }
         });
 }
+
 
 function mettreAJourEtatCalcul()
 {

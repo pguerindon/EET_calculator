@@ -282,6 +282,12 @@ TEXTES = {
         "missing_impulse": "Impulsion manquante",
         "eet_bib": "Dossard EET",
         "location": "Station",
+
+        "references": "Références",
+        "somme_delta": "Somme Delta",
+        "correction": "Somme Delta / 10",
+        "calcul_eet": "Calcul EET",
+        "eet_calculee": "EET calculé",
     },
 
     "en": {
@@ -564,8 +570,14 @@ TEXTES = {
         "departure": "Start",
         "arrival": "Finish",
         "missing_impulse": "Missing impulse",
-        "eet_bib": "EET Bib",
-        "location": "Location",
+        "eet_bib": "EET bib",
+        "location": "Station",
+
+        "references": "References",
+        "somme_delta": "Sum Delta",
+        "correction": "Sum Delta / 10",
+        "calcul_eet": "EET Calculation",
+        "eet_calculee": "Calculated EET",
 
     },
 
@@ -844,14 +856,20 @@ TEXTES = {
         # Pdf
         #
 
-        "pdf_title": "Berechnung der äquivalenten elektronischen Zeit (EET)",
+        "pdf_title": "Berechnung der elektronischen Ersatzzeit (EET)",
         "date_calcul": "Berechnungsdatum",
         "calculation_id": "Berechnungs-ID",
         "departure": "Start",
         "arrival": "Ziel",
         "missing_impulse": "Fehlender Impuls",
         "eet_bib": "EET-Startnummer",
-        "location": "Ort",
+        "location": "Station",
+
+        "references": "Referenzen",
+        "somme_delta": "Summe Delta",
+        "correction": "Summe Delta / 10",
+        "calcul_eet": "EET-Berechnung",
+        "eet_calculee": "Berechnete EET",
 
     },
 

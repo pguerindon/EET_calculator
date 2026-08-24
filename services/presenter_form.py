@@ -66,12 +66,14 @@ def _competitor_vers_ligne(
             competitor["et_tod"] or ""
         )
 
-    if competitor["delta_us"] is not None:
+    if not ligne["eet"]:
 
-        ligne["delta"] = us_to_duration(
-            competitor["delta_us"],
-            document["race"]["et_precision"],
-        )
+        if competitor["delta_us"] is not None:
+
+            ligne["delta"] = us_to_duration(
+                competitor["delta_us"],
+                document["race"]["et_precision"],
+            )
 
     return ligne
 

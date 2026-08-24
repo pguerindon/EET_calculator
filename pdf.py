@@ -504,6 +504,7 @@ def _creer_entete(
 
     return elements
 
+
 def _creer_tableau_competiteurs(
     document,
     txt,
@@ -525,6 +526,7 @@ def _creer_tableau_competiteurs(
 
     data = [
         [
+            "#",
             txt["dossard"],
             txt["tm"],
             txt["te"],
@@ -533,6 +535,7 @@ def _creer_tableau_competiteurs(
     ]
 
     ligne_eet_pdf = None
+    numero_ligne = 1
 
     for index, competitor in enumerate(
         competitors,
@@ -546,6 +549,12 @@ def _creer_tableau_competiteurs(
 
             ligne_eet_pdf = index
             et = competitor["eet_tod"] or ""
+            numero = ""
+
+        else:
+
+            numero = numero_ligne
+            numero_ligne += 1
 
         delta = _formater_duree(
             competitor["delta_us"],
@@ -553,6 +562,7 @@ def _creer_tableau_competiteurs(
         )
 
         ligne = [
+            numero,
             competitor["bib"],
             mt,
             et,
@@ -564,19 +574,24 @@ def _creer_tableau_competiteurs(
     table = Table(
         data,
         colWidths=[
-            55,
-            115,
-            115,
-            80,
+            25,   # #
+            55,   # Dossard
+            115,  # TM
+            115,  # TE
+            80,   # Delta
         ],
     )
-
 
     style = [
         ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
 
         # Fond de l'en-tête
-        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D9D9D9")),
+        (
+            "BACKGROUND",
+            (0, 0),
+            (-1, 0),
+            colors.HexColor("#D9D9D9"),
+        ),
 
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -609,13 +624,14 @@ def _creer_tableau_competiteurs(
     ):
 
         if competitor["delta_us"] is not None:
+
             if abs(competitor["delta_us"]) > 1_000_000:
 
                 style.append(
                     (
                         "BACKGROUND",
-                        (3, index),
-                        (3, index),
+                        (4, index),
+                        (4, index),
                         colors.yellow,
                     )
                 )
@@ -643,13 +659,30 @@ def _creer_tableau_resume(
     calculation = document["calculation"]
 
     eet_tod = ""
+    mt_eet_tod = ""
 
     if calculation["eet_index"] is not None:
-        eet_tod = document["competitors"][
+
+        competitor_eet = document["competitors"][
             calculation["eet_index"]
-        ]["eet_tod"]
+        ]
+
+        mt_eet_tod = competitor_eet["mt_tod"] or ""
+        eet_tod = competitor_eet["eet_tod"] or ""
 
     precision_et = race["et_precision"]
+
+    correction = _formater_duree(
+        calculation["correction_us"],
+        precision_et,
+    )
+
+    if correction and not correction.startswith("-"):
+        correction = "+" + correction
+
+    #
+    # Données du tableau
+    #
 
     data = [
         [
@@ -669,10 +702,15 @@ def _creer_tableau_resume(
         ],
         [
             txt["correction"],
-            _formater_duree(
-                calculation["correction_us"],
-                precision_et,
-            ),
+            correction,
+        ],
+        [
+            txt["calcul_eet"],
+            "",
+        ],
+        [
+            f"{mt_eet_tod} - ( {correction} ) = {eet_tod}",
+            "",
         ],
         [
             txt["eet_calculee"],
@@ -687,8 +725,8 @@ def _creer_tableau_resume(
     table = Table(
         data,
         colWidths=[
-            180,
-            180,
+            195,
+            195,
         ],
     )
 
@@ -704,19 +742,95 @@ def _creer_tableau_resume(
         ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
 
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
+
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        #
+        # Libellé « Calcul EET »
+        #
+
+        (
+            "SPAN",
+            (0, 4),
+            (1, 4),
+        ),
+        (
+            "BACKGROUND",
+            (0, 4),
+            (1, 4),
+            colors.white,
+        ),
+        (
+            "ALIGN",
+            (0, 4),
+            (0, 4),
+            "CENTER",
+        ),
+        (
+            "FONTNAME",
+            (0, 4),
+            (0, 4),
+            "Helvetica-Bold",
+        ),
+
+        #
+        # Formule EET
+        #
+
+        (
+            "SPAN",
+            (0, 5),
+            (1, 5),
+        ),
+        (
+            "BACKGROUND",
+            (0, 5),
+            (1, 5),
+            colors.white,
+        ),
+        (
+            "ALIGN",
+            (0, 5),
+            (0, 5),
+            "CENTER",
+        ),
+        (
+            "FONTNAME",
+            (0, 5),
+            (0, 5),
+            "Helvetica-Bold",
+        ),
+
+        #
+        # Formule EET
+        #
+
+        (
+            "SPAN",
+            (0, 5),
+            (1, 5),
+        ),
+        (
+            "ALIGN",
+            (0, 5),
+            (0, 5),
+            "CENTER",
+        ),
+
+        #
+        # EET calculé
+        #
 
         (
             "BACKGROUND",
-            (1, 4),
-            (1, 4),
+            (1, 6),
+            (1, 6),
             colors.khaki,
         ),
-
         (
             "FONTNAME",
-            (1, 4),
-            (1, 4),
+            (1, 6),
+            (1, 6),
             "Helvetica-Bold",
         ),
     ]
