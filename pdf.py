@@ -80,18 +80,30 @@ def creer_pdf(document, txt):
     # Logos
     #
 
-    logo_fis = Image(
-        "static/images/logo_fis.jpg",
-        width=60,
-        height=60,
+    logo_eet = Image(
+        "static/images/avatar_eet.png",
+        width=90,
+        height=90,
     )
 
     #
     # Logo de droite
     #
 
-    if document["race"]["missing_impulse"] == "WEB":
+    race = document["race"]
 
+    if race["missing_impulse"] == "WEB":
+
+        # Calcul effectué directement depuis l'interface Web
+        logo_droit = Image(
+            "static/images/logo_fis.jpg",
+            width=70,
+            height=70,
+        )
+
+    elif race["codex"].startswith("FRA"):
+
+        # Calcul provenant d'un JSON d'une course française
         logo_droit = Image(
             "static/images/logo_ffs.jpg",
             width=70,
@@ -100,12 +112,9 @@ def creer_pdf(document, txt):
 
     else:
 
-        chemin = chemin_drapeau(
-            document["race"]["codex"]
-        )
-
+        # Calcul provenant d'un JSON d'une course étrangère
         logo_droit = Image(
-            str(chemin),
+            "static/images/logo_fis.jpg",
             width=70,
             height=70,
         )
@@ -117,7 +126,7 @@ def creer_pdf(document, txt):
             document,
             txt,
             styles_pdf,
-            logo_fis,
+            logo_eet,
             logo_droit,
         )
     )
@@ -195,8 +204,8 @@ def _creer_entete(
     document,
     txt,
     styles,
-    logo_fis,
-    logo_ffs,
+    logo_gauche,
+    logo_droit,
 ):
     """
     Construit l'en-tête du rapport PDF.
@@ -216,6 +225,8 @@ def _creer_entete(
         f"{txt['dossard']} "
         f"{competitor_eet['bib']}"
     )
+
+
 
     lastname = competitor_eet["lastname"]
     firstname = competitor_eet["firstname"]
@@ -237,8 +248,27 @@ def _creer_entete(
     if firstname:
         nom += f" {firstname}"
 
+    #
+    # Drapeau du compétiteur EET
+    #
+
+    logo_nation = None
+
     if competitor_eet["nation"]:
+
         nom += f" ({competitor_eet['nation']})"
+
+        chemin = chemin_drapeau(
+            competitor_eet["nation"]
+        )
+
+        if chemin:
+
+            logo_nation = Image(
+                str(chemin),
+                width=30,
+                height=30,
+            )
 
     infos_course = []
     infos_calcul = []
@@ -361,12 +391,12 @@ def _creer_entete(
     entete = Table(
         [
             [
-                logo_fis,
+                logo_gauche,
                 Paragraph(
                     txt["pdf_title"],
                     styles["titre"],
                 ),
-                logo_ffs,
+                logo_droit,
             ]
         ],
         colWidths=[90, 320, 90],
@@ -398,11 +428,61 @@ def _creer_entete(
         styles["dossard"],
     )
 
-    _ajouter_paragraphe(
-        elements,
-        nom,
-        styles["nom"],
-    )
+    #
+    # Nom du compétiteur EET et drapeau
+    #
+
+    if logo_nation:
+
+        ligne_nom = Table(
+            [
+                [
+                    logo_nation,
+                    Paragraph(
+                        nom,
+                        styles["nom"],
+                    ),
+                ]
+            ],
+            colWidths=[40, 300],
+        )
+
+        ligne_nom.setStyle(
+            TableStyle(
+                [
+                    (
+                        "ALIGN",
+                        (0, 0),
+                        (0, 0),
+                        "RIGHT",
+                    ),
+                    (
+                        "ALIGN",
+                        (1, 0),
+                        (1, 0),
+                        "LEFT",
+                    ),
+                    (
+                        "VALIGN",
+                        (0, 0),
+                        (-1, -1),
+                        "MIDDLE",
+                    ),
+                ]
+            )
+        )
+
+        ligne_nom.hAlign = "CENTER"
+
+        elements.append(ligne_nom)
+
+    else:
+
+        _ajouter_paragraphe(
+            elements,
+            nom,
+            styles["nom"],
+        )
 
     elements.append(
         Spacer(1, 6)

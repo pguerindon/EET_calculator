@@ -8,24 +8,24 @@ FLAGS_DIR = (
 
 
 def chemin_drapeau(
-    codex,
+    nation,
 ):
     """
     Retourne le chemin du drapeau correspondant
-    au CODEX.
+    au code nation.
 
-    Si aucun drapeau correspondant n'existe,
-    retourne le logo FIS.
+    Retourne None si la nation est absente
+    ou si aucun drapeau correspondant n'existe.
     """
 
-    if not codex:
-        return FLAGS_DIR / "FIS.png"
+    if not nation:
+        return None
 
-    code = codex[:3].upper()
+    code = nation[:3].upper()
 
     fichier = FLAGS_DIR / f"{code}.png"
 
     if fichier.is_file():
         return fichier
 
-    return FLAGS_DIR / "FIS.png"
+    return None
