@@ -12,7 +12,7 @@
 
 # EET Calculator
 
-**Version:** 1.24
+**Version:** 1.25
 **EEP Protocol:** 1.2
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
@@ -42,17 +42,17 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 
 ---
 
-# What's New in Version 1.24
+# What's New in Version 1.25
 
-Version 1.24 updates the EET Calculator to EEP Specification 1.2 and strengthens EEP document validation.
+Version 1.25 improves the presentation of EET calculations in the web interface and in PDF reports.
 
 Major improvements include:
 
-- EEP Specification updated to version 1.2.
-- Validation that exactly one Electronic Time (ET) is missing in an EEP Initial Request.
-- Validation of the consistency of Initial and Secondary EEP documents.
-- Updated EEP documentation and integration documentation.
-- Country flags can be used in PDF reports according to the country code contained in the race CODEX, with the FIS logo used as fallback.
+- The EET reference line is clearly identified in the calculation grid and its Delta is no longer displayed.
+- A `#` column has been added to the competitor table in PDF reports, numbering the reference competitors while excluding the EET line.
+- The PDF report now explicitly shows the EET calculation formula.
+- The calculated EET is clearly highlighted in the PDF report.
+- Updated French, English and German translations.
 
 ---
 

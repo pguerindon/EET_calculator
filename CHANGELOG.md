@@ -4,7 +4,33 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
+
+## [1.25] - 2026-08-25
+
+### Changed
+
+- Improved the presentation of the EET reference line in the Web calculation grid.
+- The Delta is no longer displayed on the EET reference line.
+- Added a `#` column to the competitor table in PDF reports, excluding the EET reference line from the numbering.
+- The PDF report now explicitly displays the EET calculation formula.
+- Improved the presentation of the calculated EET in PDF reports.
+- Updated French, English and German translations.
+
+### Validation
+
+Validated the following scenarios:
+
+- EET calculation with the EET reference line positioned at different locations in the competitor grid.
+- Correct display of the EET reference line in the Web calculation grid.
+- Correct display of Delta values for non-EET competitors.
+- Correct numbering of competitors in the PDF report.
+- Correct display of the EET calculation and calculated EET in the PDF report.
+- Validation of the updated PDF report in French, English and German.
+
+---
+
 ## [1.24] - 2026-08-23
+
 
 ### Added
 
