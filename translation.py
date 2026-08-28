@@ -274,7 +274,7 @@ TEXTES = {
         # Pdf
         #
 
-        "pdf_title": "Calcul du temps électronique équivalent (EET)",
+        "pdf_title": "Calcul du Temps Électronique Équivalent (EET)",
         "date_calcul": "Date du calcul",
         "calculation_id": "Id du calcul",
         "departure": "Départ",
