@@ -214,6 +214,42 @@ Request body:
 
 The `calculation_ids` array contains the Calculation Keys currently stored by the client application.
 
+## Sending the Synchronization Request
+
+The JSON document can be submitted to the synchronization endpoint using an HTTP `POST` request.
+
+The request must specify the content type as:
+
+```text
+Content-Type: application/json
+```
+
+### Windows
+
+Using `curl.exe` from Command Prompt or PowerShell:
+
+```bat
+curl.exe -X POST https://pg-chrono.fr/api/eep/synchronization ^
+  -H "Content-Type: application/json" ^
+  --data-binary "@c:/path_to_your_file.json"
+```
+
+The `@` character tells `curl` to read the JSON document from the specified file rather than sending the file name itself.
+
+### macOS / Linux
+
+Using `curl` from a terminal:
+
+```bash
+curl -X POST https://pg-chrono.fr/api/eep/synchronization   -H "Content-Type: application/json"   --data-binary "@./path_to_your_file.json"
+```
+
+The path may of course be replaced by the actual location of the JSON file, for example:
+
+```bash
+--data-binary "@/home/user/eet/synchronization.json"
+```
+
 ## Response
 
 Example:
@@ -301,6 +337,61 @@ Error responses are defined in the EEP Specification.
 Calculation Synchronization returns the existence status of each supplied Calculation Key.
 
 Calculation Recall opens the corresponding Calculation Document in the web interface.
+
+# Sending an EEP JSON File
+
+An EEP JSON document can be submitted to the EET Calculator using an HTTP `POST` request to the EEP endpoint:
+
+
+```text
+https://pg-chrono.fr/api/eep
+```
+
+The request must specify the content type as:
+
+```text
+Content-Type: application/json
+```
+
+## Windows
+
+Using `curl.exe` from Command Prompt or PowerShell:
+
+```bat
+curl.exe -X POST https://pg-chrono.fr/api/eep ^
+  -H "Content-Type: application/json" ^
+  --data-binary "@c:/path_to_your_file.json"
+```
+
+The `@` character tells `curl` to read the JSON document from the specified file rather than sending the file name itself.
+
+## macOS / Linux
+
+Using `curl` from a terminal:
+
+```bash
+curl -X POST https://pg-chrono.fr/api/eep \
+  -H "Content-Type: application/json" \
+  --data-binary "@./path_to_your_file.json"
+```
+
+The path may of course be replaced by the actual location of the JSON file, for example:
+
+```bash
+--data-binary "@/home/user/eet/temp_EET.json"
+```
+
+## Response
+
+If the request is successfully accepted, the server returns the EEP response containing the **Calculation Key** associated with the newly created Calculation Document. The Calculation Key should be preserved by the client application for subsequent operations.
+
+## Test Mode
+
+During the implementation and integration testing period, the use of the `TEST` mode is strongly recommended.
+
+In this mode, JSON files submitted to the EET Calculator are automatically deleted after the configured retention period of 7 days. This allows integration testing without unnecessarily accumulating test Calculation Documents on the server.
+
+The `TEST` setting should therefore be enabled during development and integration testing and disabled when the Timing System is put into production.
 
 # Server Version Reporting
 
