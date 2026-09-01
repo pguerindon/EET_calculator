@@ -7,6 +7,7 @@ User=ubuntu
 Group=ubuntu
 WorkingDirectory=/opt/eet_calculator
 Environment="PATH=/opt/eet_calculator/venv/bin"
+EnvironmentFile=/etc/eet/eet.env
 
 ExecStart=/opt/eet_calculator/venv/bin/gunicorn 
 --workers 2 

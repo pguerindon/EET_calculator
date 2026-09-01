@@ -2,10 +2,13 @@
 
 from pathlib import Path
 
+import os
+
+SECRET_KEY = os.environ["EET_SECRET_KEY"]
+
 
 BASE_DIR = Path(__file__).resolve().parent
 
-SECRET_KEY = "PG_CHRONO_EET_2026_SECRET_KEY"
 DEBUG = False
 
 SUPPORTED_LANGUAGES = ("fr", "en", "de")
