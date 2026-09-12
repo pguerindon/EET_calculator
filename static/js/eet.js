@@ -299,6 +299,7 @@ function mettreAJourEtatCalcul()
     );
 }
 
+
 document.addEventListener(
     "input",
     function(event)
@@ -351,12 +352,84 @@ document.addEventListener(
                 longueurAttendue
             )
             {
-                const champs =
+                const calculationId =
+                    document.getElementById(
+                        "calculation_id"
+                    ).value.trim();
+
+                const dossards =
                     Array.from(
                         document.querySelectorAll(
-                            ".dossard, .tm, .te"
+                            ".dossard"
                         )
                     );
+
+                const tms =
+                    Array.from(
+                        document.querySelectorAll(
+                            ".tm"
+                        )
+                    );
+
+                const tes =
+                    Array.from(
+                        document.querySelectorAll(
+                            ".te"
+                        )
+                    );
+
+                let champs = [];
+
+                if (!calculationId)
+                {
+                    //
+                    // Mode Web :
+                    // D1 → TM1 → D2 → TM2 → ...
+                    // → D11 → TM11 → TE1 → TE2 → ...
+                    //
+
+                    for (
+                        let i = 0;
+                        i < dossards.length;
+                        i++
+                    )
+                    {
+                        champs.push(
+                            dossards[i]
+                        );
+
+                        champs.push(
+                            tms[i]
+                        );
+                    }
+
+                    champs.push(...tes);
+                }
+                else
+                {
+                    //
+                    // Mode JSON :
+                    // TM1 → TM2 → ... → TM11
+                    // → D1 → TE1 → D2 → TE2 → ...
+                    //
+
+                    champs.push(...tms);
+
+                    for (
+                        let i = 0;
+                        i < dossards.length;
+                        i++
+                    )
+                    {
+                        champs.push(
+                            dossards[i]
+                        );
+
+                        champs.push(
+                            tes[i]
+                        );
+                    }
+                }
 
                 const index =
                     champs.indexOf(
@@ -378,10 +451,12 @@ document.addEventListener(
                 }
             }
         }
+
         mettreAJourDeltas();
         mettreAJourEtatCalcul();
     }
 );
+
 
 const checkbox =
     document.getElementById(
