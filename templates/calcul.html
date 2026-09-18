@@ -89,10 +89,10 @@
             </option>
 
             <option value="3"
-                {% if precision_tm == 3 %}selected{% endif %}>
+                {% if precision_tm == 3 or precision_tm is none %}selected{% endif %}>
                 3
             </option>
-
+            
             <option value="4"
                 {% if precision_tm == 4 %}selected{% endif %}>
                 4
