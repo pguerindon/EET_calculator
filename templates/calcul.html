@@ -40,41 +40,6 @@
     <div class="parametres">
 
         <label>
-            {{ txt.precision_te }} :
-        </label>
-
-        <select
-            id="precision_te"
-            name="precision_te"
-            {% if lecture_seule %}disabled{% endif %}>
-
-            <option value="3"
-                {% if precision_te == 3 %}selected{% endif %}>
-                3
-            </option>
-
-            <option value="4"
-                {% if precision_te == 4 %}selected{% endif %}>
-                4
-            </option>
-
-            <option value="5"
-                {% if precision_te == 5 %}selected{% endif %}>
-                5
-            </option>
-
-            <option value="6"
-                {% if precision_te == 6 %}selected{% endif %}>
-                6
-            </option>
-
-        </select>
-
-
-        &nbsp;&nbsp;&nbsp;
-
-
-        <label>
             {{ txt.precision_tm }} :
         </label>
 
@@ -105,6 +70,40 @@
 
             <option value="6"
                 {% if precision_tm == 6 %}selected{% endif %}>
+                6
+            </option>
+
+        </select>
+
+
+        &nbsp;&nbsp;&nbsp;
+
+        <label>
+            {{ txt.precision_te }} :
+        </label>
+
+        <select
+            id="precision_te"
+            name="precision_te"
+            {% if lecture_seule %}disabled{% endif %}>
+
+            <option value="3"
+                {% if precision_te == 3 %}selected{% endif %}>
+                3
+            </option>
+
+            <option value="4"
+                {% if precision_te == 4 %}selected{% endif %}>
+                4
+            </option>
+
+            <option value="5"
+                {% if precision_te == 5 %}selected{% endif %}>
+                5
+            </option>
+
+            <option value="6"
+                {% if precision_te == 6 %}selected{% endif %}>
                 6
             </option>
 
