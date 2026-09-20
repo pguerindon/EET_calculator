@@ -7,6 +7,10 @@ from flask import (
     session,
 )
 
+from config import (
+    SUPPORTED_LANGUAGES,
+)
+
 from version import(
     APP_VERSION,
     INTEGRATION_GUIDE_PDF,
@@ -32,12 +36,15 @@ from web.session import (
 )
 
 
-def _contexte():
+def _contexte(langue_forcee=None):
     """
     Retourne le contexte commun à toutes les vues.
     """
 
-    langue = get_langue()
+    if langue_forcee in SUPPORTED_LANGUAGES:
+        langue = langue_forcee
+    else:
+        langue = get_langue()
 
     return langue, TEXTES[langue]
 
@@ -205,6 +212,7 @@ def _afficher_page(
     txt,
     langue,
     page_title,
+    chemin=None,
     **kwargs,
 ):
     """
@@ -217,67 +225,90 @@ def _afficher_page(
         txt=txt,
         langue=langue,
         page_title=page_title,
+        hreflang_urls=(
+            _urls_multilingues(chemin)
+            if chemin
+            else None
+        ),
         **kwargs,
     )
 
 
-def afficher_about():
+def afficher_about(langue_forcee=None):
     """
     Affiche la page À propos.
     """
 
-    langue, txt = _contexte()
+    langue, txt = _contexte(langue_forcee)
 
     return _afficher_page(
         "about.html",
         txt,
         langue,
         txt["a_propos_title"],
+        chemin="about",
         json_protocol_pdf=f"{JSON_PROTOCOL_PDF}",
         integration_guide_pdf=f"{INTEGRATION_GUIDE_PDF}",
     )
 
  
-def afficher_help():
+def afficher_help(langue_forcee=None):
     """
     Affiche la page d'aide.
     """
 
-    langue, txt = _contexte()
+    langue, txt = _contexte(langue_forcee)
 
     return _afficher_page(
         "help.html",
         txt,
         langue,
         txt["aide_title"],
+        chemin="help",
     )
 
 
-def afficher_timecalc():
+def afficher_timecalc(langue_forcee=None):
     """
     Affiche le calculateur de temps.
     """
 
-    langue, txt = _contexte()
+    langue, txt = _contexte(langue_forcee)
 
     return _afficher_page(
         "timecalc.html",
         txt,
         langue,
         txt["timecalc_title"],
+        chemin="timecalc",
     )
 
 
-def afficher_help_timecalc():
+def afficher_help_timecalc(langue_forcee=None):
     """
     Affiche l'aide du calculateur de temps.
     """
 
-    langue, txt = _contexte()
+    langue, txt = _contexte(langue_forcee)
 
     return _afficher_page(
         "help_timecalc.html",
         txt,
         langue,
         txt["timecalc_aide_title"],
+        chemin="help_timecalc",
     )
+
+
+def _urls_multilingues(chemin):
+    """
+    Retourne les URLs des différentes versions linguistiques
+    d'une page.
+    """
+
+    return {
+        "fr": f"https://pg-chrono.fr/fr/{chemin}",
+        "en": f"https://pg-chrono.fr/en/{chemin}",
+        "de": f"https://pg-chrono.fr/de/{chemin}",
+        "x-default": f"https://pg-chrono.fr/en/{chemin}",
+    }

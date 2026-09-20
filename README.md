@@ -12,7 +12,7 @@
 
 # EET Calculator
 
-**Version:** 1.25
+**Version:** 1.26
 **EEP Protocol:** 1.2
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
@@ -39,6 +39,20 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 - ✅ Multilingual interface (French, English, German)
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
 
+
+---
+
+# What's New in Version 1.26
+
+Version 1.26 improves multilingual SEO and navigation for the EET Calculator.
+
+Major improvements include:
+
+- Dedicated French, English and German URLs for documentation and information pages.
+- Added `hreflang` tags to identify the different language versions of each page.
+- Added language-specific canonical URLs.
+- Extended the sitemap with the multilingual URLs.
+- Internal navigation between the Time Calculator and its Help page now preserves the selected language.
 
 ---
 

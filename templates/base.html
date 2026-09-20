@@ -18,6 +18,15 @@
         rel="canonical"
         href="{{ request.base_url }}">
 
+    {% if hreflang_urls %}
+        {% for code, url in hreflang_urls.items() %}
+        <link
+            rel="alternate"
+            hreflang="{{ code }}"
+            href="{{ url }}">
+        {% endfor %}
+    {% endif %}
+
     <meta property="og:title" content="{{ page_title or txt.home_title }}">
     <meta property="og:description" content="{{ txt.meta_description }}">
     <meta property="og:type" content="website">

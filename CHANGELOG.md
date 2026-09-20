@@ -4,6 +4,17 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
+## [1.26] - 2026-09-20
+
+### Added
+- Added dedicated French, English and German URLs for documentation pages.
+- Added `hreflang` tags for multilingual SEO.
+- Added language-specific canonical URLs.
+- Extended the sitemap with multilingual URLs.
+
+### Changed
+- Internal navigation between the time calculator and its help page now preserves the selected language.
+- The main calculator page `/` continues to use the existing browser/session language mechanism.
 
 ## [1.25] - 2026-08-25
 

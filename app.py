@@ -160,6 +160,83 @@ def help_timecalc():
     return afficher_help_timecalc()
 
 
+# ============================================================
+# Pages multilingues pour le référencement
+# ============================================================
+
+
+@app.route("/fr/about")
+def about_fr():
+
+    return afficher_about("fr")
+
+
+@app.route("/en/about")
+def about_en():
+
+    return afficher_about("en")
+
+
+@app.route("/de/about")
+def about_de():
+
+    return afficher_about("de")
+
+
+@app.route("/fr/help")
+def help_fr():
+
+    return afficher_help("fr")
+
+
+@app.route("/en/help")
+def help_en():
+
+    return afficher_help("en")
+
+
+@app.route("/de/help")
+def help_de():
+
+    return afficher_help("de")
+
+
+@app.route("/fr/timecalc")
+def timecalc_fr():
+
+    return afficher_timecalc("fr")
+
+
+@app.route("/en/timecalc")
+def timecalc_en():
+
+    return afficher_timecalc("en")
+
+
+@app.route("/de/timecalc")
+def timecalc_de():
+
+    return afficher_timecalc("de")
+
+
+@app.route("/fr/help_timecalc")
+def help_timecalc_fr():
+
+    return afficher_help_timecalc("fr")
+
+
+@app.route("/en/help_timecalc")
+def help_timecalc_en():
+
+    return afficher_help_timecalc("en")
+
+
+@app.route("/de/help_timecalc")
+def help_timecalc_de():
+
+    return afficher_help_timecalc("de")
+
+
 @app.post("/api/calculations/check")
 def api_check_calculations():
     """
