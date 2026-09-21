@@ -1,16 +1,16 @@
-# EET Calculator License
+EET Calculator License
 
 Copyright © 2026 Philippe Guérindon
 
 All rights reserved.
 
-## Ownership
+OWNERSHIP
 
 The EET Calculator software, including its source code, documentation,
 design and associated materials, is the exclusive property of
 Philippe Guérindon.
 
-## Restrictions
+RESTRICTIONS
 
 Unless expressly authorized in writing by the copyright holder, no part
 of this software may be:
@@ -22,7 +22,7 @@ of this software may be:
 - incorporated into another software project;
 - used to create derivative works.
 
-## Permitted Use
+PERMITTED USE
 
 This repository is publicly accessible for the purpose of:
 
@@ -33,7 +33,7 @@ This repository is publicly accessible for the purpose of:
 Public availability of the source code does **not** grant any right to
 reuse, modify or redistribute the software.
 
-## EEP Specification
+EEP SPECIFICATION
 
 The accompanying **EEP Specification** is a separate copyrighted work.
 
@@ -44,7 +44,7 @@ with the copyright and permission terms of the official EEP Specification.
 No rights are granted to copy or reuse the source code of the
 EET Calculator for such implementations.
 
-## Disclaimer
+DISCLAIMER
 
 This software is provided "as is", without warranty of any kind,
 express or implied, including but not limited to the warranties of
