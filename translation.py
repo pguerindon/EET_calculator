@@ -751,7 +751,7 @@ TEXTES = {
         "confidentialite_compte": "Es ist weder ein Benutzerkonto noch eine E-Mail-Adresse erforderlich.",
         "confidentialite_session": "Berechnungen werden ausschließlich auf dem Server gespeichert, um ihren direkten Abruf, die Synchronisation mit EEP-kompatibler Zeitmesssoftware sowie ihre weitere Verarbeitung durch den Technischen Delegierten zu ermöglichen.",
         "confidentialite_stockage": "Jede Berechnung wird durch einen eindeutigen Calculation Key identifiziert. Berechnungen werden gemäß der Aufbewahrungsrichtlinie der Anwendung automatisch gelöscht.",
-        "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt weder statistische Auswertungen noch Werbetracking durch.",       "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt keine statistische oder werbliche Nachverfolgung durch.",
+        "confidentialite_ip": "Die Anwendung speichert keine IP-Adressen der Benutzer und führt weder statistische Auswertungen noch Werbetracking durch.",
 
         #
         # Über
