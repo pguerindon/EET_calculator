@@ -12,8 +12,8 @@
 
 # EET Calculator
 
-**Version:** 1.26
-**EEP Protocol:** 1.2
+**Version:** 1.27
+**EEP Protocol:** 1.3
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
 
@@ -26,7 +26,7 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 # Highlights
 
 - ✅ Fully compliant with FIS EET calculation rules
-- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.2
+- ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.3
 - ✅ Internal business document (*Single Source of Truth*)
 - ✅ Microsecond calculation engine
 - ✅ Independent Web and JSON workflows
@@ -39,6 +39,19 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 - ✅ Multilingual interface (French, English, German)
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
 
+---
+
+# What's New in Version 1.27
+
+Version 1.27 improves the handling of EEP Secondary Requests.
+
+Major improvements include:
+
+- Secondary EEP Requests may contain the complete competitor list from timing system B.
+- Competitors are matched between timing systems using their bib number.
+- Competitors present only in timing system B are ignored.
+- Secondary Requests are no longer restricted to exactly 11 competitors.
+- Updated EEP Specification and Integration Guide to version 1.3.
 
 ---
 
@@ -78,10 +91,10 @@ The complete protocol specification is available here:
 
 ## Documentation
 
-- [EEP Specification (Markdown)](documentation/EEP_Specification_v1.2.md)
-- [EEP Specification (PDF)](documentation/EEP_Specification_v1.2.pdf)
-- [EEP Integration Guide (Markdown)](documentation/EEP_Integration_Guide_v1.2.md)
-- [EEP Integration Guide (PDF)](documentation/EEP_Integration_Guide_v1.2.pdf)
+- [EEP Specification (Markdown)](documentation/EEP_Specification_v1.3.md)
+- [EEP Specification (PDF)](documentation/EEP_Specification_v1.3.pdf)
+- [EEP Integration Guide (Markdown)](documentation/EEP_Integration_Guide_v1.3.md)
+- [EEP Integration Guide (PDF)](documentation/EEP_Integration_Guide_v1.3.pdf)
 
 ---
 
@@ -263,7 +276,7 @@ The two latest Web calculations remain available for instant swapping.
 
 ## 2. JSON Import
 
-Timing software may export a calculation request using the **EEP 1.2** format.
+Timing software may export a calculation request using the **EEP 1.3** format.
 
 The imported document is:
 
