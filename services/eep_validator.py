@@ -158,6 +158,13 @@ def valider_eep_initial(
     # Business rules
     #
 
+    if len(
+        eep_document["competitors"]
+    ) != COMPETITOR_COUNT:
+        raise EEPValidationError(
+            f"The EEP document must contain exactly {COMPETITOR_COUNT} competitors."
+        )
+
     if eep_document["calculation_id"] != "":
         raise EEPValidationError(
             "calculation_id must be empty."
@@ -336,13 +343,6 @@ def _valider_competitors(
     ):
         raise EEPValidationError(
             "Invalid competitors."
-        )
-
-    if len(
-        competitors
-    ) != COMPETITOR_COUNT:
-        raise EEPValidationError(
-            f"The EEP document must contain exactly {COMPETITOR_COUNT} competitors."
         )
 
     for competitor in competitors:
