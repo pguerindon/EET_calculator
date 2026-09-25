@@ -31,6 +31,8 @@ def importer_document(
     dans le Document Model.
     """
 
+    document["mode"] = eep_document["mode"]
+
     _importer_race(
         document,
         eep_document["race"],

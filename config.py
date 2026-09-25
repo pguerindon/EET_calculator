@@ -6,6 +6,7 @@ import os
 
 SECRET_KEY = os.environ["EET_SECRET_KEY"]
 
+ADMIN_SEARCH_CODE = os.environ["EET_ADMIN_SEARCH_CODE"]
 
 BASE_DIR = Path(__file__).resolve().parent
 

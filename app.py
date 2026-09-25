@@ -10,7 +10,7 @@ from flask import (
     url_for,
 )
 
-from config import DEFAULT_LANGUAGE, SECRET_KEY
+from config import ADMIN_SEARCH_CODE, DEFAULT_LANGUAGE, SECRET_KEY
 from copy import deepcopy
 
 from pdf import creer_pdf
@@ -26,6 +26,7 @@ from services.views import(
     afficher_help, 
     afficher_help_timecalc, 
     afficher_timecalc,
+    recherche_admin,
 )
 
 from services.eep import (
@@ -402,6 +403,10 @@ def calcul():
     )
 
 
+    consulter_admin = request.form.get(
+        "consulter_admin"
+    )
+
     consulter_index = request.form.get(
         "consulter_index"
     )
@@ -412,6 +417,37 @@ def calcul():
 
     langue = get_langue()
     txt = TEXTES[langue]
+
+    if action == "retour":
+        return redirect("/")
+
+    #
+    # Consultation d'un résultat
+    # de recherche administrateur
+    #
+
+    consulter_admin = request.form.get(
+        "consulter_admin"
+    )
+
+    if consulter_admin is not None:
+
+        document = rappeler_calcul(
+            consulter_admin
+        )
+
+        if document is None:
+            return redirect("/")
+
+        definir_mode_lecture_seule(
+            False
+        )
+
+        definir_document_travail(
+            document
+        )
+
+        return redirect("/")
 
     #
     # Consultation d'un résultat
@@ -562,6 +598,12 @@ def calcul():
             ),
         }
 
+        if (
+            recherche["codex"] == ADMIN_SEARCH_CODE
+            and recherche["bib"] == ADMIN_SEARCH_CODE
+        ):
+            return recherche_admin()
+
         resultats_recherche = (
             rechercher_calculs(
                 recherche["season"],
@@ -574,6 +616,7 @@ def calcul():
             obtenir_document_travail()
         )
 
+
         return afficher_calcul(
             document,
             recherche=recherche,
@@ -582,6 +625,35 @@ def calcul():
             ),
             recherche_effectuee=True,
         )
+
+    if action == "rechercher_admin":
+        recherche = {
+            "season": request.form.get(
+                "search_season",
+                "",
+            ).strip(),
+            "codex": request.form.get(
+                "search_codex",
+                "",
+            ).strip(),
+            "bib": request.form.get(
+                "search_bib",
+                "",
+            ).strip(),
+        }
+
+        resultats_recherche = rechercher_calculs(
+            recherche["season"],
+            recherche["codex"],
+            recherche["bib"],
+        )
+
+        return recherche_admin(
+            recherche=recherche,
+            resultats_recherche=resultats_recherche,
+            recherche_effectuee=True,
+        )
+            
 
     #
     # Protection serveur

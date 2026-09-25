@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="{{ langue }}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche administrateur</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,
+        td {
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #999;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>Recherche administrateur</h1>
+
+<form method="post">
+
+    <label>{{ txt.saison }} :</label>
+    <input
+        type="text"
+        name="search_season"
+        value="{{ recherche.season }}"
+        maxlength="4">
+
+    <label>{{ txt.codex }} :</label>
+    <input
+        type="text"
+        name="search_codex"
+        value="{{ recherche.codex }}"
+        maxlength="20">
+
+    <label>{{ txt.dossard }} :</label>
+    <input
+        type="text"
+        name="search_bib"
+        value="{{ recherche.bib }}">
+
+    <button type="submit" name="action" value="rechercher_admin">
+        {{ txt.rechercher }}
+    </button>
+
+    <button
+        type="submit"
+        name="action"
+        value="retour">
+        Retour
+    </button>
+
+    {% if recherche_effectuee %}
+
+        {% if resultats_recherche %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Saison</th>
+                        <th>Codex</th>
+                        <th>Lieu</th>
+                        <th>Date</th>
+                        <th>Discipline</th>
+                        <th>Manche</th>
+                        <th>Dossard EET</th>
+                        <th>Missing impulse</th>
+                        <th>Mode</th>
+                        <th>Calculation Key</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for document_recherche in resultats_recherche %}
+
+                        {% set race = document_recherche.race %}
+
+                        <tr>
+                            <td>{{ race.season }}</td>
+                            <td>{{ race.codex }}</td>
+                            <td>{{ race.location }}</td>
+                            <td>{{ race.date }}</td>
+                            <td>{{ race.discipline }}</td>
+                            <td>{{ race.run }}</td>
+                            <td>{{ race.eet_bib }}</td>
+                            <td>{{ race.missing_impulse }}</td>
+                            <td>{{ document_recherche.mode }}</td>
+                            <td>{{ document_recherche.calculation_id }}</td>
+                            <td>
+                                <button
+                                    type="submit"
+                                    name="consulter_admin"
+                                    value="{{ document_recherche.calculation_id }}">
+                                    {{ txt.consulter }}
+                                </button>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        {% else %}
+
+            <p>{{ txt.aucun_calcul_trouve }}</p>
+
+        {% endif %}
+
+    {% endif %}
+
+
+</form>
+
+</body>
+
+</html>

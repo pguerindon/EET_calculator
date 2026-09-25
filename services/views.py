@@ -157,6 +157,45 @@ def afficher_calcul(
     )
 
 
+def recherche_admin(
+    recherche=None,
+    resultats_recherche=None,
+    recherche_effectuee=False,
+):
+    """
+    Affiche la page de recherche administrateur.
+    """
+
+    langue, txt = _contexte()
+
+    recherche = {
+        "season": "",
+        "codex": "",
+        "bib": "",
+    }
+
+
+    if recherche is None:
+        recherche = {
+            "season": "",
+            "codex": "",
+            "bib": "",
+        }
+
+    if resultats_recherche is None:
+        resultats_recherche = []
+    
+    return render_template(
+        "recherche_admin.html",
+        txt=txt,
+        langue=langue,
+        recherche=recherche,
+        resultats_recherche=resultats_recherche,
+        recherche_effectuee=recherche_effectuee,
+        version=APP_VERSION,
+    )
+
+
 def _formater_duree(
     valeur_us,
     precision,
