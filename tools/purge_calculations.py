@@ -47,7 +47,7 @@ def main():
     """
 
     saison = str(
-        datetime.now().year - 2
+        datetime.now().year - 1
     )
 
     calculs_supprimes = (

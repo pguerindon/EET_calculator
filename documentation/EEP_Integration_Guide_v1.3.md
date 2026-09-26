@@ -123,8 +123,9 @@ If a new Initial Request replaces a Calculation Document having the same Busines
 
 Calculation Documents may subsequently be deleted automatically according to the server retention policy.
 
-- 7 days for a TEST calculation
-- Otherwise, calculations from season N-2 and earlier may be deleted.
+-7 days for a TEST calculation.
+-On 1 August, calculations from season N-2 are deleted.
+-Calculations from the current season and the previous season are retained.
 
 ![](../images/calculation_document_lifecycle.png){ width=90% }
 
