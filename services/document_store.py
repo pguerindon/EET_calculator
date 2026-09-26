@@ -180,6 +180,11 @@ def rechercher_documents(
             document
         )
 
+    resultats.sort(
+        key=lambda document: document["race"]["date"],
+        reverse=True,
+    )
+
     return resultats
 
 

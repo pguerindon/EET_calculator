@@ -391,6 +391,40 @@ def export_json():
     )
 
 
+@app.route("/admin")
+def admin():
+
+    if not session.get(
+        "admin_mode",
+        False,
+    ):
+        return redirect("/")
+
+    recherche = session.get(
+        "admin_search",
+        {
+            "season": "",
+            "codex": "",
+            "bib": "",
+        },
+    )
+
+    if not any(recherche.values()):
+        return recherche_admin()
+
+    resultats_recherche = rechercher_calculs(
+        recherche["season"],
+        recherche["codex"],
+        recherche["bib"],
+    )
+
+    return recherche_admin(
+        recherche=recherche,
+        resultats_recherche=resultats_recherche,
+        recherche_effectuee=True,
+    )
+
+
 @app.route("/", methods=["GET", "POST"])
 def calcul():
 
@@ -431,6 +465,12 @@ def calcul():
     )
 
     if consulter_admin is not None:
+
+        if not session.get(
+            "admin_mode",
+            False,
+        ):
+            return redirect("/")
 
         document = rappeler_calcul(
             consulter_admin
@@ -602,7 +642,12 @@ def calcul():
             recherche["codex"] == ADMIN_SEARCH_CODE
             and recherche["bib"] == ADMIN_SEARCH_CODE
         ):
-            return recherche_admin()
+            session["admin_mode"] = True
+            session.pop(
+                "admin_search",
+                None,
+            )
+            return redirect("/admin")
 
         resultats_recherche = (
             rechercher_calculs(
@@ -627,6 +672,13 @@ def calcul():
         )
 
     if action == "rechercher_admin":
+
+        if not session.get(
+            "admin_mode",
+            False,
+        ):
+            return redirect("/")
+
         recherche = {
             "season": request.form.get(
                 "search_season",
@@ -642,17 +694,9 @@ def calcul():
             ).strip(),
         }
 
-        resultats_recherche = rechercher_calculs(
-            recherche["season"],
-            recherche["codex"],
-            recherche["bib"],
-        )
+        session["admin_search"] = recherche
 
-        return recherche_admin(
-            recherche=recherche,
-            resultats_recherche=resultats_recherche,
-            recherche_effectuee=True,
-        )
+        return redirect("/admin")
             
 
     #
