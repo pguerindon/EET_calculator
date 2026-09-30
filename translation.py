@@ -159,7 +159,7 @@ TEXTES = {
         "aide_protocole_web_l1":
             "Les données de la course sont saisies directement dans le navigateur.",
         "aide_protocole_web_l2":
-            "Après le calcul, un rapport PDF peut être généré et le calcul est mémorisé afin de pouvoir être rappelé ultérieurement.",
+            "Après le calcul, un rapport PDF peut être généré. Le calcul peut être retrouvé pendant la durée de vie de la session.",
         "aide_protocole_json":
             "Protocole d'échange JSON",
         "aide_protocole_json_l1":
@@ -439,7 +439,7 @@ TEXTES = {
         "aide_protocole_web_l1":
             "Race data is entered directly through the web browser.",
         "aide_protocole_web_l2":
-            "After the calculation, a PDF report can be generated and the calculation is stored so that it can be recalled later.",
+            "After calculation, a PDF report can be generated. The calculation can be recalled during the lifetime of the session.",
         "aide_protocole_json":
             "JSON exchange protocol",
         "aide_protocole_json_l1":
@@ -731,7 +731,7 @@ TEXTES = {
         "aide_protocole_web_l1":
             "Die Renndaten werden direkt im Webbrowser eingegeben.",
         "aide_protocole_web_l2":
-            "Nach der Berechnung kann ein PDF-Bericht erstellt werden. Die Berechnung wird gespeichert und kann später erneut aufgerufen werden.",
+            "Nach der Berechnung kann ein PDF-Bericht erstellt werden. Die Berechnung kann während der Dauer der Sitzung wieder abgerufen werden.",
         "aide_protocole_json":
             "JSON-Austauschprotokoll",
         "aide_protocole_json_l1":

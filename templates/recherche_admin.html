@@ -82,6 +82,7 @@
                         <th>Missing impulse</th>
                         <th>Mode</th>
                         <th>Calculation Key</th>
+                        <th>Date calcul</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -103,6 +104,7 @@
                             <td>{{ race.missing_impulse }}</td>
                             <td>{{ document_recherche.mode }}</td>
                             <td>{{ document_recherche.calculation_id }}</td>
+                            <td>{{ document_recherche.calculation_datetime }}</td>
                             <td>
                                 <button
                                     type="submit"
@@ -126,9 +128,7 @@
 
     {% endif %}
 
-
 </form>
 
 </body>
-
 </html>

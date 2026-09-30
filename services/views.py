@@ -26,6 +26,10 @@ from services.presenter_form import (
     document_vers_lignes,
 )
 
+from services.calculation_id import (
+    calculer_datetime,
+)
+
 from services.temps import (
     us_to_duration,
 )
@@ -168,13 +172,6 @@ def recherche_admin(
 
     langue, txt = _contexte()
 
-    recherche = {
-        "season": "",
-        "codex": "",
-        "bib": "",
-    }
-
-
     if recherche is None:
         recherche = {
             "season": "",
@@ -184,7 +181,19 @@ def recherche_admin(
 
     if resultats_recherche is None:
         resultats_recherche = []
-    
+
+    for document in resultats_recherche:
+
+        document["calculation_datetime"] = (
+            calculer_datetime(
+                document["calculation_id"]
+            )
+            .strftime(
+                "%d/%m/%Y %H:%M:%S"
+            )
+            + " UTC"
+        )
+
     return render_template(
         "recherche_admin.html",
         txt=txt,
