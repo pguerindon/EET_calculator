@@ -10,7 +10,15 @@ from flask import (
     url_for,
 )
 
-from config import ADMIN_SEARCH_CODE, DEFAULT_LANGUAGE, SECRET_KEY
+from config import (
+    ADMIN_SEARCH_CODE,
+    DEFAULT_LANGUAGE,
+    SECRET_KEY,
+    PERMANENT_SESSION_LIFETIME,
+    SESSION_COOKIE_SECURE,
+    SESSION_COOKIE_HTTPONLY,
+    SESSION_COOKIE_SAMESITE,
+)
 from copy import deepcopy
 
 from pdf import creer_pdf
@@ -110,8 +118,17 @@ def trace_document(titre, document):
 
 
 app = Flask(__name__)
-
 app.secret_key = SECRET_KEY
+
+app.config["PERMANENT_SESSION_LIFETIME"] = PERMANENT_SESSION_LIFETIME
+app.config["SESSION_COOKIE_SECURE"] = SESSION_COOKIE_SECURE
+app.config["SESSION_COOKIE_HTTPONLY"] = SESSION_COOKIE_HTTPONLY
+app.config["SESSION_COOKIE_SAMESITE"] = SESSION_COOKIE_SAMESITE
+
+
+@app.before_request
+def rendre_session_permanente():
+    session.permanent = True
 
 @app.route("/sitemap.xml")
 def sitemap():
