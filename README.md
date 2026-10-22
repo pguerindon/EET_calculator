@@ -12,7 +12,7 @@
 
 # EET Calculator
 
-**Version:** 1.27
+**Version:** 1.28  
 **EEP Protocol:** 1.3
 
 EET Calculator is a web application that computes the **Equivalent Electronic Time (EET)** in accordance with the timing rules of the **International Ski and Snowboard Federation (FIS)**.
@@ -27,7 +27,7 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 
 - ✅ Fully compliant with FIS EET calculation rules
 - ✅ EEP (Equivalent Electronic Time Exchange Protocol) v1.3
-- ✅ Internal business document (*Single Source of Truth*)
+- ✅ Internal business document (**Single Source of Truth**)
 - ✅ Microsecond calculation engine
 - ✅ Independent Web and JSON workflows
 - ✅ Calculation Key support
@@ -38,6 +38,19 @@ All computations are performed internally in **microseconds**, ensuring maximum 
 - ✅ Public calculation search
 - ✅ Multilingual interface (French, English, German)
 - ✅ Validated on Windows and Ubuntu (Gunicorn + Nginx)
+
+---
+
+# What's New in Version 1.28
+
+Version 1.28 improves the handling of the calculation ID during Web calculations and PDF generation.
+
+Major improvements include:
+
+- Calculation ID input is automatically set to read-only after a successful Web calculation.
+- Calculation IDs remain editable for calculations loaded from JSON, allowing another calculation to be recalled.
+- Web PDF generation no longer allows a manually submitted calculation ID to overwrite the calculation ID stored in the document.
+- Prevents invalid calculation IDs from causing an HTTP 500 error during PDF generation.
 
 ---
 

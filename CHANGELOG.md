@@ -4,6 +4,21 @@ All notable changes to **EET Calculator** are documented in this file.
 
 The latest version appears first.
 
+## [ 1.28] - 2026-10-22
+
+### Fixed an issue where an invalid calculation ID submitted through the Web form could cause an HTTP 500 error when generating a PDF.
+
+- For successful Web calculations, the calculation ID field is now read-only. For calculations loaded from JSON, the calculation ID remains editable so that another calculation can be recalled.
+
+## [1.27] 
+
+- Added support for the complete competitor list provided by the timing system in the EEP Secondary Request (JSON B).
+- Competitors from JSON B are now matched with the 11 competitors from JSON A using their bib numbers.
+- Competitors present only in JSON B are ignored for the EET calculation.
+- The application is no longer restricted to timing-system data containing exactly 11 competitors.
+- Updated the EEP Specification to version 1.3.
+- Updated the EEP Integration Guide to version 1.3.
+
 ## [1.26] - 2026-09-20
 
 ### Added
