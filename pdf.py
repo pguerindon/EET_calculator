@@ -72,7 +72,11 @@ def creer_pdf(document, txt):
     if eet_index is not None:
         competitor_eet = competitors[eet_index]
 
-    document["calculation_id"] = request.form["calculation_id"]
+    if race["missing_impulse"] != "WEB":
+
+        document["calculation_id"] = (
+            request.form["calculation_id"]
+        )
 
     calculation_id = document["calculation_id"]
 
@@ -158,6 +162,7 @@ def creer_pdf(document, txt):
     buffer.seek(0)
 
     return buffer
+
 
 def _dessiner_page(
     canvas,

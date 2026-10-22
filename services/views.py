@@ -133,6 +133,11 @@ def afficher_calcul(
             ""
         )
 
+    readonly_calculation_id = (
+        not calculation_id
+        and bool(eet)
+    )
+
     return render_template(
         "calcul.html",
         txt=txt,
@@ -150,6 +155,9 @@ def afficher_calcul(
             ""
             if lecture_seule
             else calculation_id
+        ),
+        readonly_calculation_id=(
+            readonly_calculation_id
         ),
         lecture_seule=lecture_seule,
         recherche=recherche,

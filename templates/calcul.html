@@ -123,7 +123,8 @@
             class="calculation-id"
             name="calculation_id"
             value="{{ calculation_id }}"
-            maxlength="6">
+            maxlength="6"
+            {% if readonly_calculation_id %}readonly{% endif %}>
 
         <button
             type="submit"
